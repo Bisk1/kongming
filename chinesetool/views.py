@@ -26,7 +26,7 @@ def login_my(request):
 @login_required
 def index(request):
     latest_words_list = WordZH.objects.all().order_by('-lesson')[:5]
-    template = loader.get_template('chinese_tool/index.html')
+    template = loader.get_template('chinesetool/index.html')
     context = RequestContext(request, {
         'latest_words_list': latest_words_list,
     })
@@ -34,27 +34,30 @@ def index(request):
 
 @login_required
 def translate_word(request):
-    random_word_zh = get_random(WordZH)
-    template = loader.get_template('chinese_tool/translate_word.html')
+    random_wordzh = get_random(WordZH)
+    template = loader.get_template('chinesetool/translate_word.html')
     context = RequestContext(request, {
-        'word_zh': random_word_zh,
+        'wordzh': random_wordzh,
     })
     return HttpResponse(template.render(context))
 
-def check_word_translation(word, word_zh_id):
+def check_word_translation(word, wordzh_id):
     # proposition = request.POST['proposition']
     proposition = word
     proposition_id = WordPL.objects.filter(word = proposition)
     status = 0
-    if WordTranslation.objects.filter(word_pl=proposition_id, word_zh=word_zh_id).count() > 0:
+    if WordTranslation.objects.filter(word_pl=proposition_id, word_zh=wordzh_id).count() > 0:
         status = 1
     else:
-        words = WordZH.objects.filter(pk=word_zh_id)[0].get_translations()
+        words = WordZH.objects.filter(pk=wordzh_id)[0].get_translations()
+        correct_answer = ""
         if len(words) > 0:
+            correct_answer = words[0]
             for word in words:
                 if check_if_similar(word, proposition) < 2:
                     if WordPL.objects.filter(word=proposition).count() == 0:
                         status = 1
+                        corrrect_answer = word
 
     # Always return an HttpResponseRedirect after successfully dealing
     # with POST data. This prevents data from being posted twice if a
@@ -91,10 +94,10 @@ def check_if_similar(word1, word2):
 
 @login_required
 def translate_sentence(request):
-    random_sentence_zh = get_random(WordZH)
-    template = loader.get_template('chinese_tool/translate_sentence.html')
+    random_sentencezh = get_random(WordZH)
+    template = loader.get_template('chinesetool/translate_sentence.html')
     context = RequestContext(request, {
-        'sentence_zh': random_sentence_zh,
+        'sentencezh': random_sentencezh,
     })
     return HttpResponse(template.render(context))
 
@@ -122,9 +125,9 @@ def register_page(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = User.objects.create_user(
-                username=form.cleaned_data['username'],
-                password=form.cleaned_data['password1'],
-                email=form.cleaned_data['email']
+              username=form.cleaned_data['username'],
+              password=form.cleaned_data['password1'],
+              email=form.cleaned_data['email']
             )
             user.save()
             abo = Abonament(name = user, registration_date = datetime.now(), last_login_date = datetime.now(), abo_date = datetime.now()+timedelta(days = 30))
@@ -152,7 +155,7 @@ def logout_page(request):
 from django.http import *
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-import json
+from django.utils import simplejson
 import socket
 
 def ajax(request):
@@ -170,7 +173,7 @@ def ajax(request):
             correct_word = words[0]
 
             if check_word_translation(word_to_check, lesson.current_word.id) == 1:
-                result_to_send = "Trulululudsdsdsdssds"
+                result_to_send = "True"
             else:
                 result_to_send = "False"
                 lesson.fails+=1
@@ -184,11 +187,11 @@ def ajax(request):
             response_dict = {}
             response_dict.update({'word_to_display': word_to_send, 'result': result, 'fails':fails, 'number':number, 'correct':correct_word })
 
-            return HttpResponse(json.dumps(response_dict), mimetype='application/javascript')
+            return HttpResponse(simplejson.dumps(response_dict), mimetype='application/javascript')
         word_to_send = "FINISH"
         response_dict = {}
         response_dict.update({'word_to_display': word_to_send, 'result': '', 'fails':'', 'number':'' })
-        return HttpResponse(json.dumps(response_dict), mimetype='application/javascript')
+        return HttpResponse(simplejson.dumps(response_dict), mimetype='application/javascript')
 
    else:
         return render_to_response('ajaxexample.html', context_instance=RequestContext(request))
