@@ -7,7 +7,6 @@ urlpatterns = patterns('',
     url(r'^translate_word/$', views.translate_word, name='translate_word'),
     url(r'^translate_sentence/$', views.translate_sentence, name='translate_sentence'),
     url(r'^(?P<wordzh_id>\d+)/check_word_translation/$', views.check_word_translation, name='check_word_translation'),
-    url(r'^(?P<status>\d+)/result/$', views.result, name='result'),
     (r'login/$','django.contrib.auth.views.login'),
     url(r'^logout/$', views.logout_page),
 
