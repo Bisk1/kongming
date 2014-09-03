@@ -1,0 +1,25 @@
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
+</script>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <title>ChineseTool {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="/media/style.css" type="text/css" />
+    <script type="text/javascript" src="/media/jquery.js"></script>
+    {% block external %}{% endblock %}
+  </head>
+  <body>
+{% block header %}
+  <div id="nav">
+    {% if user.is_authenticated %}
+      Zalogowany użytkownik: <b>{{user.username}}</b>    <a href="/logout/">wyloguj się</a>
+    {% else %}
+      <a href="/login/">zaloguj się</a>    <a href="/register/">rejestracja</a>
+    {% endif %}
+  </div>
+{% endblock %}
+    {% block content %}{% endblock %}
+    {% block footer %}{% endblock %}
+  </body>
+</html>

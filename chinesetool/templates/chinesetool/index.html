@@ -1,0 +1,25 @@
+{% extends "chinesetool/base.html"%}
+
+{% block content %}
+{% if latest_words_list %}
+    <ul>
+    {% for wordzh in latest_words_list %}
+        <li><a href="/{{ wordzh.id }}/translate_word">{{ wordzh.word }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No words are available.</p>
+{% endif %}
+<a href="/translate_word">Przetłumacz słowo</a>
+<a href="/translate_sentence">Przetłumacz zdanie</a>
+
+
+{% endblock %}
+{% block footer %}
+<div style="text-align:center;">
+Element Company
+</div>
+{% endblock %}
+
+
+

@@ -1,0 +1,47 @@
+{% extends "chinesetool/base.html"%}
+{% block content %}
+<h1></h1>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#check").click(function() {
+                    var input_string = $("#proposition").val();
+                    $.ajax({
+                        url : "/ajaxexample_json",
+                        type : "POST",
+                        dataType: "json",
+                        data : {
+                            client_response : input_string,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                            },
+                            success : function(json) {
+                                $('#result').html("Wynik: "+json.result);
+                                $('#correct').html("Poprawne haslo: "+json.correct);
+                                $('#number').html("Numer slowka: "+json.number);
+                                $('#fails').html("Nieprawidlowe odpowiedzi: "+json.fails);
+                                $('h1').html(json.word_to_display);
+                            },
+                            error : function(xhr,errmsg,err) {
+                                $('#result').html((xhr.status + ": " + xhr.responseText));
+                            }
+                    });
+                    return false;
+            });
+        });
+    </script>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% csrf_token %}
+    <input type="text" name="proposition" id="proposition" value="{{ choice.id }}" />
+    <label for="proposition">Twoje tłumaczenie</label><br />
+<button type = "button" id= "check">Check</button>
+<p id = "result"></p>
+<p id = "correct"></p>
+<p id = "number"></p>
+<p id = "fails"></p>
+
+{% endblock %}
+
+
+

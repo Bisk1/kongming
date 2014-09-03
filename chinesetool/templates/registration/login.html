@@ -1,0 +1,20 @@
+{% block content%}
+<center>
+<h2>Logowanie do serwisu ChineseTool</h2>
+<p>
+<div style="margin-left:35%;margin-right:35%;">
+<fieldset>
+    <form method="post" action=".">{% csrf_token %}
+    <div style="text-align:left";>{{ form.as_p }}</div>
+    <input type="hidden" name="next" value="/" />
+    <input type="submit" value="Logowanie"/>    <input type="reset" value="Wartości domyślne"/>
+  </form>
+</fieldset>
+</div>
+</center>  
+{% endblock %}
+{% block footer %}
+<p>
+<div style="text-align:center;"><a href="/">Strona główna</a></div>
+</p>
+{% endblock %}
