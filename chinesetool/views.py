@@ -33,6 +33,12 @@ def index(request):
 
 @login_required
 def translate_word(request):
+    """
+    It generates a form with chinese word to be guessed and an input box for
+    the user to type in his guess. If a guess has already been made, it shows results.
+    :param request: http request for this page
+    :return: http response showing guessing panel
+    """
     random_word_zh = get_random(WordZH)
     template = loader.get_template('chinesetool/translate_word.html')
     context = RequestContext(request, {
@@ -42,6 +48,13 @@ def translate_word(request):
 
 
 def check_word_translation(word, word_zh_id):
+    """
+    Check if the polish word used by the user
+    can be accepted for given chinese word
+    :param word: word in polish typed in by the user
+    :param word_zh_id: chinese word to be guessed
+    :return: true if this translation is acceptable
+    """
     # proposition = request.POST['proposition']
     proposition = word
     proposition_id = WordPL.objects.filter(word=proposition)
@@ -64,6 +77,14 @@ def check_word_translation(word, word_zh_id):
 
 
 def check_if_similar(word1, word2):
+    """
+    Check if two words in the same language are similar enough
+    to be accepted. In order to be accepted there must be at most
+    one different character.
+    :param word1:
+    :param word2:
+    :return:
+    """
     if word1 == word2:
         return 0
     if len(word1) == len(word2):
@@ -92,6 +113,13 @@ def check_if_similar(word1, word2):
 
 @login_required
 def translate_sentence(request):
+    """
+    TODO: This is a mock!
+    It generates a form with chinese sentence to be guessed and an input box for
+    the user to type in his guess. If a guess has already been made, it shows results.
+    :param request: http request for this page
+    :return: http response showing guessing panel
+    """
     random_sentence_zh = get_random(WordZH)
     template = loader.get_template('chinesetool/translate_sentence.html')
     context = RequestContext(request, {
@@ -101,6 +129,13 @@ def translate_sentence(request):
 
 
 def get_random(model):
+    """
+    Gets a random object from any of the objects
+    for given model. It uses all records specified
+    for this model in the database
+    :param model: model of the objects to be randomized
+    :return: single object of given model
+    """
     count = model.objects.all().count()
     if count > 0:
         random_index = random.randint(0, count - 1)
