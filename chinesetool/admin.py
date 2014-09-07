@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from chinesetool.models import WordPL, Abonament, WordSkills
+from chinesetool.models import WordPL, Subscription, WordSkills
 from chinesetool.models import WordZH
 from chinesetool.models import WordTranslation
 from chinesetool.models import SentenceZH
@@ -16,5 +16,5 @@ admin.site.register(SentenceZH)
 admin.site.register(SentencePL)
 admin.site.register(SentenceTranslation)
 admin.site.register(Lesson)
-admin.site.register(Abonament)
+admin.site.register(Subscription)
 admin.site.register(WordSkills)

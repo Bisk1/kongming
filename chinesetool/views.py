@@ -6,7 +6,7 @@ from django.template import loader
 import random
 from chinesetool.forms import RegistrationForm
 
-from chinesetool.models import WordZH, WordPL, WordTranslation, Abonament
+from chinesetool.models import WordZH, WordPL, WordTranslation, Subscription
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -120,7 +120,7 @@ def register_page(request):
                 email=form.cleaned_data['email']
             )
             user.save()
-            abo = Abonament(name=user,
+            abo = Subscription(name=user,
                             registration_date=datetime.now(),
                             last_login_date=datetime.now(),
                             abo_date=datetime.now()+timedelta(days=30))

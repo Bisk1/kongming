@@ -1,6 +1,7 @@
 # _*_ coding: utf-8 _*_
 from django import forms
 
+
 class RegistrationForm(forms.Form):
     username = forms.CharField(label="Login:",max_length=30)
     email = forms.EmailField(label="Email:")

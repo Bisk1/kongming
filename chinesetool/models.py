@@ -69,7 +69,7 @@ class SentenceTranslation(models.Model):
     sentence_pl = models.ForeignKey(WordPL)
 
 
-class Abonament(models.Model):
+class Subscription(models.Model):
     name = models.ForeignKey(User)
     registration_date = models.DateTimeField()
     last_login_date = models.DateTimeField()
