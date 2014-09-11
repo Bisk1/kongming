@@ -1,3 +1,4 @@
+{% load i18n %}
 <h1>{{ sentencezh.word }}</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
@@ -5,6 +6,6 @@
 <form action="{% url 'chinesetool:check_sentence_translation' sentencezh.id %}" method="post">
 {% csrf_token %}
     <input type="text" name="proposition" id="proposition" />
-    <label for="proposition">Twoje tłumaczenie</label><br />
+    <label for="proposition">{% trans "Your translation" %}</label><br />
 <input type="submit" value="Vote" />
 </form>

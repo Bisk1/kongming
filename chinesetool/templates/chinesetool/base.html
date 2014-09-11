@@ -3,6 +3,7 @@
   <head>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
 </script>
+{% load i18n %}
     <meta content="text/html; charset=utf-8" http-equiv="content-type">
     <title>ChineseTool {% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="/media/style.css" type="text/css" />
@@ -13,9 +14,9 @@
 {% block header %}
   <div id="nav">
     {% if user.is_authenticated %}
-      Zalogowany użytkownik: <b>{{user.username}}</b>    <a href="/logout/">wyloguj się</a>
+      {% trans "Logged user" %} <b>{{user.username}}</b>    <a href="/logout/">{% trans "Log out" %}</a>
     {% else %}
-      <a href="/login/">zaloguj się</a>    <a href="/register/">rejestracja</a>
+      <a href="/login/">{% trans "Log in" %}</a>    <a href="/register/">{% trans "Register" %}</a>
     {% endif %}
   </div>
 {% endblock %}

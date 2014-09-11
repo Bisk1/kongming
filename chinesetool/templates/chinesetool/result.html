@@ -1,4 +1,5 @@
 {% extends "chinesetool/base.html"%}
+{% load i18n %}
 {% block content %}
 <h1> {{result_state}} </h1>
     <ul>
@@ -7,7 +8,7 @@
     {% endfor %}
     </ul>
 {% else %}
-    <p>No words are available.</p>
+    <p>{% trans "No words are available" %}</p>
 {% endif %}
 
 {% endblock %}

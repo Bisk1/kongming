@@ -72,8 +72,16 @@ DATABASES = {
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
+LANGUAGES = (
+ ('pl', 'Polish'),
+ ('en', 'English'),
+        )
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pl'
+
+LOCALE_PATHS = (
+    os.path.join(os.path.dirname(__file__), 'locale'),
+)
 
 TIME_ZONE = 'Poland'
 

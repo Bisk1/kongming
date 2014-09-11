@@ -1,5 +1,5 @@
 {% extends "chinesetool/base.html"%}
-
+{% load i18n %}
 {% block content %}
 {% if latest_words_list %}
     <ul>
@@ -10,8 +10,8 @@
 {% else %}
     <p>No words are available.</p>
 {% endif %}
-<a href="/translate_word">Przetłumacz słowo</a>
-<a href="/translate_sentence">Przetłumacz zdanie</a>
+<a href="/translate_word">{% trans "Translate a word" %}</a>
+<a href="/translate_sentence">{% trans "Translate a sentence" %}</a>
 
 
 {% endblock %}

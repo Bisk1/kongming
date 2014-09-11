@@ -1,4 +1,5 @@
 {% extends "chinesetool/base.html"%}
+{% load i18n %}
 {% block content %}
 <h1></h1>
 
@@ -15,10 +16,10 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}'
                             },
                             success : function(json) {
-                                $('#result').html("Wynik: "+json.result);
-                                $('#correct').html("Poprawne haslo: "+json.correct);
-                                $('#number').html("Numer slowka: "+json.number);
-                                $('#fails').html("Nieprawidlowe odpowiedzi: "+json.fails);
+                                $('#result').html("{% trans "Result" %}: "+json.result);
+                                $('#correct').html("{% trans "Correct answer:" %}: "+json.correct);
+                                $('#number').html("{% trans "Word number" %}: "+json.number);
+                                $('#fails').html("{% trans "Wrong answers" %}: "+json.fails);
                                 $('h1').html(json.word_to_display);
                             },
                             error : function(xhr,errmsg,err) {
@@ -34,8 +35,8 @@
 
 {% csrf_token %}
     <input type="text" name="proposition" id="proposition" value="{{ choice.id }}" />
-    <label for="proposition">Twoje tłumaczenie</label><br />
-<button type = "button" id= "check">Check</button>
+    <label for="proposition">{% trans "Your translation" %}</label><br />
+<button type = "button" id= "check">{% trans "Check" %}</button>
 <p id = "result"></p>
 <p id = "correct"></p>
 <p id = "number"></p>

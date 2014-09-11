@@ -1,6 +1,7 @@
 {% block content%}
+{% load i18n %}
 <center>
-<h2>Logowanie do serwisu ChineseTool</h2>
+<h2>{% trans "Logging into ChineseTool application" %}z</h2>
 <p>
 <div style="margin-left:35%;margin-right:35%;">
 <fieldset>
@@ -15,6 +16,6 @@
 {% endblock %}
 {% block footer %}
 <p>
-<div style="text-align:center;"><a href="/">Strona główna</a></div>
+<div style="text-align:center;"><a href="/">{% trans "Main page" %}</a></div>
 </p>
 {% endblock %}
