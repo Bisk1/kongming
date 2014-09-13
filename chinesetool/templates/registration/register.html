@@ -9,7 +9,7 @@
   <legend> {% trans "All fields except for cell phone have to be filled " %} </legend>
     <form method="post" action=".">{% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Rejestracja">    <input type="reset" value="Wartości początkowe">
+    <input type="submit" value="{% trans 'Register' %}">    <input type="reset" value="{% trans 'Empty form' %}">
   </form>
 </fieldset>
 </div>

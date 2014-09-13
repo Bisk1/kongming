@@ -73,8 +73,8 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 LANGUAGES = (
- ('pl', 'Polish'),
- ('en', 'English'),
+    ('pl', 'Polish'),
+    ('en', 'English'),
         )
 
 LANGUAGE_CODE = 'pl'

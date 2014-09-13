@@ -9,7 +9,7 @@ from chinesetool.forms import RegistrationForm
 from chinesetool.models import WordZH, WordPL, WordTranslation, Subscription
 
 from django.contrib.auth import authenticate, login, logout
-
+from django.core.urlresolvers import reverse
 
 def login_my(request):
     username = request.POST['username']
@@ -175,7 +175,7 @@ def register_page(request):
 
 def logout_page(request):
     logout(request)
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(reverse("chinesetool:index"))
 
 
 from django.http import *

@@ -1,21 +1,23 @@
 {% block content%}
 {% load i18n %}
 <center>
-<h2>{% trans "Logging into ChineseTool application" %}z</h2>
+<h2>{% trans "Logging into ChineseTool application" %}</h2>
 <p>
 <div style="margin-left:35%;margin-right:35%;">
 <fieldset>
     <form method="post" action=".">{% csrf_token %}
-    <div style="text-align:left";>{{ form.as_p }}</div>
+    <div style="text-align:left">{{ form.as_p }}</div>
     <input type="hidden" name="next" value="/" />
-    <input type="submit" value="Logowanie"/>    <input type="reset" value="Wartości domyślne"/>
+    <input type="submit" value="{% trans 'Log in' %}"/>    <input type="reset" value="{% trans 'Default values' %}"/>
   </form>
 </fieldset>
 </div>
+<a href="{% url 'chinesetool:register' %}">Register</a>
 </center>  
 {% endblock %}
 {% block footer %}
 <p>
-<div style="text-align:center;"><a href="/">{% trans "Main page" %}</a></div>
+
+<div style="text-align:center;"><a href="{% url 'chinesetool:index' %}">{% trans "Main page" %}</a></div>
 </p>
 {% endblock %}
