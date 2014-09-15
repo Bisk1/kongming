@@ -50,7 +50,7 @@
 {% csrf_token %}
 <input type="text" name="word_to_search" id="word_to_search" value="{{ choice.id }}" />
 
-<label for="word_to_search">{% trans "Your translation" %}</label><br />
+<label for="word_to_search">{% trans "Word to search" %}</label><br />
 <select id="source_language">
     <option value="polish">{% trans "Polish" %}</option>
     <option value="chinese">{% trans "Chinese" %}</option>
@@ -67,6 +67,7 @@
 </div>
 
 <div id="error_message"/>
+
 {% endblock %}
 
 

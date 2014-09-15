@@ -43,6 +43,7 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -82,6 +83,7 @@ LANGUAGE_CODE = 'pl'
 LOCALE_PATHS = (
     os.path.join(os.path.dirname(__file__), 'locale'),
 )
+
 
 TIME_ZONE = 'Poland'
 

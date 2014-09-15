@@ -14,13 +14,15 @@
 {% block header %}
   <div id="nav">
     {% if user.is_authenticated %}
-      {% trans "Logged user" %}:<b>{{user.username}}</b>    <a href="{% url 'chinesetool:logout' %}">{% trans "Log out" %}</a>
+      {% trans "Logged user" %}:<b>{{user.username}}</b>    <a href="{% url 'chinesetool:logout' %}">{% trans "Log out" %}</a> <a href="{% url 'chinesetool:index' %}">{% trans "Main page" %}</a>
     {% else %}
       <a href="{% url 'chinesetool:login' %}">{% trans "Log in" %}</a>    <a href="{% url 'chinesetool:register' %}">{% trans "Register" %}</a>
+
     {% endif %}
   </div>
+
 {% endblock %}
     {% block content %}{% endblock %}
-    {% block footer %}{% endblock %}
+{% block footer %}{% endblock %}
   </body>
 </html>

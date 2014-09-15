@@ -299,3 +299,11 @@ def dictionary(request):
     template = loader.get_template('chinesetool/dictionary.html')
     context = RequestContext(request)
     return HttpResponse(template.render(context))
+
+
+@login_required
+def choose_language(request):
+    template = loader.get_template('chinesetool/choose_language.html')
+    context = RequestContext(request)
+    return HttpResponse(template.render(context))
+
