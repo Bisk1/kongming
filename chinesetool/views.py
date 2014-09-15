@@ -39,10 +39,10 @@ def translate_word(request):
     :param request: http request for this page
     :return: http response showing guessing panel
     """
-    random_word_zh = get_random(WordZH)
+    if request.session.get('lesson'):
+        request.session['lesson'] = None
     template = loader.get_template('chinesetool/translate_word.html')
     context = RequestContext(request, {
-        'wordzh': random_word_zh,
     })
     return HttpResponse(template.render(context))
 

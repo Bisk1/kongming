@@ -92,7 +92,9 @@
 <p id = "fails" hidden></p>
 <p id = "lesson" hidden>Lekcja: </p>
 <p id = "comment" hidden></p>
-<button type = "button" id= "menu" hidden>MENU</button>
+<form action="{% url 'chinesetool:index' %}">
+    <input type="submit" id = "menu" value="MENU" hidden>
+</form>
 
 {% endblock %}
 
