@@ -182,18 +182,43 @@ from django.http import *
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 import json
+from enum import Enum
 
+class State(Enum):
+    NOT_STARTED = "not started"
+    STARTED = "started"
+    FINISHED = "finished"
+
+NUMBER_OF_WORDS = 5
 
 def ajax(request):
+
     if 'client_response' in request.POST:
         lesson = request.session.get('lesson')
-        correct_word = ""
-        result_to_send = ""
-        if not lesson:
-            lesson = LessonController()
-        else:
+        if lesson:
             lesson = LessonController.to_object(lesson)
-        if 0 < lesson.number < 20:
+        else:
+            lesson = LessonController()
+
+        if lesson.get_state() == State.NOT_STARTED:
+
+            word_to_send = lesson.get_next_word().word
+            fails = lesson.fails
+            number = lesson.number
+            request.session['lesson'] = lesson.to_json()
+            word_position = lesson.word_position
+            response_dict = {}
+            response_dict.update({'word_to_display': word_to_send,
+                                  'state': "not started",
+                                  'fails': fails,
+                                  'word_position': word_position,
+
+                                  'number': number,})
+
+            return HttpResponse(json.dumps(response_dict), mimetype='application/javascript')
+
+        elif lesson.get_state() == State.STARTED or lesson.get_state() == State.FINISHED:
+
             word_to_check = request.POST['client_response']
             words = WordZH.objects.filter(pk=lesson.current_word.id)[0].get_translations()
             correct_word = words[0]
@@ -203,52 +228,61 @@ def ajax(request):
             else:
                 result_to_send = "False"
                 lesson.fails += 1
-
-        if lesson.number < 20:
-            word_to_send = lesson.get_next_word().word
             result = result_to_send
+            word_to_send = ""
+            if lesson.get_state() == State.STARTED:
+                word_to_send = lesson.get_next_word().word
             fails = lesson.fails
+            word_position = lesson.word_position
             number = lesson.number
+
             request.session['lesson'] = lesson.to_json()
+
             response_dict = {}
             response_dict.update({'word_to_display': word_to_send,
+                                  'state': lesson.get_state(),
                                   'result': result,
                                   'fails': fails,
                                   'number': number,
+                                  'word_position': word_position,
                                   'correct': correct_word})
-
             return HttpResponse(json.dumps(response_dict), mimetype='application/javascript')
-        word_to_send = "FINISH"
-        response_dict = {}
-        response_dict.update({'word_to_display': word_to_send, 'result': '', 'fails': '', 'number': ''})
-        return HttpResponse(json.dumps(response_dict), mimetype='application/javascript')
+
 
     else:
-        return render_to_response('ajaxexample.html', context_instance=RequestContext(request))
-
+        template = loader.get_template('chinesetool/translate_word.html')
+        variables = RequestContext(request, {'start':'true'})
+        output = template.render(variables)
+        return HttpResponse(output)
 
 class LessonController():
-    def __init__(self, number=0, fails=0, words=None, current_word=None):
-        self.number = number
+    def __init__(self, word_position=0, fails=0, number = 0, words=None, current_word=None, lesson = None):
+
+        self.word_position = word_position
         self.fails = fails
+        self.number = number
         if words is None:
-            self.words = self.get_words()
+            self.words = self.get_words(lesson)
         else:
             self.words = words
         self.current_word = current_word
 
-    def get_words(self):
+    def get_words(self, lesson):
         words = list()
-        for i in range(20):
-            words.append(get_random(WordZH))
+        if lesson is not None:
+            WordZH.get_words_from_lesson(lesson = lesson)
+        else:
+            for i in range(NUMBER_OF_WORDS):
+                words.append(get_random(WordZH))
+        self.number = len(words)
         return words
 
     def get_next_word(self):
-        if self.number < 20:
-            self.number += 1
-            self.current_word = self.words[self.number-1]
-            return self.words[self.number-1]
-        return "Koniec lekcji"
+        if self.word_position < self.number:
+            self.word_position += 1
+            self.current_word = self.words[self.word_position-1]
+            return self.words[self.word_position-1]
+
 
     def to_json(self):
         object_words = dict()
@@ -256,18 +290,34 @@ class LessonController():
             object_words[i] = word.id
         object_dict = {
             'number': self.number,
+            'word_position': self.word_position,
             'fails': self.fails,
             'current_word': self.current_word.id,
             'words': object_words
         }
         return object_dict
 
+    def get_state(self):
+        if self.word_position == 0:
+            return State.NOT_STARTED
+        elif self.word_position > 0 and self.word_position < self.number:
+            return State.STARTED
+        elif self.word_position == self.number:
+            return State.FINISHED
+        else:
+            return "error"
+
     @staticmethod
     def to_object(object_dict):
+
         if "number" in object_dict:
             number = object_dict["number"]
         else:
             number = 0
+        if "word_position" in object_dict:
+            word_position = object_dict["word_position"]
+        else:
+            word_position = 0
         if "fails" in object_dict:
             fails = object_dict["fails"]
         else:
@@ -278,10 +328,10 @@ class LessonController():
             current_word = None
         words = list()
         if "words" in object_dict:
-            for i in range(20):
+            for i in range(NUMBER_OF_WORDS):
                 words.append(WordZH.objects.filter(pk=object_dict['words'][str(i)])[0])
-
-        return LessonController(number=number, fails=fails, words = words, current_word = current_word)
+        print "Word_position in to_object: %s" % word_position
+        return LessonController(number=number, fails=fails, words = words, current_word = current_word, word_position = word_position)
 
 
 def dictionary(request):

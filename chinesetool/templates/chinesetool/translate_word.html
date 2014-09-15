@@ -7,6 +7,9 @@
         $(document).ready(function() {
             $("#check").click(function() {
                     var input_string = $("#proposition").val();
+                    if (input_string == "") {
+                        input_string = "Empty";
+                    }
                     $.ajax({
                         url : "/ajaxexample_json",
                         type : "POST",
@@ -16,11 +19,58 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}'
                             },
                             success : function(json) {
-                                $('#result').html("{% trans "Result" %}: "+json.result);
-                                $('#correct').html("{% trans "Correct answer:" %}: "+json.correct);
-                                $('#number').html("{% trans "Word number" %}: "+json.number);
-                                $('#fails').html("{% trans "Wrong answers" %}: "+json.fails);
-                                $('h1').html(json.word_to_display);
+                                $('#proposition').hide();
+                                $('#check').hide();
+                                $('#result').hide();
+                                $('#correct').hide();
+                                $('#number').hide();
+                                $('#fails').hide();
+                                $('#comment').hide();
+                                $('#start').hide();
+                                $('#lesson').hide();
+                                $('#menu').hide();
+
+
+                                if (json.state == "not started") {
+                                    $('#proposition').show();
+                                    $('#number').show();
+                                    $('#fails').show();
+                                    $('#check').html("Check");
+                                    $('#check').show();
+                                    $('h1').html(json.word_to_display);
+                                    $('#number').html("Numer slowka: "+json.word_position);
+                                    $('#fails').html("Nieprawidlowe odpowiedzi: "+json.fails);
+
+                                }
+                                if (json.state == "started") {
+                                    $('#proposition').show();
+                                    $('#check').show();
+                                    $('#check').html("Check");
+                                    $('#result').show();
+                                    $('#correct').show();
+                                    $('#number').show();
+                                    $('#fails').show();
+                                    $('#result').html("Wynik: "+json.result);
+                                    $('#correct').html("Poprawne haslo: "+json.correct);
+                                    $('#number').html("Numer slowka: "+json.word_position);
+                                    $('#fails').html("Nieprawidlowe odpowiedzi: "+json.fails);
+                                    $('h1').html(json.word_to_display);
+                                }
+
+                                if (json.state == "finished") {
+                                    $('#fails').show();
+                                    $('#comment').show();
+                                    $('#menu').show();
+                                    $('#result').show();
+                                    $('#correct').show();
+                                    $('h1').hide();
+                                    $('#number').html("Numer slowka: "+json.word_position);
+                                    $('#fails').html("Nieprawidlowe odpowiedzi: "+json.fails);
+                                    $('#comment').html(json.comment);
+                                }
+
+
+
                             },
                             error : function(xhr,errmsg,err) {
                                 $('#result').html((xhr.status + ": " + xhr.responseText));
@@ -30,17 +80,19 @@
             });
         });
     </script>
-
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 {% csrf_token %}
-    <input type="text" name="proposition" id="proposition" value="{{ choice.id }}" />
-    <label for="proposition">{% trans "Your translation" %}</label><br />
-<button type = "button" id= "check">{% trans "Check" %}</button>
-<p id = "result"></p>
-<p id = "correct"></p>
-<p id = "number"></p>
-<p id = "fails"></p>
+
+<input type="text" name="proposition" id="proposition" value="{{ choice.id }}" hidden/>
+<button type = "button" id = "check">START</button>
+<p id = "result" hidden>Started</p>
+<p id = "correct" hidden></p>
+<p id = "number" hidden></p>
+<p id = "fails" hidden></p>
+<p id = "lesson" hidden>Lekcja: </p>
+<p id = "comment" hidden></p>
+<button type = "button" id= "menu" hidden>MENU</button>
 
 {% endblock %}
 
