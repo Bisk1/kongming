@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-11 22:37+0200\n"
+"POT-Creation-Date: 2014-09-15 20:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,30 +26,65 @@ msgstr "Zalogowany użytkownik"
 msgid "Log out"
 msgstr "Wyloguj"
 
-#: .\templates\chinesetool\base.html:19
+#: .\templates\chinesetool\base.html:19 .\templates\registration\login.html:11
 msgid "Log in"
 msgstr "Zaloguj"
 
 #: .\templates\chinesetool\base.html:19
+#: .\templates\registration\register.html:12
 msgid "Register"
 msgstr "Rejestracja"
 
-#: .\templates\chinesetool\index.html:13
-msgid "Translate a word"
-msgstr "Przetłumacz słowo"
+#: .\templates\chinesetool\dictionary.html:24
+#, fuzzy
+msgid "No translations found"
+msgstr "Twoje tłumaczenie"
 
-#: .\templates\chinesetool\index.html:14
-msgid "Translate a sentence"
-msgstr "Przetłumacz zdanie"
-
-#: .\templates\chinesetool\result.html:11
-msgid "No words are available"
-msgstr "Brak dostępnych słów"
-
+#: .\templates\chinesetool\dictionary.html:53
 #: .\templates\chinesetool\translate_sentence.html:9
 #: .\templates\chinesetool\translate_word.html:38
 msgid "Your translation"
 msgstr "Twoje tłumaczenie"
+
+#: .\templates\chinesetool\dictionary.html:55
+msgid "Polish"
+msgstr "polski"
+
+#: .\templates\chinesetool\dictionary.html:56
+msgid "Chinese"
+msgstr "chiński"
+
+#: .\templates\chinesetool\dictionary.html:58
+msgid "Source language"
+msgstr "Język żródłowy"
+
+#: .\templates\chinesetool\dictionary.html:60
+msgid "Search"
+msgstr "Szukaj"
+
+#: .\templates\chinesetool\index.html:4
+msgid "Words examples"
+msgstr "Przykłady słów"
+
+#: .\templates\chinesetool\index.html:15
+msgid "Translate a word"
+msgstr "Przetłumacz słowo"
+
+#: .\templates\chinesetool\index.html:16
+msgid "Translate a sentence"
+msgstr "Przetłumacz zdanie"
+
+#: .\templates\chinesetool\index.html:18
+msgid "Administrator's panel"
+msgstr "Panel administratora"
+
+#: .\templates\chinesetool\index.html:20
+msgid "Dictionary"
+msgstr "Słownik"
+
+#: .\templates\chinesetool\result.html:11
+msgid "No words are available"
+msgstr "Brak dostępnych słów"
 
 #: .\templates\chinesetool\translate_word.html:19
 msgid "Result"
@@ -75,7 +110,12 @@ msgstr "Sprawdź"
 msgid "Logging into ChineseTool application"
 msgstr "Logowanie do aplikacji ChineseTool"
 
-#: .\templates\registration\login.html:19
+#: .\templates\registration\login.html:11
+#: .\templates\registration\register.html:12
+msgid "Empty form"
+msgstr "Wyczyść formularz"
+
+#: .\templates\registration\login.html:21
 #: .\templates\registration\register.html:20
 msgid "Main page"
 msgstr "Strona główna"

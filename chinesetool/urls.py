@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     url(r'login/$', 'django.contrib.auth.views.login', name='login'),
     url(r'^logout/$', views.logout_page, name='logout'),
     url(r'^register/$',views.register_page, name='register'),
+    url(r'^dictionary/$',views.dictionary, name='dictionary'),
 
     url(r'^ajaxexample_json$',views.ajax),
 

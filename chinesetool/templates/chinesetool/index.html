@@ -17,6 +17,7 @@
     {% if user.is_superuser %}
     <li><a href="{% url 'admin:index' %}">{% trans "Administrator's panel" %}</a></li>
     {% endif %}
+    <li><a href="{% url 'chinesetool:dictionary' %}">{% trans "Dictionary" %}</a></li>
 </ul>
 
 

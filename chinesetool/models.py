@@ -23,7 +23,6 @@ class WordPL(models.Model):
     def __unicode__(self):
         return unicode(self.word)
 
-
     def get_translations(self):
         """
         Gets all accurate translations of this word
@@ -50,7 +49,6 @@ class WordZH(models.Model):
 
     def __unicode__(self):
         return unicode(self.word)
-
 
     def get_translations(self):
         """
@@ -79,7 +77,6 @@ class WordTranslation(models.Model):
 
     def __unicode__(self):
         return self.word_zh.word + " - " + self.word_pl.word
-
 
 class SentencePL(models.Model):
     """

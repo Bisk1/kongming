@@ -282,3 +282,20 @@ class LessonController():
                 words.append(WordZH.objects.filter(pk=object_dict['words'][str(i)])[0])
 
         return LessonController(number=number, fails=fails, words = words, current_word = current_word)
+
+
+def dictionary(request):
+    if request.POST:
+        word_to_search = request.POST['word_to_search']
+        translations = []
+        matching_words = []
+        if request.POST['source_language'] == "polish":
+            matching_words = WordPL.objects.filter(word=word_to_search)
+        elif request.POST['source_language'] == "chinese":
+            matching_words = WordZH.objects.filter(word=word_to_search)
+        if matching_words:
+            translations = matching_words[0].get_translations()
+        return HttpResponse(json.dumps({'translations': translations}), mimetype='application/javascript')
+    template = loader.get_template('chinesetool/dictionary.html')
+    context = RequestContext(request)
+    return HttpResponse(template.render(context))

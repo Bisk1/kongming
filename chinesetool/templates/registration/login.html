@@ -8,7 +8,7 @@
     <form method="post" action=".">{% csrf_token %}
     <div style="text-align:left">{{ form.as_p }}</div>
     <input type="hidden" name="next" value="/" />
-    <input type="submit" value="{% trans 'Log in' %}"/>    <input type="reset" value="{% trans 'Default values' %}"/>
+    <input type="submit" value="{% trans 'Log in' %}"/>    <input type="reset" value="{% trans 'Empty form' %}"/>
   </form>
 </fieldset>
 </div>
