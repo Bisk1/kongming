@@ -1,28 +1,186 @@
 <!doctype html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-  <head>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
-</script>
-{% load i18n %}
-    <meta content="text/html; charset=utf-8" http-equiv="content-type">
-    <title>ChineseTool {% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="/media/style.css" type="text/css" />
-    <script type="text/javascript" src="/media/jquery.js"></script>
-    {% block external %}{% endblock %}
-  </head>
-  <body>
-{% block header %}
-  <div id="nav">
+    <head>
+    {% block header %}
+        {% load i18n %}
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <!-- Title and other stuffs -->
+        <title>Dashboard - Metro King</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <meta name="author" content="">
+
+
+        <!-- Stylesheets -->
+        <link href="{{STATIC_URL}}style/bootstrap.css" rel="stylesheet">
+        <!-- Font awesome icon -->
+        <link rel="stylesheet" href="{{STATIC_URL}}style/font-awesome.css">
+        <!-- jQuery UI -->
+        <link rel="stylesheet" href="{{STATIC_URL}}style/jquery-ui.css">
+        <!-- Calendar -->
+        <link rel="stylesheet" href="{{STATIC_URL}}style/fullcalendar.css">
+        <!-- prettyPhoto -->
+        <link rel="stylesheet" href="{{STATIC_URL}}style/prettyPhoto.css">
+        <!-- Star rating -->
+        <link rel="stylesheet" href="{{STATIC_URL}}style/rateit.css">
+        <!-- Date picker -->
+        <link rel="stylesheet" href="{{STATIC_URL}}style/bootstrap-datetimepicker.min.css">
+        <!-- jQuery Gritter -->
+        <link rel="stylesheet" href="{{STATIC_URL}}style/jquery.gritter.css">
+        <!-- CLEditor -->
+        <link rel="stylesheet" href="{{STATIC_URL}}style/jquery.cleditor.css">
+        <!-- Bootstrap toggle -->
+        <link rel="stylesheet" href="{{STATIC_URL}}style/bootstrap-switch.css">
+        <!-- Main stylesheet -->
+        <link href="{{STATIC_URL}}style/style.css" rel="stylesheet">
+        <!-- Widgets stylesheet -->
+        <link href="{{STATIC_URL}}style/widgets.css" rel="stylesheet">
+
+<script src="{{STATIC_URL}}js/jquery.js"></script> <!-- jQuery -->
+<script src="{{STATIC_URL}}js/bootstrap.js"></script> <!-- Bootstrap -->
+<script src="{{STATIC_URL}}js/jquery-ui-1.10.2.custom.min.js"></script> <!-- jQuery UI -->
+
+
+<!-- jQuery Flot -->
+<script src="{{STATIC_URL}}js/excanvas.min.js"></script>
+<script src="{{STATIC_URL}}js/jquery.flot.js"></script>
+<script src="{{STATIC_URL}}js/jquery.flot.resize.js"></script>
+<script src="{{STATIC_URL}}js/jquery.flot.pie.js"></script>
+<script src="{{STATIC_URL}}js/jquery.flot.stack.js"></script>
+
+<script src="{{STATIC_URL}}js/jquery.gritter.min.js"></script> <!-- jQuery Gritter -->
+<script src="{{STATIC_URL}}js/sparklines.js"></script> <!-- Sparklines -->
+<script src="{{STATIC_URL}}js/jquery.cleditor.min.js"></script> <!-- CLEditor -->
+<script src="{{STATIC_URL}}js/bootstrap-datetimepicker.min.js"></script> <!-- Date picker -->
+<script src="{{STATIC_URL}}js/bootstrap-switch.min.js"></script> <!-- Bootstrap Toggle -->
+<script src="{{STATIC_URL}}js/filter.js"></script> <!-- Filter for support page -->
+<!--<script src="{{STATIC_URL}}js/custom.js"></script> &lt;!&ndash; Custom codes &ndash;&gt;-->
+<script src="{{STATIC_URL}}js/charts.js"></script> <!-- Custom chart codes -->
+
+        <!-- HTML5 Support for IE -->
+        <!--[if lt IE 9]>
+        <script src="{{STATIC_URL}}js/html5shim.js"></script>
+        <![endif]-->
+
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="img/favicon/favicon.png">
+    {% endblock %}
+
+    </head>
+    <body>
     {% if user.is_authenticated %}
-      {% trans "Logged user" %}:<b>{{user.username}}</b>    <a href="{% url 'chinesetool:logout' %}">{% trans "Log out" %}</a> <a href="{% url 'chinesetool:index' %}">{% trans "Main page" %}</a>
+    {% block top_menu %}
+        <div class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+            <div class="container">
+            <!-- Menu button for smallar screens -->
+		        <div class="navbar-header">
+
+		            <a href="{% url 'chinesetool:index' %}" class="navbar-brand">Chinese <span class="bold">Tool</span></a>
+		        </div>
+            <!-- Site name for smallar screens -->
+
+            <!-- Navigation starts -->
+            <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+
+            <!-- Links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <img src="img/user.jpg" alt="" class="nav-user-pic img-responsive" /><b>{{user.username}}</b> <b class="caret"></b>
+                    </a>
+                    <!-- Dropdown menu -->
+                    <ul class="dropdown-menu">
+                        <li><a href="#"><i class="icon-user"></i> Profile</a></li>
+                        <li><a href="#"><i class="icon-cogs"></i> Settings</a></li>
+                        <li><a href="{% url 'chinesetool:logout' %}"><i class="icon-off">{% trans "Log out" %}</i> </a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- Notifications -->
+            <ul class="nav navbar-nav navbar-right">
+            </ul>
+		    </nav>
+            </div>
+        </div>
+        <div class="content">
+    {% endblock %}
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-dropdown"><a href="#">Navigation</a></div>
+
+            <div class="sidebar-inner">
+
+                <!--- Sidebar navigation -->
+                <!-- If the main navigation has sub navigation, then add the class "has_submenu" to "li" of main navigation. -->
+                <ul class="navi">
+
+                <!-- Use the class nred, ngreen, nblue, nlightblue, nviolet or norange to add background color. You need to use this in <li> tag. -->
+
+                <li class="norange"><a href="{% url 'chinesetool:translate_word' %}"><i class="icon-sitemap"></i> Ucz się!</a></li>
+
+                <!-- Menu with sub menu -->
+                <li class="has_submenu nlightblue">
+                    <a href="#">
+                        <!-- Menu name with icon -->
+                        <i class="icon-th"></i> Słownik
+                        <!-- Icon for dropdown -->
+                        <span class="pull-right"><i class="icon-angle-right"></i></span>
+                    </a>
+
+                    <ul>
+                        <li><a href="widgets1.html">Polsko - chiński</a></li>
+                        <li><a href="widgets2.html">Chińsko - polski</a></li>
+                    </ul>
+                </li>
+
+                <li class="ngreen"><a href="charts.html"><i class="icon-bar-chart"></i> Statystyki</a></li>
+                </ul>
+            </div>
+
+        </div>
+	<!-- Main bar -->
+  	<div class="mainbar">
+
+	    <!-- Page heading -->
+	    <div class="page-head">
+        <!-- Page heading -->
+	        <h2 class="pull-left">Chineese Tool
+			  <!-- page meta -->
+			  <span class="page-meta">Z nami nauczysz się chińskiego</span>
+			</h2>
+
+
+			<div class="clearfix"></div>
+
+	    </div>
+	    <!-- Page heading ends -->
+
+
+
+	    <!-- Matter -->
+
+	    <div class="matter">
+        <div class="container">
+
+            {% block content %}{% endblock %}
+
+
+        </div>
+        </div>
+        </div>
+     </div>
     {% else %}
       <a href="{% url 'chinesetool:login' %}">{% trans "Log in" %}</a>    <a href="{% url 'chinesetool:register' %}">{% trans "Register" %}</a>
 
     {% endif %}
-  </div>
 
-{% endblock %}
-    {% block content %}{% endblock %}
 {% block footer %}{% endblock %}
+    <script type="text/javascript">
+
+</script>
   </body>
 </html>
