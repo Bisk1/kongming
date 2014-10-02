@@ -6,72 +6,33 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $("#check").click(function() {
-
-                    var input_string = $("#proposition").val();
-                    if (input_string == "") {
-                        input_string = "Empty";
-                    }
+                    var proposition = $("#proposition").val();
+                    var lesson_id = $("#lesson_id").val();
                     $.ajax({
-                        url : "/ajaxexample_json",
+                        url : "/translate_word/",
                         type : "POST",
                         dataType: "json",
                         data : {
-                            client_response : input_string,
+                            proposition : proposition,
+                            lesson_id : lesson_id,
                             csrfmiddlewaretoken: '{{ csrf_token }}'
                             },
                             success : function(json) {
-                                $('#proposition').hide();
-                                $('#check').hide();
-                                $('#result').hide();
-                                $('#correct').hide();
-                                $('#number').hide();
-                                $('#fails').hide();
-                                $('#comment').hide();
-                                $('#start').hide();
-                                $('#lesson').hide();
-                                $('#menu').hide();
-
-
-                                if (json.state == "not started") {
-                                    $('#proposition').show();
-                                    $('#number').show();
-                                    $('#fails').show();
-                                    $('#check').html("Check");
-                                    $('#check').show();
-                                    $('h1').html(json.word_to_display);
-                                    $('#number').html("Numer slowka: "+json.word_position);
-                                    $('#fails').html("Nieprawidlowe odpowiedzi: "+json.fails);
-
-                                }
-                                if (json.state == "started") {
-                                    $('#proposition').show();
-                                    $('#check').show();
-                                    $('#check').html("Check");
+                                    $('#proposition').hide();
+                                    $('#check').hide();
+                                    $('#next').show();
+                                    $('#next').html("Continue");
                                     $('#result').show();
                                     $('#correct').show();
-                                    $('#number').show();
+                                    $('#total_exercises_number').show();
                                     $('#fails').show();
-                                    $('#result').html("Wynik: "+json.result);
-                                    $('#correct').html("Poprawne haslo: "+json.correct);
-                                    $('#number').html("Numer slowka: "+json.word_position);
+                                    $('#result').html("Wynik: "+json.success);
+                                    $('#correct').html("Poprawne haslo: "+json.correct_word);
+                                    $('#current_exercise_number').html("Numer slowka: "+json.current_exercise_number);
+                                    $('#total_exercises_number').html("Liczba wszystkich slow: "+json.total_exercises_number);
+                                    $('#total_number').html("Numer slowka: "+json.current_exercise_number);
                                     $('#fails').html("Nieprawidlowe odpowiedzi: "+json.fails);
                                     $('h1').html(json.word_to_display);
-                                }
-
-                                if (json.state == "finished") {
-                                    $('#fails').show();
-                                    $('#comment').show();
-                                    $('#menu').show();
-                                    $('#result').show();
-                                    $('#correct').show();
-                                    $('h1').hide();
-                                    $('#number').html("Numer slowka: "+json.word_position);
-                                    $('#fails').html("Nieprawidlowe odpowiedzi: "+json.fails);
-                                    $('#comment').html(json.comment);
-                                }
-
-
-
                             },
                             error : function(xhr,errmsg,err) {
                                 $('#result').html((xhr.status + ": " + xhr.responseText));
@@ -79,24 +40,68 @@
                     });
                     return false;
             });
+
+            $("#next").click(function() {
+                    var lesson_id = $("#lesson_id").val();
+                    $.ajax({
+                        url : "/translate_word/",
+                        type : "POST",
+                        dataType: "json",
+                        data : {
+                            lesson_id : lesson_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                            },
+
+
+                            success : function(json) {
+                                $('#next').hide();
+                                $('#correct').hide();
+                                $('#fails').show();
+                                $('#result').hide();
+                                if (json.final) {
+                                    $('#proposition').hide();
+                                    $('#check').hide();
+                                    $('#return_link').show();
+                                    $('h1').html("To koniec!");
+                                }
+                                else {
+                                    $('#proposition').show();
+                                    $('#check').show();
+                                    $('#check').html("Check");
+                                    $('#current_exercise_number').show();
+                                    $('#current_exercise_number').html("Numer slowka: "+json.current_exercise_number);
+                                    $('#total_exercises_number').html("Liczba wszystkich slow: "+json.total_exercises_number);
+                                    $('h1').html(json.word_to_display);
+
+                                }
+                            },
+                            error : function(xhr,errmsg,err) {
+                                $('#result').html((xhr.status + ": " + xhr.responseText));
+                            }
+                    });
+                    return false;
+            })
         });
     </script>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 {% csrf_token %}
 
-<input type="text" name="proposition" id="proposition" value="{{ choice.id }}" hidden/>
-<button type = "button" id = "check">START</button>
-<p id = "result" hidden>Started</p>
+<input type="text" name="proposition" id="proposition" hidden/>
+<button type="button" id="check" hidden>Check</button>
+<button type="button" id="next">Start</button>
+<input type="hidden" name="lesson_id" id="lesson_id" value="{{ lesson_action.pk }}">
 <p id = "correct" hidden></p>
-<p id = "number" hidden></p>
+<p id = "total_exercises_number" hidden></p>
+<p id = "current_exercise_number" hidden></p>
 <p id = "fails" hidden></p>
 <p id = "lesson" hidden>Lekcja: </p>
 <p id = "comment" hidden></p>
+
 <form action="{% url 'chinesetool:index' %}">
     <input type="submit" id = "menu" value="MENU" hidden>
 </form>
-
+<a href="{% url 'chinesetool:index' %}" id="return_link" hidden>{% trans "Return" %}</a>
 {% endblock %}
 
 

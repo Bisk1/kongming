@@ -3,13 +3,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import transaction
 from django.template import loader
-import random
 from chinesetool.forms import RegistrationForm
 
-from chinesetool.models import WordZH, WordPL, WordTranslation, Subscription
+from chinesetool.models import WordZH, WordPL, WordTranslation, Subscription, LessonAction
 
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
+from chinesetool.utils.model_utils import get_random
+
 
 def login_my(request):
     username = request.POST['username']
@@ -39,76 +40,25 @@ def translate_word(request):
     :param request: http request for this page
     :return: http response showing guessing panel
     """
-    if request.session.get('lesson'):
-        request.session['lesson'] = None
+    if request.POST:
+        lesson_action = LessonAction.objects.get(pk=request.POST.get('lesson_id'))
+        proposition = request.POST.get('proposition')
+        if proposition is not None:
+            response = lesson_action.check(proposition)
+            return HttpResponse(json.dumps(response), content_type='application/javascript')
+        else:
+            if lesson_action.has_next():
+                lesson_action.next_exercise()
+                response = lesson_action.prepare()
+            else:
+                response = lesson_action.get_final_response()
+            return HttpResponse(json.dumps(response), content_type='application/javascript')
+
+    new_lesson_action = LessonAction.create(request.user)
+    response = {'lesson_action': new_lesson_action}
     template = loader.get_template('chinesetool/translate_word.html')
-    context = RequestContext(request, {
-    })
+    context = RequestContext(request, response)
     return HttpResponse(template.render(context))
-
-
-def check_word_translation(word, word_zh_id):
-    """
-    Check if the polish word used by the user
-    can be accepted for given chinese word
-    :param word: word in polish typed in by the user
-    :param word_zh_id: chinese word to be guessed
-    :return: true if this translation is acceptable
-    """
-    # proposition = request.POST['proposition']
-    proposition = word
-    proposition_id = WordPL.objects.filter(word=proposition)
-    status = 0
-    if WordTranslation.objects.filter(word_pl=proposition_id, word_zh=word_zh_id).count() > 0:
-        status = 1
-    else:
-        words = WordZH.objects.filter(pk=word_zh_id)[0].get_translations()
-        if len(words) > 0:
-            for word in words:
-                if check_if_similar(word, proposition) < 2:
-                    if WordPL.objects.filter(word=proposition).count() == 0:
-                        status = 1
-
-    # Always return an HttpResponseRedirect after successfully dealing
-    # with POST data. This prevents data from being posted twice if a
-    # user hits the Back button.
-
-    return status
-
-
-def check_if_similar(word1, word2):
-    """
-    Check if two words in the same language are similar enough
-    to be accepted. In order to be accepted there must be at most
-    one different character.
-    :param word1:
-    :param word2:
-    :return:
-    """
-    if word1 == word2:
-        return 0
-    if len(word1) == len(word2):
-        letter_count = 0
-        for position, letter in enumerate(word1):
-            if letter != word2[position]:
-                letter_count += 1
-        return letter_count
-
-    if len(word1) > len(word2):
-        if word1[1:] == word2:
-            return 1
-        elif word1[:-1] == word2:
-            return 1
-        else:
-            return 1000
-
-    if len(word2) > len(word1):
-        if word2[1:] == word1:
-            return 1
-        elif word2[:-1] == word1:
-            return 1
-        else:
-            return 1000
 
 
 @login_required
@@ -123,25 +73,9 @@ def translate_sentence(request):
     random_sentence_zh = get_random(WordZH)
     template = loader.get_template('chinesetool/translate_sentence.html')
     context = RequestContext(request, {
-        'sentencezh': random_sentence_zh,
+        'sentence_zh': random_sentence_zh,
     })
     return HttpResponse(template.render(context))
-
-
-def get_random(model):
-    """
-    Gets a random object from any of the objects
-    for given model. It uses all records specified
-    for this model in the database
-    :param model: model of the objects to be randomized
-    :return: single object of given model
-    """
-    count = model.objects.all().count()
-    if count > 0:
-        random_index = random.randint(0, count - 1)
-        return model.objects.all()[random_index]
-    else:
-        return
 
 
 @transaction.atomic
@@ -156,9 +90,9 @@ def register_page(request):
             )
             user.save()
             abo = Subscription(name=user,
-                            registration_date=datetime.now(),
-                            last_login_date=datetime.now(),
-                            abo_date=datetime.now()+timedelta(days=30))
+                               registration_date=datetime.now(),
+                               last_login_date=datetime.now(),
+                               abo_date=datetime.now() + timedelta(days=30))
             abo.save()
 
             template = loader.get_template("registration/register_success.html")
@@ -179,159 +113,8 @@ def logout_page(request):
 
 
 from django.http import *
-from django.shortcuts import render_to_response
 from django.template import RequestContext
 import json
-from enum import Enum
-
-class State(Enum):
-    NOT_STARTED = "not started"
-    STARTED = "started"
-    FINISHED = "finished"
-
-NUMBER_OF_WORDS = 5
-
-def ajax(request):
-
-    if 'client_response' in request.POST:
-        lesson = request.session.get('lesson')
-        if lesson:
-            lesson = LessonController.to_object(lesson)
-        else:
-            lesson = LessonController()
-
-        if lesson.get_state() == State.NOT_STARTED:
-
-            word_to_send = lesson.get_next_word().word
-            fails = lesson.fails
-            number = lesson.number
-            request.session['lesson'] = lesson.to_json()
-            word_position = lesson.word_position
-            response_dict = {}
-            response_dict.update({'word_to_display': word_to_send,
-                                  'state': "not started",
-                                  'fails': fails,
-                                  'word_position': word_position,
-
-                                  'number': number,})
-
-            return HttpResponse(json.dumps(response_dict), mimetype='application/javascript')
-
-        elif lesson.get_state() == State.STARTED or lesson.get_state() == State.FINISHED:
-
-            word_to_check = request.POST['client_response']
-            words = WordZH.objects.filter(pk=lesson.current_word.id)[0].get_translations()
-            correct_word = words[0]
-
-            if check_word_translation(word_to_check, lesson.current_word.id) == 1:
-                result_to_send = "True"
-            else:
-                result_to_send = "False"
-                lesson.fails += 1
-            result = result_to_send
-            word_to_send = ""
-            if lesson.get_state() == State.STARTED:
-                word_to_send = lesson.get_next_word().word
-            fails = lesson.fails
-            word_position = lesson.word_position
-            number = lesson.number
-
-            request.session['lesson'] = lesson.to_json()
-
-            response_dict = {}
-            response_dict.update({'word_to_display': word_to_send,
-                                  'state': lesson.get_state(),
-                                  'result': result,
-                                  'fails': fails,
-                                  'number': number,
-                                  'word_position': word_position,
-                                  'correct': correct_word})
-            return HttpResponse(json.dumps(response_dict), mimetype='application/javascript')
-
-
-    else:
-        template = loader.get_template('chinesetool/translate_word.html')
-        variables = RequestContext(request, {'start':'true'})
-        output = template.render(variables)
-        return HttpResponse(output)
-
-class LessonController():
-    def __init__(self, word_position=0, fails=0, number = 0, words=None, current_word=None, lesson = None):
-
-        self.word_position = word_position
-        self.fails = fails
-        self.number = number
-        if words is None:
-            self.words = self.get_words(lesson)
-        else:
-            self.words = words
-        self.current_word = current_word
-
-    def get_words(self, lesson):
-        words = list()
-        if lesson is not None:
-            WordZH.get_words_from_lesson(lesson = lesson)
-        else:
-            for i in range(NUMBER_OF_WORDS):
-                words.append(get_random(WordZH))
-        self.number = len(words)
-        return words
-
-    def get_next_word(self):
-        if self.word_position < self.number:
-            self.word_position += 1
-            self.current_word = self.words[self.word_position-1]
-            return self.words[self.word_position-1]
-
-
-    def to_json(self):
-        object_words = dict()
-        for i, word in enumerate(self.words):
-            object_words[i] = word.id
-        object_dict = {
-            'number': self.number,
-            'word_position': self.word_position,
-            'fails': self.fails,
-            'current_word': self.current_word.id,
-            'words': object_words
-        }
-        return object_dict
-
-    def get_state(self):
-        if self.word_position == 0:
-            return State.NOT_STARTED
-        elif self.word_position > 0 and self.word_position < self.number:
-            return State.STARTED
-        elif self.word_position == self.number:
-            return State.FINISHED
-        else:
-            return "error"
-
-    @staticmethod
-    def to_object(object_dict):
-
-        if "number" in object_dict:
-            number = object_dict["number"]
-        else:
-            number = 0
-        if "word_position" in object_dict:
-            word_position = object_dict["word_position"]
-        else:
-            word_position = 0
-        if "fails" in object_dict:
-            fails = object_dict["fails"]
-        else:
-            fails = 0
-        if "current_word" in object_dict:
-            current_word = WordZH.objects.filter(pk=object_dict["current_word"])[0]
-        else:
-            current_word = None
-        words = list()
-        if "words" in object_dict:
-            for i in range(NUMBER_OF_WORDS):
-                words.append(WordZH.objects.filter(pk=object_dict['words'][str(i)])[0])
-        print "Word_position in to_object: %s" % word_position
-        return LessonController(number=number, fails=fails, words = words, current_word = current_word, word_position = word_position)
 
 
 def dictionary(request):
@@ -356,4 +139,3 @@ def choose_language(request):
     template = loader.get_template('chinesetool/choose_language.html')
     context = RequestContext(request)
     return HttpResponse(template.render(context))
-
