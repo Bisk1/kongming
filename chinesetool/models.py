@@ -57,16 +57,16 @@ class WordZH(models.Model):
     Chinese word contains string value and set of
     polish translations related to it
     """
-    word = models.CharField(max_length=50, unique=True)
+    word = models.CharField(max_length=50)
     pinyin = models.CharField(max_length=100)
-    lesson = models.ForeignKey(Lesson, null=True, default=None)
+    lesson = models.ForeignKey(Lesson, null=True, default=0)
     wordpl_set = models.ManyToManyField(WordPL, through='WordTranslation')
 
     class Meta:
         unique_together = ["word", "pinyin"]
 
     def __unicode__(self):
-        return unicode(self.word)
+        return unicode(self.word + ' [' + self.pinyin + ']')
 
     def get_translations(self):
         """
@@ -146,7 +146,7 @@ class Subscription(models.Model):
         return unicode(self.name)
 
 
-class WordSkills(models.Model):
+class WordSkill(models.Model):
     word_zh = models.ForeignKey(WordZH)
     user = models.ForeignKey(User)
     last_time = models.DateTimeField()

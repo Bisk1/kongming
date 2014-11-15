@@ -25,9 +25,9 @@ class Migration(SchemaMigration):
         # Adding model 'WordZH'
         db.create_table(u'chinesetool_wordzh', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('word', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50)),
+            ('word', self.gf('django.db.models.fields.CharField')(max_length=50)),
             ('pinyin', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('lesson', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['chinesetool.Lesson'], null=True)),
+            ('lesson', self.gf('django.db.models.fields.related.ForeignKey')(default=0, to=orm['chinesetool.Lesson'], null=True)),
         ))
         db.send_create_signal(u'chinesetool', ['WordZH'])
 
@@ -69,26 +69,76 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'chinesetool', ['SentenceTranslation'])
 
-        # Adding model 'Abonament'
-        db.create_table(u'chinesetool_abonament', (
+        # Adding model 'Subscription'
+        db.create_table(u'chinesetool_subscription', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('registration_date', self.gf('django.db.models.fields.DateTimeField')()),
             ('last_login_date', self.gf('django.db.models.fields.DateTimeField')()),
             ('abo_date', self.gf('django.db.models.fields.DateTimeField')()),
         ))
-        db.send_create_signal(u'chinesetool', ['Abonament'])
+        db.send_create_signal(u'chinesetool', ['Subscription'])
 
-        # Adding model 'WordSkills'
-        db.create_table(u'chinesetool_wordskills', (
+        # Adding model 'WordSkill'
+        db.create_table(u'chinesetool_wordskill', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('word_zh', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chinesetool.WordZH'])),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('last_time', self.gf('django.db.models.fields.DateTimeField')()),
             ('correct', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('correct_run', self.gf('django.db.models.fields.IntegerField')(default=0)),
             ('wrong', self.gf('django.db.models.fields.IntegerField')(default=0)),
         ))
-        db.send_create_signal(u'chinesetool', ['WordSkills'])
+        db.send_create_signal(u'chinesetool', ['WordSkill'])
+
+        # Adding model 'LessonAction'
+        db.create_table(u'chinesetool_lessonaction', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('total_exercises_number', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('current_exercise_number', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('fails', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('lesson', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chinesetool.Lesson'], null=True)),
+        ))
+        db.send_create_signal(u'chinesetool', ['LessonAction'])
+
+        # Adding model 'ExerciseType'
+        db.create_table(u'chinesetool_exercisetype', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=10)),
+        ))
+        db.send_create_signal(u'chinesetool', ['ExerciseType'])
+
+        # Adding model 'ExerciseAction'
+        db.create_table(u'chinesetool_exerciseaction', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chinesetool.ExerciseType'], null=True, blank=True)),
+            ('lesson_action', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chinesetool.LessonAction'])),
+            ('number', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('result', self.gf('django.db.models.fields.IntegerField')(default=0)),
+        ))
+        db.send_create_signal(u'chinesetool', ['ExerciseAction'])
+
+        # Adding model 'AbstractExerciseActionDescription'
+        db.create_table(u'chinesetool_abstractexerciseactiondescription', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('exercise', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chinesetool.ExerciseAction'])),
+        ))
+        db.send_create_signal(u'chinesetool', ['AbstractExerciseActionDescription'])
+
+        # Adding model 'WordZHExerciseActionDescription'
+        db.create_table(u'chinesetool_wordzhexerciseactiondescription', (
+            (u'abstractexerciseactiondescription_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['chinesetool.AbstractExerciseActionDescription'], unique=True, primary_key=True)),
+            ('word', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chinesetool.WordZH'])),
+        ))
+        db.send_create_signal(u'chinesetool', ['WordZHExerciseActionDescription'])
+
+        # Adding model 'WordPLExerciseActionDescription'
+        db.create_table(u'chinesetool_wordplexerciseactiondescription', (
+            (u'abstractexerciseactiondescription_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['chinesetool.AbstractExerciseActionDescription'], unique=True, primary_key=True)),
+            ('word', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chinesetool.WordPL'])),
+        ))
+        db.send_create_signal(u'chinesetool', ['WordPLExerciseActionDescription'])
 
 
     def backwards(self, orm):
@@ -119,11 +169,29 @@ class Migration(SchemaMigration):
         # Deleting model 'SentenceTranslation'
         db.delete_table(u'chinesetool_sentencetranslation')
 
-        # Deleting model 'Abonament'
-        db.delete_table(u'chinesetool_abonament')
+        # Deleting model 'Subscription'
+        db.delete_table(u'chinesetool_subscription')
 
-        # Deleting model 'WordSkills'
-        db.delete_table(u'chinesetool_wordskills')
+        # Deleting model 'WordSkill'
+        db.delete_table(u'chinesetool_wordskill')
+
+        # Deleting model 'LessonAction'
+        db.delete_table(u'chinesetool_lessonaction')
+
+        # Deleting model 'ExerciseType'
+        db.delete_table(u'chinesetool_exercisetype')
+
+        # Deleting model 'ExerciseAction'
+        db.delete_table(u'chinesetool_exerciseaction')
+
+        # Deleting model 'AbstractExerciseActionDescription'
+        db.delete_table(u'chinesetool_abstractexerciseactiondescription')
+
+        # Deleting model 'WordZHExerciseActionDescription'
+        db.delete_table(u'chinesetool_wordzhexerciseactiondescription')
+
+        # Deleting model 'WordPLExerciseActionDescription'
+        db.delete_table(u'chinesetool_wordplexerciseactiondescription')
 
 
     models = {
@@ -156,18 +224,37 @@ class Migration(SchemaMigration):
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
-        u'chinesetool.abonament': {
-            'Meta': {'object_name': 'Abonament'},
-            'abo_date': ('django.db.models.fields.DateTimeField', [], {}),
+        u'chinesetool.abstractexerciseactiondescription': {
+            'Meta': {'object_name': 'AbstractExerciseActionDescription'},
+            'exercise': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['chinesetool.ExerciseAction']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+        },
+        u'chinesetool.exerciseaction': {
+            'Meta': {'object_name': 'ExerciseAction'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'last_login_date': ('django.db.models.fields.DateTimeField', [], {}),
-            'name': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
-            'registration_date': ('django.db.models.fields.DateTimeField', [], {})
+            'lesson_action': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['chinesetool.LessonAction']"}),
+            'number': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'result': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['chinesetool.ExerciseType']", 'null': 'True', 'blank': 'True'})
+        },
+        u'chinesetool.exercisetype': {
+            'Meta': {'object_name': 'ExerciseType'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '10'})
         },
         u'chinesetool.lesson': {
             'Meta': {'object_name': 'Lesson'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'level': ('django.db.models.fields.IntegerField', [], {'default': '0'})
+        },
+        u'chinesetool.lessonaction': {
+            'Meta': {'object_name': 'LessonAction'},
+            'current_exercise_number': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'fails': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'lesson': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['chinesetool.Lesson']", 'null': 'True'}),
+            'total_exercises_number': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         u'chinesetool.sentencepl': {
             'Meta': {'object_name': 'SentencePL'},
@@ -187,14 +274,28 @@ class Migration(SchemaMigration):
             'level': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'sentence': ('django.db.models.fields.TextField', [], {'default': "''"})
         },
+        u'chinesetool.subscription': {
+            'Meta': {'object_name': 'Subscription'},
+            'abo_date': ('django.db.models.fields.DateTimeField', [], {}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'last_login_date': ('django.db.models.fields.DateTimeField', [], {}),
+            'name': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
+            'registration_date': ('django.db.models.fields.DateTimeField', [], {})
+        },
         u'chinesetool.wordpl': {
             'Meta': {'object_name': 'WordPL'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'word': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'})
         },
-        u'chinesetool.wordskills': {
-            'Meta': {'object_name': 'WordSkills'},
+        u'chinesetool.wordplexerciseactiondescription': {
+            'Meta': {'object_name': 'WordPLExerciseActionDescription', '_ormbases': [u'chinesetool.AbstractExerciseActionDescription']},
+            u'abstractexerciseactiondescription_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['chinesetool.AbstractExerciseActionDescription']", 'unique': 'True', 'primary_key': 'True'}),
+            'word': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['chinesetool.WordPL']"})
+        },
+        u'chinesetool.wordskill': {
+            'Meta': {'object_name': 'WordSkill'},
             'correct': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'correct_run': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_time': ('django.db.models.fields.DateTimeField', [], {}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
@@ -210,10 +311,15 @@ class Migration(SchemaMigration):
         u'chinesetool.wordzh': {
             'Meta': {'unique_together': "(['word', 'pinyin'],)", 'object_name': 'WordZH'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'lesson': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['chinesetool.Lesson']", 'null': 'True'}),
+            'lesson': ('django.db.models.fields.related.ForeignKey', [], {'default': '0', 'to': u"orm['chinesetool.Lesson']", 'null': 'True'}),
             'pinyin': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'word': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'}),
+            'word': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'wordpl_set': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['chinesetool.WordPL']", 'through': u"orm['chinesetool.WordTranslation']", 'symmetrical': 'False'})
+        },
+        u'chinesetool.wordzhexerciseactiondescription': {
+            'Meta': {'object_name': 'WordZHExerciseActionDescription', '_ormbases': [u'chinesetool.AbstractExerciseActionDescription']},
+            u'abstractexerciseactiondescription_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['chinesetool.AbstractExerciseActionDescription']", 'unique': 'True', 'primary_key': 'True'}),
+            'word': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['chinesetool.WordZH']"})
         },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
