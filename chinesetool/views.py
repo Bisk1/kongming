@@ -54,7 +54,7 @@ def translate_word(request):
                 response = lesson_action.get_final_response()
             return HttpResponse(json.dumps(response), content_type='application/javascript')
 
-    new_lesson_action = LessonAction.create(request.user)
+    new_lesson_action = LessonAction.create_word_lesson_action(request.user)
     response = {'lesson_action': new_lesson_action}
     template = loader.get_template('chinesetool/translate_word.html')
     context = RequestContext(request, response)
@@ -64,17 +64,29 @@ def translate_word(request):
 @login_required
 def translate_sentence(request):
     """
-    TODO: This is a mock!
     It generates a form with chinese sentence to be guessed and an input box for
     the user to type in his guess. If a guess has already been made, it shows results.
     :param request: http request for this page
     :return: http response showing guessing panel
     """
-    random_sentence_zh = get_random(WordZH)
+    if request.POST:
+        lesson_action = LessonAction.objects.get(pk=request.POST.get('lesson_id'))
+        proposition = request.POST.get('proposition')
+        if proposition is not None:
+            response = lesson_action.check(proposition)
+            return HttpResponse(json.dumps(response), content_type='application/javascript')
+        else:
+            if lesson_action.has_next():
+                lesson_action.next_exercise()
+                response = lesson_action.prepare()
+            else:
+                response = lesson_action.get_final_response()
+            return HttpResponse(json.dumps(response), content_type='application/javascript')
+
+    new_lesson_action = LessonAction.create_sentence_lesson_action(request.user)
+    response = {'lesson_action': new_lesson_action}
     template = loader.get_template('chinesetool/translate_sentence.html')
-    context = RequestContext(request, {
-        'sentence_zh': random_sentence_zh,
-    })
+    context = RequestContext(request, response)
     return HttpResponse(template.render(context))
 
 

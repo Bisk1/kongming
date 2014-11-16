@@ -3,14 +3,27 @@ from django.contrib.auth.models import User
 from django.db import models
 from enum import Enum
 from chinesetool.learn import checkers
-from chinesetool.utils.model_utils import get_random, get_random_list
+from chinesetool.utils.model_utils import get_random_list
 
-NUMBER_OF_WORDS_PER_LESSON_ACTION = 5
+NUMBER_OF_EXERCISES_PER_LESSON_ACTION = 5
+
+NONE = 'a'
+WORD_PL = 'b'
+WORD_ZH = 'c'
+SENTENCE_PL = 'd'
+SENTENCE_ZH = 'e'
+EXERCISE_TYPE = (
+    (NONE, 'none'),
+    (WORD_PL, 'word_pl'),
+    (WORD_PL, 'word_zh'),
+    (SENTENCE_PL, 'sentence_pl'),
+    (SENTENCE_ZH, 'sentence_zh'),
+)
 
 
 class Lesson(models.Model):
     """
-    Single chinese lesson is defined by level
+    Single Chinese lesson is defined by level
     and words related to it.
     """
     level = models.IntegerField(default=0)
@@ -22,7 +35,7 @@ class Lesson(models.Model):
 class WordPL(models.Model):
     """
     Polish word has string value and set of
-    chinese translations related to it
+    Chinese translations related to it
     """
     word = models.CharField(max_length=100, unique=True)
 
@@ -32,7 +45,7 @@ class WordPL(models.Model):
     def get_translations(self):
         """
         Gets all accurate translations of this word
-        :return: array of chinese words
+        :return: array of Chinese words
         """
         word_zh = list()
         for translation in self.wordzh_set.all():
@@ -41,8 +54,8 @@ class WordPL(models.Model):
 
     def check_translation(self, word_zh_proposition):
         """
-        Check if the chinese word used by the user can be accepted for this polish word
-        :param word_zh_proposition: word in chineses (string) typed in by the user
+        Check if the Chinese word used by the user can be accepted for this Polish word
+        :param word_zh_proposition: word in Chinese (string) typed in by the user
         :return: true if this translation is acceptable
         """
         correct_chinese_translations = self.get_translations()
@@ -55,7 +68,7 @@ class WordPL(models.Model):
 class WordZH(models.Model):
     """
     Chinese word contains string value and set of
-    polish translations related to it
+    Polish translations related to it
     """
     word = models.CharField(max_length=50)
     pinyin = models.CharField(max_length=100)
@@ -71,7 +84,7 @@ class WordZH(models.Model):
     def get_translations(self):
         """
         Gets all accurate translations of this word
-        :return: array of polish words
+        :return: array of Polish words
         """
         words_pl = list()
         for translation in self.wordpl_set.all():
@@ -80,8 +93,8 @@ class WordZH(models.Model):
 
     def check_translation(self, word_pl_proposition):
         """
-        Check if the polish word used by the user can be accepted for this chinese word
-        :param word_pl_proposition: word in polish (string) typed in by the user
+        Check if the Polish word used by the user can be accepted for this Chinese word
+        :param word_pl_proposition: word in Polish (string) typed in by the user
         :return: true if this translation is acceptable
         """
         correct_polish_translations = self.get_translations()
@@ -93,11 +106,11 @@ class WordZH(models.Model):
 
 class WordTranslation(models.Model):
     """
-    Pair of chinese word and polish word defines
+    Pair of a Chinese word and a Polish word defines
     single translation. This is a many-to-many field
-    because oen polish word can have many chinese
-    translations and one chinese word can have
-    many polish translations
+    because one Polish word can have many Chinese
+    translations and one Chinese word can have
+    many Polish translations
     """
     word_zh = models.ForeignKey(WordZH)
     word_pl = models.ForeignKey(WordPL)
@@ -111,29 +124,81 @@ class WordTranslation(models.Model):
 
 class SentencePL(models.Model):
     """
-    TODO: This is mock
-    Polish sentence has string value
+    Polish sentence has a string value
     """
-    level = models.IntegerField(default=0)
-    sentence = models.TextField(default='')
+    sentence = models.TextField(unique=True)
+
+    def __unicode__(self):
+        return unicode(self.sentence)
+
+    def get_translations(self):
+        """
+        Gets all accurate translations of this word
+        :return: array of Chinese words
+        """
+        sentence_zh = list()
+        for translation in self.sentencezh_set.all():
+            sentence_zh.append(translation.sentence)
+        return sentence_zh
+
+    def check_translation(self, sentence_zh_proposition):
+        """
+        Check if the Chinese word used by the user can be accepted for this Polish word
+        :param sentence_zh_proposition: word in Chinese (string) typed in by the user
+        :return: true if this translation is acceptable
+        """
+        correct_chinese_translations = self.get_translations()
+        for chinese_sentence in correct_chinese_translations:
+            if checkers.sentence_difference(chinese_sentence, sentence_zh_proposition) < 2:
+                return True
+        return False
 
 
 class SentenceZH(models.Model):
     """
-    TODO: This is mock
-    Chinese sentence has string value
+    Chinese sentence has a string value
     """
-    level = models.IntegerField(default=0)
-    sentence = models.TextField(default='')
+    sentence = models.TextField(unique=True)
+    sentencepl_set = models.ManyToManyField(SentencePL, through='SentenceTranslation')
+
+    def __unicode__(self):
+        return unicode(self.sentence)
+
+    def get_translations(self):
+        """
+        Gets all accurate translations of this word
+        :return: array of Polish words
+        """
+        sentences_pl = list()
+        for translation in self.sentencepl_set.all():
+            sentences_pl.append(translation.sentence)
+        return sentences_pl
+
+    def check_translation(self, sentence_pl_proposition):
+        """
+        Check if the Polish word used by the user can be accepted for this Chinese word
+        :param sentence_pl_proposition: word in Polish (string) typed in by the user
+        :return: true if this translation is acceptable
+        """
+        correct_polish_translations = self.get_translations()
+        for polish_sentence in correct_polish_translations:
+            if checkers.sentence_difference(polish_sentence, sentence_pl_proposition) < 2:
+                return True
+        return False
 
 
 class SentenceTranslation(models.Model):
     """
-    TODO: This is mock
-    Pair of chinese sentece and polish sentence
+    Pair of a Chinese sentence and a Polish sentence
     """
-    sentence_zh = models.ForeignKey(WordZH)
-    sentence_pl = models.ForeignKey(WordPL)
+    class Meta:
+        unique_together = ["sentence_zh", "sentence_pl"]
+
+    sentence_zh = models.ForeignKey(SentenceZH)
+    sentence_pl = models.ForeignKey(SentencePL)
+
+    def __unicode__(self):
+        return self.word_zh.word + " - " + self.word_pl.word
 
 
 class Subscription(models.Model):
@@ -163,26 +228,50 @@ class LessonAction(models.Model):
     lesson = models.ForeignKey(Lesson, null=True)
 
     @classmethod
-    def create(cls, user, lesson=None, number=NUMBER_OF_WORDS_PER_LESSON_ACTION):
-        new_lesson_action = cls(total_exercises_number=NUMBER_OF_WORDS_PER_LESSON_ACTION, current_exercise_number=0,
+    def create_word_lesson_action(cls, user, lesson=None,
+                                  number_of_exercises=NUMBER_OF_EXERCISES_PER_LESSON_ACTION):
+        new_lesson_action = cls(total_exercises_number=number_of_exercises, current_exercise_number=0,
                                 fails=0, user=user, lesson=lesson)
         new_lesson_action.save()
 
-        i = 1
         if lesson is None:
-            words = get_random_list(WordZH, number)
+            words = get_random_list(WordZH, number_of_exercises)
         else:
-            words = get_random_list(WordZH.objects.filter(lesson=lesson), number=number)
+            words = get_random_list(WordZH.objects.filter(lesson=lesson), number=number_of_exercises)
+        i = 1
         for word in words:
-            new_exercise = ExerciseAction(type=ExerciseType.objects.get(name="word_zh"),
-                                          lesson_action=new_lesson_action, number=i)
+            new_exercise = ExerciseAction(type=WORD_ZH, lesson_action=new_lesson_action, number=i)
             new_exercise.save()
             WordZHExerciseActionDescription(word=word,
                                             exercise=new_exercise).save()  # TODO: should use multiple actions
             i += 1
         return new_lesson_action
 
+    @classmethod
+    def create_sentence_lesson_action(cls, user, lesson=None,
+                                      number_of_exercises=NUMBER_OF_EXERCISES_PER_LESSON_ACTION):
+        new_lesson_action = cls(total_exercises_number=number_of_exercises, current_exercise_number=0,
+                                fails=0, user=user, lesson=lesson)
+        new_lesson_action.save()
+
+        if lesson is None:
+            sentences = get_random_list(SentenceZH, number_of_exercises)
+        else:
+            sentences = get_random_list(SentenceZH.objects.filter(lesson=lesson), number=number_of_exercises)
+        i = 1
+        for sentence in sentences:
+            new_exercise = ExerciseAction(type=SENTENCE_ZH, lesson_action=new_lesson_action, number=i)
+            new_exercise.save()
+            SentenceZHExerciseActionDescription(sentence=sentence,
+                                                exercise=new_exercise).save()
+            i += 1
+        return new_lesson_action
+
     def has_next(self):
+        """
+        Check if lesson has next exercise
+        :return: true if lesson has next exercise
+        """
         return self.current_exercise_number <= self.total_exercises_number - 1
 
     def next_exercise(self):
@@ -213,25 +302,21 @@ class LessonAction(models.Model):
         response['total_exercises_number'] = self.total_exercises_number
         return response
 
+
 class ExerciseResultState(Enum):
     NOT_DONE = 0
     SUCCESS = 1
     FAILURE = 2
 
 
-class ExerciseType(models.Model):
-    name = models.CharField(max_length=10)
-
-
 class ExerciseAction(models.Model):
-    type = models.ForeignKey(ExerciseType, blank=True, null=True)
+    type = models.CharField(max_length=1, choices=EXERCISE_TYPE, default=NONE)
     lesson_action = models.ForeignKey(LessonAction)
     number = models.IntegerField(default=0)
     result = models.IntegerField(default=ExerciseResultState.NOT_DONE)
 
     def check(self, proposition):
-        if self.type.name == "word_zh":
-            response = self.get_description().check(proposition)
+        response = self.get_description().check(proposition)
         if response['success']:
             self.result = ExerciseResultState.SUCCESS
         else:
@@ -245,10 +330,14 @@ class ExerciseAction(models.Model):
         return self.get_description_model().objects.get(exercise=self)
 
     def get_description_model(self):
-        if self.type.name == "word_zh":
+        if self.type == WORD_ZH:
             return WordZHExerciseActionDescription
-        if self.type.name == "word_pl":
-            return WordZHExerciseActionDescription
+        if self.type == WORD_PL:
+            return WordPLExerciseActionDescription
+        if self.type == SENTENCE_ZH:
+            return SentenceZHExerciseActionDescription
+        if self.type == SENTENCE_PL:
+            return SentencePLExerciseActionDescription
         else:
             raise Exception("Unknown exercise type")
 
@@ -261,7 +350,7 @@ class AbstractExerciseActionDescription(models.Model):
         pass
 
     @abc.abstractmethod
-    def prepare(self, proposition):
+    def prepare(self):
         pass
 
 
@@ -285,3 +374,25 @@ class WordPLExerciseActionDescription(AbstractExerciseActionDescription):
 
     def prepare(self):
         return {'word_to_display': self.word.word}
+
+
+class SentenceZHExerciseActionDescription(AbstractExerciseActionDescription):
+    sentence = models.ForeignKey(SentenceZH)
+
+    def check(self, proposition):
+        return {'success': self.sentence.check_translation(proposition),
+                'correct_sentence': self.sentence.sentencepl_set.all()[0].sentence}
+
+    def prepare(self):
+        return {'sentence_to_display': self.sentence.sentence}
+
+
+class SentencePLExerciseActionDescription(AbstractExerciseActionDescription):
+    sentence = models.ForeignKey(SentencePL)
+
+    def check(self, proposition):
+        return {'success': self.sentence.check_translation(proposition),
+                'correct_sentence': self.sentence.sentencezh_set.all()[0].sentence}
+
+    def prepare(self):
+        return {'sentence_to_display': self.sentence.sentence}

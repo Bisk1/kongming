@@ -1,11 +1,110 @@
+{% extends "chinesetool/base.html"%}
 {% load i18n %}
-<h1>{{ sentencezh.word }}</h1>
+{% block content %}
+<h1></h1>
 
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#check").click(function() {
+                    var proposition = $("#proposition").val();
+                    var lesson_id = $("#lesson_id").val();
+                    $.ajax({
+                        url : "/translate_sentence/",
+                        type : "POST",
+                        dataType: "json",
+                        data : {
+                            proposition : proposition,
+                            lesson_id : lesson_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                            },
+                            success : function(json) {
+                                    $('#proposition').hide();
+                                    $('#check').hide();
+                                    $('#next').show();
+                                    $('#next').html("Continue");
+                                    $('#result').show();
+                                    $('#correct').show();
+                                    $('#total_exercises_number').show();
+                                    $('#fails').show();
+                                    $('#result').html("Wynik: "+json.success);
+                                    $('#correct').html("Poprawne haslo: "+json.correct_sentence);
+                                    $('#current_exercise_number').html("Numer slowka: "+json.current_exercise_number);
+                                    $('#total_exercises_number').html("Liczba wszystkich slow: "+json.total_exercises_number);
+                                    $('#total_number').html("Numer slowka: "+json.current_exercise_number);
+                                    $('#fails').html("Nieprawidlowe odpowiedzi: "+json.fails);
+                                    $('h1').html(json.sentence_to_display);
+                            },
+                            error : function(xhr,errmsg,err) {
+                                $('#result').show();
+                                $('#result').html((xhr.status + ": " + xhr.responseText));
+                            }
+                    });
+                    return false;
+            });
+
+            $("#next").click(function() {
+                    var lesson_id = $("#lesson_id").val();
+                    $.ajax({
+                        url : "/translate_sentence/",
+                        type : "POST",
+                        dataType: "json",
+                        data : {
+                            lesson_id : lesson_id,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                            },
+
+
+                            success : function(json) {
+                                $('#next').hide();
+                                $('#correct').hide();
+                                $('#fails').show();
+                                $('#result').hide();
+                                $('#proposition').val('');
+                                if (json.final) {
+                                    $('#proposition').hide();
+                                    $('#check').hide();
+                                    $('#return_link').show();
+                                    $('h1').html("To koniec!");
+                                }
+                                else {
+                                    $('#proposition').show();
+                                    $('#check').show();
+                                    $('#check').html("Check");
+                                    $('#current_exercise_number').show();
+                                    $('#current_exercise_number').html("Numer slowka: "+json.current_exercise_number);
+                                    $('#total_exercises_number').html("Liczba wszystkich slow: "+json.total_exercises_number);
+                                    $('h1').html(json.sentence_to_display);
+
+                                }
+                            },
+                            error : function(xhr,errmsg,err) {
+                                $('#result').show();
+                                $('#result').html((xhr.status + ": " + xhr.responseText));
+                            }
+                    });
+                    return false;
+            })
+        });
+    </script>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<form action="{% url 'chinesetool:check_sentence_translation' sentencezh.id %}" method="post">
 {% csrf_token %}
-    <input type="text" name="proposition" id="proposition" />
-    <label for="proposition">{% trans "Your translation" %}</label><br />
-<input type="submit" value="Vote" />
+
+<input type="text" name="proposition" id="proposition" hidden/>
+<button type="button" id="check" hidden>Check</button>
+<button type="button" id="next">Start</button>
+<input type="hidden" name="lesson_id" id="lesson_id" value="{{ lesson_action.pk }}">
+<p id = "correct" hidden></p>
+<p id = "total_exercises_number" hidden></p>
+<p id = "current_exercise_number" hidden></p>
+<p id = "fails" hidden></p>
+<p id = "lesson" hidden>Lekcja: </p>
+<p id = "comment" hidden></p>
+
+<form action="{% url 'chinesetool:index' %}">
+    <input type="submit" id = "menu" value="MENU" hidden>
 </form>
+
+<p id = "result"></p>
+<a href="{% url 'chinesetool:index' %}" id="return_link" hidden>{% trans "Return" %}</a>
+{% endblock %}

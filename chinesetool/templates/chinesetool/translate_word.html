@@ -35,6 +35,7 @@
                                     $('h1').html(json.word_to_display);
                             },
                             error : function(xhr,errmsg,err) {
+                                $('#result').show();
                                 $('#result').html((xhr.status + ": " + xhr.responseText));
                             }
                     });
@@ -58,6 +59,7 @@
                                 $('#correct').hide();
                                 $('#fails').show();
                                 $('#result').hide();
+                                $('#proposition').val('');
                                 if (json.final) {
                                     $('#proposition').hide();
                                     $('#check').hide();
@@ -76,6 +78,7 @@
                                 }
                             },
                             error : function(xhr,errmsg,err) {
+                                $('#result').show();
                                 $('#result').html((xhr.status + ": " + xhr.responseText));
                             }
                     });
@@ -101,8 +104,7 @@
 <form action="{% url 'chinesetool:index' %}">
     <input type="submit" id = "menu" value="MENU" hidden>
 </form>
+
+<p id = "result"></p>
 <a href="{% url 'chinesetool:index' %}" id="return_link" hidden>{% trans "Return" %}</a>
 {% endblock %}
-
-
-

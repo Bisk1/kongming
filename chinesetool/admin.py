@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from chinesetool.models import WordPL, WordZH, WordTranslation, Subscription, WordSkill, SentenceZH, SentencePL, \
-    SentenceTranslation, Lesson, ExerciseAction, ExerciseType
+    SentenceTranslation, Lesson, ExerciseAction
 
 
 class WordTranslationAdmin(admin.ModelAdmin):
@@ -10,6 +10,14 @@ class WordTranslationAdmin(admin.ModelAdmin):
         ('Polish word', {'fields': ['word_pl']}),
     ]
     list_display = ('word_zh', 'word_pl')
+
+
+class SentenceTranslationAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ('Chinese sentence',               {'fields': ['sentence_zh']}),
+        ('Polish sentence', {'fields': ['sentence_pl']}),
+    ]
+    list_display = ('sentence_zh', 'sentence_pl')
 
 
 class WordZHAdmin(admin.ModelAdmin):
@@ -21,9 +29,8 @@ admin.site.register(WordZH, WordZHAdmin)
 admin.site.register(WordTranslation, WordTranslationAdmin)
 admin.site.register(SentenceZH)
 admin.site.register(SentencePL)
-admin.site.register(SentenceTranslation)
+admin.site.register(SentenceTranslation, SentenceTranslationAdmin)
 admin.site.register(Lesson)
 admin.site.register(Subscription)
 admin.site.register(WordSkill)
 admin.site.register(ExerciseAction)
-admin.site.register(ExerciseType)

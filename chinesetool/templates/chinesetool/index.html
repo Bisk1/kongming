@@ -13,7 +13,7 @@
 {% endif %}
 <ul>
     <li><a href="{% url 'chinesetool:translate_word' %}">{% trans "Translate a word" %}</a></li>
-    <li>{% trans "Translate a sentence" %} <b>TODO</b></li>
+    <li><a href="{% url 'chinesetool:translate_sentence' %}">{% trans "Translate a sentence" %}</li>
     {% if user.is_superuser %}
     <li><a href="{% url 'admin:index' %}">{% trans "Administrator's panel" %}</a></li>
     {% endif %}
