@@ -126,7 +126,7 @@ class SentencePL(models.Model):
     """
     Polish sentence has a string value
     """
-    sentence = models.TextField(unique=True)
+    sentence = models.CharField(max_length=255, unique=True)
 
     def __unicode__(self):
         return unicode(self.sentence)
@@ -158,7 +158,7 @@ class SentenceZH(models.Model):
     """
     Chinese sentence has a string value
     """
-    sentence = models.TextField(unique=True)
+    sentence = models.CharField(max_length=255, unique=True)
     sentencepl_set = models.ManyToManyField(SentencePL, through='SentenceTranslation')
 
     def __unicode__(self):

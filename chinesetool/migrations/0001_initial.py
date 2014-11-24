@@ -48,14 +48,14 @@ class Migration(SchemaMigration):
         # Adding model 'SentencePL'
         db.create_table(u'chinesetool_sentencepl', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('sentence', self.gf('django.db.models.fields.TextField')(unique=True)),
+            ('sentence', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
         ))
         db.send_create_signal(u'chinesetool', ['SentencePL'])
 
         # Adding model 'SentenceZH'
         db.create_table(u'chinesetool_sentencezh', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('sentence', self.gf('django.db.models.fields.TextField')(unique=True)),
+            ('sentence', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
         ))
         db.send_create_signal(u'chinesetool', ['SentenceZH'])
 
@@ -106,7 +106,7 @@ class Migration(SchemaMigration):
         # Adding model 'ExerciseAction'
         db.create_table(u'chinesetool_exerciseaction', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('type', self.gf('django.db.models.fields.CharField')(default='0', max_length=3)),
+            ('type', self.gf('django.db.models.fields.CharField')(default='a', max_length=1)),
             ('lesson_action', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chinesetool.LessonAction'])),
             ('number', self.gf('django.db.models.fields.IntegerField')(default=0)),
             ('result', self.gf('django.db.models.fields.IntegerField')(default=0)),
@@ -249,7 +249,7 @@ class Migration(SchemaMigration):
             'lesson_action': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['chinesetool.LessonAction']"}),
             'number': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'result': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'type': ('django.db.models.fields.CharField', [], {'default': "'0'", 'max_length': '3'})
+            'type': ('django.db.models.fields.CharField', [], {'default': "'a'", 'max_length': '1'})
         },
         u'chinesetool.lesson': {
             'Meta': {'object_name': 'Lesson'},
@@ -268,7 +268,7 @@ class Migration(SchemaMigration):
         u'chinesetool.sentencepl': {
             'Meta': {'object_name': 'SentencePL'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'sentence': ('django.db.models.fields.TextField', [], {'unique': 'True'})
+            'sentence': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'})
         },
         u'chinesetool.sentenceplexerciseactiondescription': {
             'Meta': {'object_name': 'SentencePLExerciseActionDescription', '_ormbases': [u'chinesetool.AbstractExerciseActionDescription']},
@@ -284,7 +284,7 @@ class Migration(SchemaMigration):
         u'chinesetool.sentencezh': {
             'Meta': {'object_name': 'SentenceZH'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'sentence': ('django.db.models.fields.TextField', [], {'unique': 'True'}),
+            'sentence': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
             'sentencepl_set': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['chinesetool.SentencePL']", 'through': u"orm['chinesetool.SentenceTranslation']", 'symmetrical': 'False'})
         },
         u'chinesetool.sentencezhexerciseactiondescription': {
