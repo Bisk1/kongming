@@ -10,8 +10,10 @@ urlpatterns = patterns('',
     url(r'^logout/$', views.logout_page, name='logout'),
     url(r'^register/$', views.register_page, name='register'),
     url(r'^dictionary/$', views.dictionary, name='dictionary'),
-    url(r'^choose_language/', views.choose_language, name='choose_language'),
+    url(r'^choose_language/$', views.choose_language, name='choose_language'),
+    url(r'^add_lesson/$', views.add_lesson, name='add_lesson'),
+    url(r'^modify_lesson/(\d+)/$', views.modify_lesson, name='modify_lesson'),
+    url(r'^add_requirement/(\d+)/$', views.add_requirement, name='add_requirement'),
     url(r'^i18n/', include('django.conf.urls.i18n')),
-
 
 )

@@ -2,10 +2,11 @@ from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import transaction
+from django.shortcuts import redirect
 from django.template import loader
 from chinesetool.forms import RegistrationForm
 
-from chinesetool.models import WordZH, WordPL, WordTranslation, Subscription, LessonAction
+from chinesetool.models import WordZH, WordPL, WordTranslation, Subscription, LessonAction, Lesson, ExerciseType
 
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
@@ -114,9 +115,8 @@ def register_page(request):
     else:
         form = RegistrationForm()
     template = loader.get_template("registration/register.html")
-    variables = RequestContext(request, {'form': form})
-    output = template.render(variables)
-    return HttpResponse(output)
+    context = RequestContext(request, {'form': form})
+    return HttpResponse(template.render(context))
 
 
 def logout_page(request):
@@ -150,4 +150,75 @@ def dictionary(request):
 def choose_language(request):
     template = loader.get_template('chinesetool/choose_language.html')
     context = RequestContext(request)
+    return HttpResponse(template.render(context))
+
+
+def add_lesson(request):
+    """
+    Allows user to add a new lesson
+    :param request:
+    :return:
+    """
+    if request.POST.get('topic', False):
+        lesson = Lesson(topic=request.POST.get('topic'))
+        lesson.save()
+        return HttpResponseRedirect(reverse('chinesetool:modify_lesson', args=(lesson.id,)))
+    template = loader.get_template(('chinesetool/add_lesson.html'))
+    context = RequestContext(request)
+    return HttpResponse(template.render(context))
+
+
+def modify_lesson(request, lesson_id):
+    """
+    Modifies lesson - allows to change requirements and exercises
+    :param request:
+    :return:
+    """
+    lesson = Lesson.objects.get(pk=lesson_id)
+    if request.POST.get('requirement_to_remove', False):
+        requirement_to_remove = Lesson.objects.get(pk=request.POST.get('requirement_to_remove'))
+        lesson.requirements.remove(requirement_to_remove)
+        lesson.save()
+    other_lessons = Lesson.objects.all().order_by('-topic')
+    requirements = lesson.requirements.all()
+    exercises_types = ExerciseType.objects.all().order_by('-description')
+    template = loader.get_template('chinesetool/modify_lesson.html')
+    context = RequestContext(request, {'other_lessons': other_lessons, 'exercises_types': exercises_types,
+                                       'requirements': requirements, 'lesson': lesson})
+    return HttpResponse(template.render(context))
+
+
+def add_requirement(request, lesson_id):
+    """
+    Adds requirement for lesson - a lesson that should be learned first
+    :param request:
+    :return:
+    """
+    lesson = Lesson.objects.get(pk=lesson_id)
+    if request.POST:
+        lesson.requirements.add(request.POST.get('new_requirement'))
+        lesson.save()
+        return HttpResponseRedirect(reverse('chinesetool:modify_lesson', args=(lesson_id,)))
+    other_lessons = Lesson.objects.all().order_by('-topic')
+    template = loader.get_template('chinesetool/add_requirement.html')
+    context = RequestContext(request, {'other_lessons': other_lessons, 'lesson': lesson})
+    return HttpResponse(template.render(context))
+
+
+def add_exercise_word_zh(request, lesson_id):
+    """
+    Adds exercise - Chinese word - for a lesson
+    :param request:
+    :return:
+    """
+    lesson = Lesson.objects.get(pk=lesson_id)
+    if request.POST:
+        lesson.add
+        lesson.add(request.POST.get('new_word_zh'))
+        lesson.save()
+        return HttpResponseRedirect(reverse('chinesetool:modify_lesson', args=(lesson_id,)))
+    lesson = Lesson.objects.get(pk=lesson_id)
+    other_lessons = Lesson.objects.all().order_by('-topic')
+    template = loader.get_template('chinesetool/add_requirement.html')
+    context = RequestContext(request, {'other_lessons': other_lessons, 'lesson': lesson})
     return HttpResponse(template.render(context))

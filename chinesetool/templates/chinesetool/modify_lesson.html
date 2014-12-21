@@ -1,0 +1,46 @@
+{% extends "chinesetool/base.html"%}
+{% load i18n %}
+{% block content %}
+
+
+<div>
+Tytuł lekcji:
+{{ lesson.topic }}
+</div>
+
+
+    <input type="hidden" id="lesson" value="{{ lesson.id }}"/>
+    Wymagane tematy:
+    <div class="requirements">
+        <table>
+            {% for requirement in requirements %}
+                <tr>
+                    <td>{{ requirement.topic }}</td>
+                    <td>
+                        <form action="{% url 'chinesetool:modify_lesson' lesson.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="requirement_to_remove" value="{{ requirement.id }}"/>
+                            <button class="remove_requirement_button">Usuń</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <form action="{% url 'chinesetool:add_requirement' lesson.id %}" method="get">
+            <button class="add_requirement_button">Dodaj</button>
+        </form>
+    </div>
+    Ćwiczenia:
+    <div>
+        <table>
+            {% for exercise in exercises %}
+                <tr><td> {{ exercise }} </td></tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <input type="submit" id = "menu" value="Zapisz">
+
+{% endblock %}
+{% block
+footer %}++

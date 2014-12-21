@@ -1,0 +1,14 @@
+{% extends "chinesetool/base.html"%}
+{% load i18n %}
+{% block content %}
+
+
+Lekcja: {{ lesson.topic }}
+Dodaj wymaganie:
+<form action="{% url 'chinesetool:add_exercise_word_zh' lesson.id %}" method="post">
+    {% csrf_token %}
+    <input type="text" id="new_word_zh" name="new_word_zh"/>
+    <input type="submit" value="Dodaj">
+</form>
+
+{% endblock %}

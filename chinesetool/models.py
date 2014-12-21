@@ -12,13 +12,26 @@ WORD_PL = 'b'
 WORD_ZH = 'c'
 SENTENCE_PL = 'd'
 SENTENCE_ZH = 'e'
+TEXT = 'f'
 EXERCISE_TYPE = (
     (NONE, 'none'),
     (WORD_PL, 'word_pl'),
     (WORD_PL, 'word_zh'),
     (SENTENCE_PL, 'sentence_pl'),
     (SENTENCE_ZH, 'sentence_zh'),
+    (TEXT, 'text')
 )
+
+
+class ExerciseType(models.Model):
+    """
+    Exercise type
+    """
+    description = models.CharField(max_length=100, default="NO-DESC")
+    name = models.CharField(max_length=20, default="NO-NAME")
+
+    def __unicode__(self):
+        return unicode(self.description)
 
 
 class Lesson(models.Model):
@@ -27,6 +40,8 @@ class Lesson(models.Model):
     and words related to it.
     """
     level = models.IntegerField(default=0)
+    topic = models.CharField(max_length=100, default="NO-NAME")
+    requirements = models.ManyToManyField("self", symmetrical=False)
 
     def __unicode__(self):
         return unicode(self.level)
