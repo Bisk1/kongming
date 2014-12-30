@@ -1,0 +1,17 @@
+{% extends "chinesetool/base.html"%}
+{% load i18n %}
+{% block content %}
+
+
+<div>Lesson: {{ lesson.topic }}</div>
+Add exercise - explanation:
+<form action="{% url 'chinesetool:add_exercise_explanation' lesson.id %}" method="post">
+    {% csrf_token %}
+    <div>Explanation text:</div>
+    <input type="text" id="explanation" name="explanation"/>
+    <div>Number:</div>
+    <input type="number" id="number" name="number"/>
+    <input type="submit" value="Add">
+</form>
+
+{% endblock %}

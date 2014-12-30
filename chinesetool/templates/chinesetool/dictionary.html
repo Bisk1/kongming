@@ -1,61 +1,19 @@
 {% extends "chinesetool/base.html"%}
 {% load i18n %}
 {% block content %}
-<h1></h1>
+<script type="text/javascript" src="{{ STATIC_URL }}js/dictionary.js"></script>
 
-<script type="text/javascript">
-    $(document).ready(function() {
-        var check_words = function() {
-                var word_to_search = $("#word_to_search").val();
-                var source_language = $("#source_language").val();
-                $.ajax({
-                    url : "/dictionary/",
-                    type : "POST",
-                    dataType: "json",
-                    data : {
-                        word_to_search : word_to_search,
-                        source_language: source_language,
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                        },
-                    success : function(response) {
-                        $("#translations_table > tbody").html("");
-                        if (response['translations'].length == 0) {
-                            $('#translations').hide();
-                            $('#error_message').text("{% trans 'No translations found' %}").show();
-
-                        } else {
-                            $('#translations').show();
-                            $('#error_message').hide();
-                            for (i = 0; i < response['translations'].length; i++) {
-                                $("#translations_table").find('tbody')
-                                    .append($('<tr>')
-                                        .append($('<td>')
-                                            .text(response['translations'][i])
-                                            )
-                                    );
-                            }
-                        }
-                    }
-                });
-        };
-        $("#search").click(check_words);
-        $(document).keypress(function(e) {
-            if (e.which == 13 && e.target.id=="word_to_search")
-                check_words();
-        });
-    });
-    </script>
-
+<div>
+    {% trans "Source language: "%}
+    {% ifequal source_language "polish" %}{% trans "Polish"%}{% endifequal %}
+    {% ifequal source_language "chinese" %}{% trans "Chinese"%}{% endifequal %}
+</div>
 
 {% csrf_token %}
 <input type="text" name="word_to_search" id="word_to_search" value="{{ choice.id }}" />
 
 <label for="word_to_search">{% trans "Word to search" %}</label><br />
-<select id="source_language">
-    <option value="polish">{% trans "Polish" %}</option>
-    <option value="chinese">{% trans "Chinese" %}</option>
-</select>
-<label for="source_language">{% trans "Source language" %}</label><br />
+<input type="hidden" id="source_language" name="source_language" value="{{ source_language }}"/>
 
 <button type="button" id="search">{% trans "Search" %}</button>
 
@@ -66,7 +24,7 @@
     </table>
 </div>
 
-<div id="error_message"/>
+<div id="error_message" style="display: none;">{% trans 'No translations found' %}</div>
 
 {% endblock %}
 

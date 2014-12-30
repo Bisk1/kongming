@@ -1,4 +1,3 @@
-
 def word_difference(word1, word2):
     """
     Determine how different are two words in the same language
@@ -30,6 +29,7 @@ def word_difference(word1, word2):
             return 1
         else:
             return 1000
+
 
 def sentence_difference(sentence1, sentence2):
     """

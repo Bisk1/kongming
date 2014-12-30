@@ -344,12 +344,12 @@ $(".cleditor").cleditor({
 
 $('.modal').appendTo($('body'));
 
-/* Pretty Photo for Gallery*/
-
+/* Pretty Photo for Gallery
+DOESN'T WORK
 jQuery("a[class^='prettyPhoto']").prettyPhoto({
 overlay_gallery: false, social_tools: false
 });
-
+*/
 
 /* Notification box */
 

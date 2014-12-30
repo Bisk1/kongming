@@ -1,26 +1,12 @@
 {% extends "chinesetool/base.html"%}
 {% load i18n %}
 {% block content %}
-<h2>{% trans "Words examples" %}:</h2>
-{% if latest_words_list %}
-    <ul>
-    {% for wordzh in latest_words_list %}
-        <li>{{ wordzh.word }}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No words are available.</p>
-{% endif %}
 <ul>
-    <li><a href="{% url 'chinesetool:translate_word' %}">{% trans "Translate a word" %}</a></li>
-    <li><a href="{% url 'chinesetool:translate_sentence' %}">{% trans "Translate a sentence" %}</a></li>
     {% if user.is_superuser %}
-    <li><a href="{% url 'admin:index' %}">{% trans "Administrator's panel" %}</a></li>
+        <li><a href="{% url 'admin:index' %}">{% trans "Administrator's panel" %}</a></li>
     {% endif %}
-    <li><a href="{% url 'chinesetool:dictionary' %}">{% trans "Dictionary" %}</a></li>
     <li><a href="{% url 'chinesetool:choose_language' %}">{% trans "Language settings" %}</a></li>
 </ul>
-
 
 {% endblock %}
 {% block footer %}
