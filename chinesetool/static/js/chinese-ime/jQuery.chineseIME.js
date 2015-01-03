@@ -389,13 +389,13 @@ var _callbacks_ = {
                                 collision: "none"});
         }
 
-        self.updateDialog = function(){
+        self.updateDialog = function() {
             if (self.currentText.length > 0) {
                 var options = self.getOptionsFromDatabase(self.currentText, self.currentPage);
-                if (options && options.length){
+                if (options && options.length) {
                     var $box = $('#chinese-ime');
                     if (!$box.size()){
-                        $box = $(document.createElement('div')).draggable().
+                        $box = $(document.createElement('div')).
                                 attr({'id': 'chinese-ime'}).
                                 html(self.html)
                         $('body').append($box);
@@ -403,16 +403,11 @@ var _callbacks_ = {
                     $box.find('.typing').text(self.currentText);
                     var lis = [];
                     for (var i = 0; i < 5 && i < options.length; i++) {
-                        lis.push('<li ' + (i + 1 == self.currentSelection ? 'class="current"' : '') + '> ' + (i + 1) + '. ' + options[i] +'</li>');
+                        lis.push('<li ' + (i + 1 == self.currentSelection ? 'class="current"' : '') + ' style="display: inline-block;"> ' + (i + 1) + '. ' + options[i] +'</li>');
                     }
                     $box.find('ul').html(lis.join('\n'));
                     $box.show();
                     var caretPosition = self.$el.getCaretPosition();
-                    $box.css({
-                        position: 'absolute',
-                        left: self.$el.offset().left + caretPosition.left,
-                        top: self.$el.offset().top + caretPosition.top
-                    });
                 } else { // load options with ajax
                     self.callAjax(self.currentText, self.currentPage);
                 }
