@@ -1,0 +1,14 @@
+{% extends "chinesetool/base.html"%}
+{% load i18n %}
+{% block content %}
+
+
+<div>Lesson: {{ lesson.topic }}</div>
+Add exercise - Chinese word:
+<form action="{% url 'chinesetool:add_exercise_word_zh' lesson.id %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save">
+</form>
+
+{% endblock %}

@@ -1,8 +1,8 @@
 from django.contrib import admin
 
 from chinesetool.models import WordPL, WordZH, WordTranslation, Subscription, WordSkill, SentenceZH, SentencePL, \
-    SentenceTranslation, Lesson, ExerciseAction, ExerciseType, Exercise, WordZHExerciseDetails, WordPLExerciseDetails, \
-    SentenceZHExerciseDetails, SentencePLExerciseDetails
+    SentenceTranslation, Lesson, ExerciseAction, ExerciseType, Exercise, WordZHExercise, WordPLExercise, \
+    SentenceZHExercise, SentencePLExercise
 
 
 class WordTranslationAdmin(admin.ModelAdmin):
@@ -49,7 +49,7 @@ admin.site.register(WordSkill)
 admin.site.register(ExerciseAction)
 admin.site.register(ExerciseType)
 admin.site.register(Exercise, ExerciseCommonAdmin)
-admin.site.register(WordZHExerciseDetails)
-admin.site.register(WordPLExerciseDetails, WordPLExerciseDetailsAdmin)
-admin.site.register(SentenceZHExerciseDetails)
-admin.site.register(SentencePLExerciseDetails)
+admin.site.register(WordZHExercise)
+admin.site.register(WordPLExercise, WordPLExerciseDetailsAdmin)
+admin.site.register(SentenceZHExercise)
+admin.site.register(SentencePLExercise)

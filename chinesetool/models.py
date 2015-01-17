@@ -329,7 +329,7 @@ class ExerciseAction(models.Model):
         return exercise_type_to_model(self.exercise.type.name)
 
 
-class ExerciseDetailsCommon(models.Model):
+class AbstractExercise(models.Model):
     exercise = models.ForeignKey(Exercise)
 
     @abc.abstractmethod
@@ -344,7 +344,7 @@ class ExerciseDetailsCommon(models.Model):
         abstract = True
 
 
-class WordZHExerciseDetails(ExerciseDetailsCommon):
+class WordZHExercise(AbstractExercise):
     word = models.ForeignKey(WordZH)
 
     def check(self, proposition):
@@ -358,7 +358,7 @@ class WordZHExerciseDetails(ExerciseDetailsCommon):
         return unicode(self.word)
 
 
-class WordPLExerciseDetails(ExerciseDetailsCommon):
+class WordPLExercise(AbstractExercise):
     word = models.ForeignKey(WordPL)
 
     def check(self, proposition):
@@ -372,7 +372,7 @@ class WordPLExerciseDetails(ExerciseDetailsCommon):
         return unicode(self.word)
 
 
-class SentenceZHExerciseDetails(ExerciseDetailsCommon):
+class SentenceZHExercise(AbstractExercise):
     sentence = models.ForeignKey(SentenceZH)
 
     def check(self, proposition):
@@ -386,7 +386,7 @@ class SentenceZHExerciseDetails(ExerciseDetailsCommon):
         return unicode(self.sentence)
 
 
-class SentencePLExerciseDetails(ExerciseDetailsCommon):
+class SentencePLExercise(AbstractExercise):
     sentence = models.ForeignKey(SentencePL)
 
     def check(self, proposition):
@@ -400,7 +400,7 @@ class SentencePLExerciseDetails(ExerciseDetailsCommon):
         return unicode(self.sentence)
 
 
-class ExplanationExerciseDetails(ExerciseDetailsCommon):
+class ExplanationExercise(AbstractExercise):
     text = models.TextField()
 
     def check(self, proposition):
@@ -413,20 +413,34 @@ class ExplanationExerciseDetails(ExerciseDetailsCommon):
         return unicode(self.text)
 
 
+class ExplanationImageExercise(AbstractExercise):
+    text = models.TextField()
+    image = models.CharField(max_length=20)
+
+    def check(self, proposition):
+        raise Exception("ExplanationExerciseDetails has no check method")
+
+    def prepare(self):
+        return {'text': self.text}
+
+    def __unicode__(self):
+        return unicode(self.text)
+
+
 exercise_type_to_model_map = {
-    WORD_PL: WordPLExerciseDetails,
-    WORD_ZH: WordZHExerciseDetails,
-    SENTENCE_PL: SentencePLExerciseDetails,
-    SENTENCE_ZH: SentenceZHExerciseDetails,
-    EXPLANATION: ExplanationExerciseDetails
+    WORD_PL: WordPLExercise,
+    WORD_ZH: WordZHExercise,
+    SENTENCE_PL: SentencePLExercise,
+    SENTENCE_ZH: SentenceZHExercise,
+    EXPLANATION: ExplanationExercise
 }
 
 exercise_model_to_type_map = {
-    WordPLExerciseDetails: WORD_PL,
-    WordZHExerciseDetails: WORD_ZH,
-    SentencePLExerciseDetails: SENTENCE_PL,
-    SentenceZHExerciseDetails: SENTENCE_ZH,
-    ExplanationExerciseDetails: EXPLANATION
+    WordPLExercise: WORD_PL,
+    WordZHExercise: WORD_ZH,
+    SentencePLExercise: SENTENCE_PL,
+    SentenceZHExercise: SENTENCE_ZH,
+    ExplanationExercise: EXPLANATION
 }
 
 

@@ -5,10 +5,11 @@
 <div id="new_lesson">
     {% trans "Add new lesson" %}
     <form action="{% url 'chinesetool:lessons_management'  %}" method="post">
-    Tytuł lekcji:
+    Lesson topic:
         {% csrf_token %}
+        <input type="hidden" name="create" id="create" value="true"/>
         <input type="text" name="topic" id="topic"/>
-        <input type="submit" value="Dodaj">
+        <input type="submit" value="Add">
     </form>
 </div>
 
@@ -22,6 +23,8 @@
             </th>
             <th>
                 {% trans "Requirements" %}
+            </th>
+            <th>
             </th>
             <th>
             </th>
@@ -46,6 +49,14 @@
                 </td>
                 <td>
                     <a href="{% url 'chinesetool:modify_lesson' lesson_id=lesson.id %}">{% trans "Modify" %}</a>
+                </td>
+                <td>
+                    <form action="{% url 'chinesetool:lessons_management'  %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="delete" id="delete" value="true"/>
+                        <input type="hidden" name="lesson_id" id="lesson_id" value="{{ lesson.id }}"/>
+                        <input type="submit" value="Delete">
+                    </form>
                 </td>
             </tr>
         {% endfor %}
