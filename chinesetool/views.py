@@ -338,7 +338,7 @@ def add_exercise_explanation(request, lesson_id):
             exercise_type = ExerciseType.objects.get(name=EXPLANATION)
             exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number'))
             exercise.save()
-            explanation = ExplanationExercise(text=request.POST.get('explanation'), exercise=exercise)
+            explanation = ExplanationExercise(text=request.POST.get('text'), exercise=exercise)
             explanation.save()
             return HttpResponseRedirect(reverse('chinesetool:modify_lesson', args=(lesson_id,)))
     else:
