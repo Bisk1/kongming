@@ -8,7 +8,7 @@ from django.template import loader
 from chinesetool.forms import RegistrationForm, WordZHExerciseForm, WordPLExerciseForm, SentenceZHExerciseForm, \
     SentencePLExerciseForm, ExplanationExerciseForm
 
-from chinesetool.models import WordZH, WordPL, Subscription, LessonAction, Lesson, ExerciseType, \
+from chinesetool.models import WordZH, WordPL, Subscription, LessonAction, Lesson, \
     WordZHExercise, WORD_ZH, Exercise, WordPLExercise, SentenceZHExercise, SentencePLExercise, ExplanationExercise, \
     EXPLANATION, SENTENCE_PL, SENTENCE_ZH, WORD_PL, SentencePL, SentenceZH, SentenceTranslation, WordTranslation
 
@@ -231,7 +231,7 @@ def add_exercise_word_zh(request, lesson_id):
     if request.method == 'POST':
         form = WordZHExerciseForm(request.POST)
         if form.is_valid():
-            exercise_type = ExerciseType.objects.get(name=WORD_ZH)
+            exercise_type = WORD_ZH
             exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number'))
             exercise.save()
             word_zh = WordZH.objects.get_or_create(word=request.POST.get('word_zh'))[0]
@@ -257,7 +257,7 @@ def add_exercise_word_pl(request, lesson_id):
     if request.method == 'POST':
         form = WordPLExerciseForm(request.POST)
         if form.is_valid():
-            exercise_type = ExerciseType.objects.get(name=WORD_PL)
+            exercise_type = WORD_PL
             exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number'))
             exercise.save()
             word_pl = WordPL.objects.get_or_create(word=request.POST.get('word_pl'))[0]
@@ -283,7 +283,7 @@ def add_exercise_sentence_zh(request, lesson_id):
     if request.method == 'POST':
         form = SentenceZHExerciseForm(request.POST)
         if form.is_valid():
-            exercise_type = ExerciseType.objects.get(name=SENTENCE_ZH)
+            exercise_type = SENTENCE_ZH
             exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number'))
             exercise.save()
             sentence_zh = SentenceZH.objects.get_or_create(sentence=request.POST.get('sentence_zh'))[0]
@@ -309,7 +309,7 @@ def add_exercise_sentence_pl(request, lesson_id):
     if request.method == 'POST':
         form = SentencePLExerciseForm(request.POST)
         if form.is_valid():
-            exercise_type = ExerciseType.objects.get(name=SENTENCE_PL)
+            exercise_type = SENTENCE_PL
             exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number'))
             exercise.save()
             sentence_pl = SentencePL.objects.get_or_create(sentence=request.POST.get('sentence_pl'))[0]
@@ -335,7 +335,7 @@ def add_exercise_explanation(request, lesson_id):
     if request.method == 'POST':
         form = ExplanationExerciseForm(request.POST)
         if form.is_valid():
-            exercise_type = ExerciseType.objects.get(name=EXPLANATION)
+            exercise_type = EXPLANATION
             exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number'))
             exercise.save()
             explanation = ExplanationExercise(text=request.POST.get('text'), exercise=exercise)

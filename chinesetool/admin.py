@@ -1,8 +1,8 @@
 from django.contrib import admin
 
 from chinesetool.models import WordPL, WordZH, WordTranslation, Subscription, WordSkill, SentenceZH, SentencePL, \
-    SentenceTranslation, Lesson, ExerciseAction, ExerciseType, Exercise, WordZHExercise, WordPLExercise, \
-    SentenceZHExercise, SentencePLExercise
+    SentenceTranslation, Lesson, ExerciseAction, Exercise, WordZHExercise, WordPLExercise, \
+    SentenceZHExercise, SentencePLExercise, LANGUAGE_CHOICES
 
 
 class WordTranslationAdmin(admin.ModelAdmin):
@@ -29,7 +29,7 @@ class LessonAdmin(admin.ModelAdmin):
     list_display = ('topic', 'level')
 
 
-class ExerciseCommonAdmin(admin.ModelAdmin):
+class ExerciseAdmin(admin.ModelAdmin):
     list_display = ('id', 'lesson', 'type', 'number')
 
 
@@ -47,8 +47,7 @@ admin.site.register(Lesson)
 admin.site.register(Subscription)
 admin.site.register(WordSkill)
 admin.site.register(ExerciseAction)
-admin.site.register(ExerciseType)
-admin.site.register(Exercise, ExerciseCommonAdmin)
+admin.site.register(Exercise, ExerciseAdmin)
 admin.site.register(WordZHExercise)
 admin.site.register(WordPLExercise, WordPLExerciseDetailsAdmin)
 admin.site.register(SentenceZHExercise)

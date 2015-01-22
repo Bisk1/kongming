@@ -5,24 +5,21 @@ from django.db import models
 from enum import Enum
 from chinesetool.learn import checkers
 
-NONE = 'none'
-WORD_PL = 'word_pl'
-WORD_ZH = 'word_zh'
-SENTENCE_PL = 'sentence_pl'
-SENTENCE_ZH = 'sentence_zh'
-EXPLANATION = 'explanation'
+NONE = 'a'
+WORD_PL = 'b'
+WORD_ZH = 'c'
+SENTENCE_PL = 'd'
+SENTENCE_ZH = 'e'
+EXPLANATION = 'f'
 
-
-class ExerciseType(models.Model):
-    """
-    Exercise type
-    """
-    description = models.CharField(max_length=100, default="NO-DESC")
-    name = models.CharField(max_length=20, default="NO-NAME")
-
-    def __unicode__(self):
-        return unicode(self.description)
-
+LANGUAGE_CHOICES = {
+    (NONE, 'none'),
+    (WORD_PL, 'word_pl'),
+    (WORD_ZH, 'word_zh'),
+    (SENTENCE_PL, 'sentence_pl'),
+    (SENTENCE_ZH, 'sentence_zh'),
+    (EXPLANATION, 'explanation')
+}
 
 class Lesson(models.Model):
     """
@@ -290,11 +287,22 @@ class LessonAction(models.Model):
 
 class Exercise(models.Model):
     lesson = models.ForeignKey(Lesson)
-    type = models.ForeignKey(ExerciseType)
+    type = models.CharField(max_length=1, choices=LANGUAGE_CHOICES)
     number = models.IntegerField(null=True)
+
+    exercise_type_to_name_map = {
+        WORD_PL: 'word_pl',
+        WORD_ZH: 'word_zh',
+        SENTENCE_PL: 'sentence_pl',
+        SENTENCE_ZH: 'sentence_zh',
+        EXPLANATION: 'explanation'
+    }
 
     def __unicode__(self):
         return unicode(self.lesson) + ' ' + unicode(self.id)
+
+    def type_name(self):
+        return self.exercise_type_to_name_map[self.type]
 
 
 class ExerciseResultState(Enum):
@@ -319,14 +327,14 @@ class ExerciseAction(models.Model):
 
     def prepare(self):
         response = self.get_description().prepare()
-        response['exercise_type'] = self.exercise.type.name
+        response['exercise_type'] = self.exercise.type_name()
         return response
 
     def get_description(self):
         return self.get_description_model().objects.get(exercise=self.exercise)
 
     def get_description_model(self):
-        return exercise_type_to_model(self.exercise.type.name)
+        return exercise_type_to_model(self.exercise.type)
 
 
 class AbstractExercise(models.Model):
@@ -442,7 +450,6 @@ exercise_model_to_type_map = {
     SentenceZHExercise: SENTENCE_ZH,
     ExplanationExercise: EXPLANATION
 }
-
 
 def exercise_type_to_model(exercise_name):
     try:
