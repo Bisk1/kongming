@@ -11,6 +11,7 @@ WORD_ZH = 'c'
 SENTENCE_PL = 'd'
 SENTENCE_ZH = 'e'
 EXPLANATION = 'f'
+EXPLANATION_IMAGE = 'g'
 
 LANGUAGE_CHOICES = {
     (NONE, 'none'),
@@ -18,7 +19,8 @@ LANGUAGE_CHOICES = {
     (WORD_ZH, 'word_zh'),
     (SENTENCE_PL, 'sentence_pl'),
     (SENTENCE_ZH, 'sentence_zh'),
-    (EXPLANATION, 'explanation')
+    (EXPLANATION, 'explanation'),
+    (EXPLANATION_IMAGE, 'explanation_image')
 }
 
 class Lesson(models.Model):
@@ -231,7 +233,7 @@ class LessonAction(models.Model):
     @classmethod
     def create_lesson_action(cls, user, lesson):
         exercises = lesson.exercise_set
-        new_lesson_action = cls(total_exercises_number=exercises.count(), current_exercise_number=0,
+        new_lesson_action = cls(total_exercises_number=lesson.exercises_number, current_exercise_number=0,
                                 fails=0, user=user, lesson=lesson)
         new_lesson_action.save()
 
@@ -295,7 +297,8 @@ class Exercise(models.Model):
         WORD_ZH: 'word_zh',
         SENTENCE_PL: 'sentence_pl',
         SENTENCE_ZH: 'sentence_zh',
-        EXPLANATION: 'explanation'
+        EXPLANATION: 'explanation',
+        EXPLANATION_IMAGE: 'explanation_image'
     }
 
     def __unicode__(self):
@@ -423,7 +426,7 @@ class ExplanationExercise(AbstractExercise):
 
 class ExplanationImageExercise(AbstractExercise):
     text = models.TextField()
-    image = models.CharField(max_length=20)
+    image = models.FileField(upload_to="image/")
 
     def check(self, proposition):
         raise Exception("ExplanationExerciseDetails has no check method")
@@ -440,7 +443,8 @@ exercise_type_to_model_map = {
     WORD_ZH: WordZHExercise,
     SENTENCE_PL: SentencePLExercise,
     SENTENCE_ZH: SentenceZHExercise,
-    EXPLANATION: ExplanationExercise
+    EXPLANATION: ExplanationExercise,
+    EXPLANATION_IMAGE: ExplanationImageExercise
 }
 
 exercise_model_to_type_map = {
@@ -448,8 +452,10 @@ exercise_model_to_type_map = {
     WordZHExercise: WORD_ZH,
     SentencePLExercise: SENTENCE_PL,
     SentenceZHExercise: SENTENCE_ZH,
-    ExplanationExercise: EXPLANATION
+    ExplanationExercise: EXPLANATION,
+    ExplanationImageExercise: EXPLANATION_IMAGE
 }
+
 
 def exercise_type_to_model(exercise_name):
     try:

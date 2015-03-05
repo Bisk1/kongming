@@ -137,6 +137,7 @@ $(document).ready(function() {
                         if (exercise_type == 'explanation') {
                             // explanation exercise is not checked - user goes to next exercise after reading
                             $('#check').hide();
+                            $('#next').html("Continue");
                             $('#next').show();
                         }
                         switch (exercise_type) {

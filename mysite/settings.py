@@ -103,3 +103,5 @@ SOUTH_TESTS_MIGRATE = False
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = './media/'
