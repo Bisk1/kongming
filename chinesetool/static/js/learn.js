@@ -22,6 +22,7 @@ function showExerciseContent(exercise_type, json) {
         case('sentence_pl'):
             $('#word_or_sentence').html(json.sentence);
             break;
+        case('explanation_image'):
         case('explanation'):
             $('#explanation_text').html(json.text);
             break;
@@ -134,7 +135,7 @@ $(document).ready(function() {
 
                         showExerciseContent(exercise_type, json);
                         showDivForExerciseType(exercise_type);
-                        if (exercise_type == 'explanation') {
+                        if (exercise_type == 'explanation' || exercise_type == 'explanation_image') {
                             // explanation exercise is not checked - user goes to next exercise after reading
                             $('#check').hide();
                             $('#next').html("Continue");

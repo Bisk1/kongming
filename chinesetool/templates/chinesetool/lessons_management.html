@@ -51,12 +51,7 @@
                     <a href="{% url 'chinesetool:modify_lesson' lesson_id=lesson.id %}">{% trans "Modify" %}</a>
                 </td>
                 <td>
-                    <form action="{% url 'chinesetool:lessons_management'  %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="delete" id="delete" value="true"/>
-                        <input type="hidden" name="lesson_id" id="lesson_id" value="{{ lesson.id }}"/>
-                        <input type="submit" value="Delete">
-                    </form>
+                    <a href="{% url 'chinesetool:delete_lesson' lesson_id=lesson.id %}">{% trans "Delete" %}</a>
                 </td>
             </tr>
         {% endfor %}

@@ -3,7 +3,7 @@ import uuid
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from django.core.urlresolvers import reverse
 from django.http import *
@@ -67,6 +67,16 @@ def modify_lesson(request, lesson_id):
                                        'explanation_image_exercises': explanation_image_exercises})
     return HttpResponse(template.render(context))
 
+
+def delete_lesson(request, lesson_id):
+    """
+    Delete lesson
+    :param request: HTTP request
+    :return: HTTP response
+    """
+    print "Trying to delete lesson " + lesson_id
+    Lesson.objects.get(id=lesson_id).delete()
+    return redirect('chinesetool:lessons_management')
 
 def add_requirement(request, lesson_id):
     """
