@@ -1,7 +1,24 @@
 {% extends "chinesetool/base.html"%}
 {% load i18n %}
 {% block content %}
+<script type="text/javascript">
 
+    $(function(){
+       $("#menu").change(function(){
+           $("#content").load($("#menu option:selected").attr('addr'));
+               return false;
+       })
+    })
+
+    $(function(){
+       $("#add").click(function(){
+           $("#add_exercise").toggle();
+           $("#content").load($("#menu option:selected").attr('addr'));
+
+       })
+    })
+
+</script>
 
 <div>
 Lesson topic:
@@ -39,6 +56,7 @@ Exercises number:
         </table>
         <a href="{% url 'chinesetool:add_requirement' lesson.id %}">Add requirement</a>
     </div>Exercises:<div>
+    <div id="exercises" link="{% url 'chinesetool:display_exercises' lesson.id %}">
     <table>
         {% for exercise_details in exercise_details_list %}
             <tr>
@@ -55,18 +73,23 @@ Exercises number:
             </tr>
         {% endfor %}
     </table>
-    <div>Add exercise: </div>
-    <ul>
-        <li><a href="{% url 'chinesetool:add_exercise_word_zh' lesson.id %}">Chinese word</a></li>
-        <li><a href="{% url 'chinesetool:add_exercise_word_pl' lesson.id %}">Polish word</a></li>
-        <li><a href="{% url 'chinesetool:add_exercise_sentence_zh' lesson.id %}">Chinese sentence</a></li>
-        <li><a href="{% url 'chinesetool:add_exercise_sentence_pl' lesson.id %}">Polish sentence</a></li>
-        <li><a href="{% url 'chinesetool:add_exercise_explanation' lesson.id %}">Explanation</a></li>
-        <li><a href="{% url 'chinesetool:add_exercise_explanation_image' lesson.id %}">Explanation with image</a></li>
-    </ul>
+    </div>
+    <button id="add">Add</button>
+
+    <div id="add_exercise" hidden>
+    <select id="menu">
+        <option addr="{% url 'chinesetool:add_exercise_word_zh' lesson.id %}">Chinese word</option>
+        <option addr="{% url 'chinesetool:add_exercise_word_pl' lesson.id %}">Polish word</option>
+        <option addr="{% url 'chinesetool:add_exercise_sentence_zh' lesson.id %}">Chinese sentence</option>
+        <option addr="{% url 'chinesetool:add_exercise_sentence_pl' lesson.id %}">Polish sentence</option>
+        <option addr="{% url 'chinesetool:add_exercise_explanation' lesson.id %}">Explanation</option>
+        <option addr="{% url 'chinesetool:add_exercise_explanation_image' lesson.id %}">Explanation with image</option>
+    </select>
+        <div id="content"></div>
 
     </div>
 
 {% endblock %}
-{% block
-footer %}++
+{% block footer %}
+{% endblock %}
+
