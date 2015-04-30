@@ -1,11 +1,8 @@
-{% extends "chinesetool/base.html"%}
-{% load i18n %}
-{% block content %}
-
+<script src="{{STATIC_URL}}js/modify_lesson.js"></script>
 
 <div>Lesson: {{ lesson.topic }}</div>
 Add exercise - Polish sentence:
-<form action="{% url 'chinesetool:add_exercise_sentence_pl' lesson.id %}" method="post">
+<form id="adding_exercise" action="{% url 'chinesetool:add_exercise_sentence_pl' lesson.id %}" method="post">
     {% csrf_token %}
     <div>New sentence:</div>
     <input type="text" id="sentence_pl" name="sentence_pl"/>
@@ -13,7 +10,5 @@ Add exercise - Polish sentence:
     <input type="text" id="translations_zh" name="translations_zh"/>
     <div>Number:</div>
     <input type="number" id="number" name="number"/>
-    <input type="submit" value="Add">
 </form>
-
-{% endblock %}
+<button id="save">Save</button>
