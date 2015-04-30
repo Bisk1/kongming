@@ -18,6 +18,7 @@ from chinesetool.models import WordZH, WordPL, Lesson, \
 
 
 def modify_lesson(request, lesson_id):
+
     """
     Modifies lesson - allows to change requirements and exercises
     :param request: HTTP request
@@ -39,6 +40,17 @@ def modify_lesson(request, lesson_id):
         exercise_to_remove.delete()
 
     requirements = lesson.requirements.all()
+
+
+    exercise_details_list = get_exercises(lesson)
+
+    template = loader.get_template('chinesetool/modify_lesson.html')
+    context = RequestContext(request, {'lesson': lesson, 'requirements': requirements,
+                                       'exercise_details_list': exercise_details_list,
+                                      })
+    return HttpResponse(template.render(context))
+
+def get_exercises(lesson):
     exercises = Exercise.objects.filter(lesson=lesson)
     word_zh_exercises = WordZHExercise.objects.filter(exercise__in=exercises)
     word_pl_exercises = WordPLExercise.objects.filter(exercise__in=exercises)
@@ -53,19 +65,16 @@ def modify_lesson(request, lesson_id):
                                  explanation_exercises,
                                  explanation_image_exercises))
 
-    exercise_details_list = sorted(exercise_details_list,
+    return sorted(exercise_details_list,
                                    key=lambda instance: instance.exercise.number)
 
-    template = loader.get_template('chinesetool/modify_lesson.html')
-    context = RequestContext(request, {'lesson': lesson, 'requirements': requirements,
-                                       'exercise_details_list': exercise_details_list,
-                                       'word_zh_exercises': word_zh_exercises,
-                                       'word_pl_exercises': word_pl_exercises,
-                                       'sentence_zh_exercises': sentence_zh_exercises,
-                                       'sentence_pl_exercises': sentence_pl_exercises,
-                                       'explanation_exercises': explanation_exercises,
-                                       'explanation_image_exercises': explanation_image_exercises})
-    return HttpResponse(template.render(context))
+def display_exercises(request, lesson_id):
+    lesson = Lesson.objects.get(pk=lesson_id)
+    print lesson_id
+    print lesson
+    exercise_details_list = get_exercises(lesson)
+
+    return render(request, 'chinesetool/exercises.html', {'exercise_details_list': exercise_details_list, 'lesson':lesson})
 
 
 def delete_lesson(request, lesson_id):
