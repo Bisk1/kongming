@@ -46,7 +46,7 @@ class WordPL(models.Model):
     def __unicode__(self):
         return unicode(self.word)
 
-    def get_translations(self):
+    def get_translations(self): #TODO: Remove this method from all models - this logic should be in controller (.values())
         """
         Gets all accurate translations of this word
         :return: array of Chinese words
