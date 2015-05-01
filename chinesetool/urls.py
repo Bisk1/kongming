@@ -23,5 +23,6 @@ urlpatterns = patterns('',
     url(r'lessons_map/$', menu.lessons_map, name='lessons_map'),
     url(r'lessons_management/$', menu.lessons_management, name='lessons_management'),
     url(r'^manage_words_translations/(?P<source_language>\w+)/$', menu.manage_words_translations, name='manage_words_translations'),
+    url(r'modify_lesson/(?P<lesson_id>\d+)/get_exercises/$', modify_lesson.display_exercises, name='display_exercises'),
     url(r'^i18n/', include('django.conf.urls.i18n')),
 )

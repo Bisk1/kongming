@@ -1,14 +1,9 @@
-{% extends "chinesetool/base.html"%}
-{% load i18n %}
-{% block content %}
-
+<script src="{{STATIC_URL}}js/modify_lesson.js"></script>
 
 <div>Lesson: {{ lesson.topic }}</div>
 Add exercise - explanation with image:
-<form enctype="multipart/form-data"action="{% url 'chinesetool:add_exercise_explanation_image' lesson.id %}" method="post">
+<form id="adding_exercise" enctype="multipart/form-data"action="{% url 'chinesetool:add_exercise_explanation_image' lesson.id %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Add">
 </form>
-
-{% endblock %}
+<button id="save">Save</button>
