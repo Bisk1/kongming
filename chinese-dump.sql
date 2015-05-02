@@ -210,7 +210,7 @@ CREATE TABLE `django_admin_log` (
   KEY `django_admin_log_37ef4eb4` (`content_type_id`),
   CONSTRAINT `content_type_id_refs_id_93d2d1f8` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `user_id_refs_id_c0d12874` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -219,7 +219,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2015-01-22 21:05:44',1,18,'2','Śpiew 2',3,''),(2,'2015-01-22 21:05:44',1,18,'1','Śpiew 1',3,''),(3,'2015-01-31 13:23:25',1,18,'31','Śpiew 31',3,''),(4,'2015-01-31 13:23:25',1,18,'30','Śpiew 30',3,''),(5,'2015-01-31 13:23:25',1,18,'29','Śpiew 29',3,''),(6,'2015-01-31 13:23:25',1,18,'28','Śpiew 28',3,''),(7,'2015-01-31 13:23:25',1,18,'27','Śpiew 27',3,''),(8,'2015-01-31 13:23:25',1,18,'26','Śpiew 26',3,''),(9,'2015-01-31 13:23:25',1,18,'25','Śpiew 25',3,''),(10,'2015-01-31 13:23:25',1,18,'24','Śpiew 24',3,''),(11,'2015-01-31 13:23:25',1,18,'23','Śpiew 23',3,''),(12,'2015-01-31 13:23:25',1,18,'22','Śpiew 22',3,''),(13,'2015-01-31 13:23:25',1,18,'21','Śpiew 21',3,''),(14,'2015-01-31 13:23:25',1,18,'20','Śpiew 20',3,''),(15,'2015-01-31 13:23:25',1,18,'19','Śpiew 19',3,''),(16,'2015-01-31 13:23:25',1,18,'18','Śpiew 18',3,''),(17,'2015-01-31 13:23:25',1,18,'17','Śpiew 17',3,''),(18,'2015-01-31 13:23:25',1,18,'16','Śpiew 16',3,''),(19,'2015-01-31 13:23:25',1,18,'15','Śpiew 15',3,''),(20,'2015-01-31 13:23:25',1,18,'14','Śpiew 14',3,''),(21,'2015-01-31 13:23:25',1,18,'13','Śpiew 13',3,''),(22,'2015-01-31 13:23:25',1,18,'12','Śpiew 12',3,''),(23,'2015-01-31 13:23:25',1,18,'11','Śpiew 11',3,''),(24,'2015-01-31 13:23:25',1,18,'10','Śpiew 10',3,''),(25,'2015-01-31 13:23:25',1,18,'9','Śpiew 9',3,''),(26,'2015-01-31 13:23:25',1,18,'8','Śpiew 8',3,''),(27,'2015-01-31 13:23:25',1,18,'7','Śpiew 7',3,''),(28,'2015-01-31 13:23:25',1,18,'6','Śpiew 6',3,''),(29,'2015-01-31 13:23:25',1,18,'5','Śpiew 5',3,''),(30,'2015-05-01 14:27:53',1,10,'7','你 [ni3]',2,'Zmieniono pinyin'),(31,'2015-05-01 14:28:01',1,10,'6','学生 [xue2sheng1]',2,'Zmieniono pinyin'),(32,'2015-05-01 14:28:07',1,10,'5','学校 [xue2xiao4]',2,'Zmieniono pinyin'),(33,'2015-05-01 14:28:13',1,10,'4','我 [wo3]',2,'Zmieniono pinyin'),(34,'2015-05-01 14:28:19',1,10,'3','屁股 [pi4gu5]',2,'Zmieniono pinyin'),(35,'2015-05-01 14:28:32',1,10,'2','跳舞 [tiao4wu3]',2,'Zmieniono pinyin'),(36,'2015-05-01 14:28:39',1,10,'1','唱歌 [chang4ge1]',2,'Zmieniono pinyin');
+INSERT INTO `django_admin_log` VALUES (1,'2015-01-22 21:05:44',1,18,'2','Śpiew 2',3,''),(2,'2015-01-22 21:05:44',1,18,'1','Śpiew 1',3,''),(3,'2015-01-31 13:23:25',1,18,'31','Śpiew 31',3,''),(4,'2015-01-31 13:23:25',1,18,'30','Śpiew 30',3,''),(5,'2015-01-31 13:23:25',1,18,'29','Śpiew 29',3,''),(6,'2015-01-31 13:23:25',1,18,'28','Śpiew 28',3,''),(7,'2015-01-31 13:23:25',1,18,'27','Śpiew 27',3,''),(8,'2015-01-31 13:23:25',1,18,'26','Śpiew 26',3,''),(9,'2015-01-31 13:23:25',1,18,'25','Śpiew 25',3,''),(10,'2015-01-31 13:23:25',1,18,'24','Śpiew 24',3,''),(11,'2015-01-31 13:23:25',1,18,'23','Śpiew 23',3,''),(12,'2015-01-31 13:23:25',1,18,'22','Śpiew 22',3,''),(13,'2015-01-31 13:23:25',1,18,'21','Śpiew 21',3,''),(14,'2015-01-31 13:23:25',1,18,'20','Śpiew 20',3,''),(15,'2015-01-31 13:23:25',1,18,'19','Śpiew 19',3,''),(16,'2015-01-31 13:23:25',1,18,'18','Śpiew 18',3,''),(17,'2015-01-31 13:23:25',1,18,'17','Śpiew 17',3,''),(18,'2015-01-31 13:23:25',1,18,'16','Śpiew 16',3,''),(19,'2015-01-31 13:23:25',1,18,'15','Śpiew 15',3,''),(20,'2015-01-31 13:23:25',1,18,'14','Śpiew 14',3,''),(21,'2015-01-31 13:23:25',1,18,'13','Śpiew 13',3,''),(22,'2015-01-31 13:23:25',1,18,'12','Śpiew 12',3,''),(23,'2015-01-31 13:23:25',1,18,'11','Śpiew 11',3,''),(24,'2015-01-31 13:23:25',1,18,'10','Śpiew 10',3,''),(25,'2015-01-31 13:23:25',1,18,'9','Śpiew 9',3,''),(26,'2015-01-31 13:23:25',1,18,'8','Śpiew 8',3,''),(27,'2015-01-31 13:23:25',1,18,'7','Śpiew 7',3,''),(28,'2015-01-31 13:23:25',1,18,'6','Śpiew 6',3,''),(29,'2015-01-31 13:23:25',1,18,'5','Śpiew 5',3,''),(30,'2015-05-01 14:27:53',1,10,'7','你 [ni3]',2,'Zmieniono pinyin'),(31,'2015-05-01 14:28:01',1,10,'6','学生 [xue2sheng1]',2,'Zmieniono pinyin'),(32,'2015-05-01 14:28:07',1,10,'5','学校 [xue2xiao4]',2,'Zmieniono pinyin'),(33,'2015-05-01 14:28:13',1,10,'4','我 [wo3]',2,'Zmieniono pinyin'),(34,'2015-05-01 14:28:19',1,10,'3','屁股 [pi4gu5]',2,'Zmieniono pinyin'),(35,'2015-05-01 14:28:32',1,10,'2','跳舞 [tiao4wu3]',2,'Zmieniono pinyin'),(36,'2015-05-01 14:28:39',1,10,'1','唱歌 [chang4ge1]',2,'Zmieniono pinyin'),(37,'2015-05-02 12:38:41',1,28,'3','ZXZX - zxvzxv',3,''),(38,'2015-05-02 12:57:20',1,29,'13','Gdzie jest nowa szkoła? []',3,''),(39,'2015-05-02 12:57:35',1,29,'12','asda []',3,''),(40,'2015-05-02 12:57:35',1,29,'11','123 []',3,''),(41,'2015-05-02 12:57:35',1,29,'9',' []',3,''),(42,'2015-05-02 12:57:48',1,30,'9','asd',3,''),(43,'2015-05-02 12:57:48',1,30,'8','Zx',3,'');
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -237,7 +237,7 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_label` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -246,7 +246,7 @@ CREATE TABLE `django_content_type` (
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'log entry','admin','logentry'),(2,'permission','auth','permission'),(3,'group','auth','group'),(4,'user','auth','user'),(5,'content type','contenttypes','contenttype'),(6,'session','sessions','session'),(8,'lesson','chinesetool','lesson'),(9,'word pl','chinesetool','wordpl'),(10,'word zh','chinesetool','wordzh'),(11,'word translation','chinesetool','wordtranslation'),(12,'sentence pl','chinesetool','sentencepl'),(13,'sentence zh','chinesetool','sentencezh'),(14,'sentence translation','chinesetool','sentencetranslation'),(15,'subscription','chinesetool','subscription'),(16,'word skill','chinesetool','wordskill'),(17,'lesson action','chinesetool','lessonaction'),(18,'exercise','chinesetool','exercise'),(19,'exercise action','chinesetool','exerciseaction'),(20,'word zh exercise','chinesetool','wordzhexercise'),(21,'word pl exercise','chinesetool','wordplexercise'),(22,'sentence zh exercise','chinesetool','sentencezhexercise'),(23,'sentence pl exercise','chinesetool','sentenceplexercise'),(24,'explanation exercise','chinesetool','explanationexercise'),(25,'explanation image exercise','chinesetool','explanationimageexercise'),(26,'migration history','south','migrationhistory');
+INSERT INTO `django_content_type` VALUES (1,'log entry','admin','logentry'),(2,'permission','auth','permission'),(3,'group','auth','group'),(4,'user','auth','user'),(5,'content type','contenttypes','contenttype'),(6,'session','sessions','session'),(8,'lesson','chinesetool','lesson'),(9,'word pl','chinesetool','wordpl'),(10,'word zh','chinesetool','wordzh'),(11,'word translation','chinesetool','wordtranslation'),(12,'sentence pl','chinesetool','sentencepl'),(13,'sentence zh','chinesetool','sentencezh'),(14,'sentence translation','chinesetool','sentencetranslation'),(15,'subscription','chinesetool','subscription'),(16,'word skill','chinesetool','wordskill'),(17,'lesson action','chinesetool','lessonaction'),(18,'exercise','chinesetool','exercise'),(19,'exercise action','chinesetool','exerciseaction'),(20,'word zh exercise','chinesetool','wordzhexercise'),(21,'word pl exercise','chinesetool','wordplexercise'),(22,'sentence zh exercise','chinesetool','sentencezhexercise'),(23,'sentence pl exercise','chinesetool','sentenceplexercise'),(24,'explanation exercise','chinesetool','explanationexercise'),(25,'explanation image exercise','chinesetool','explanationimageexercise'),(26,'migration history','south','migrationhistory'),(27,'sentence pl','translations','sentencepl'),(28,'sentence translation','translations','sentencetranslation'),(29,'word zh','translations','wordzh'),(30,'word pl','translations','wordpl');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -629,7 +629,7 @@ CREATE TABLE `translations_sentencepl` (
   `sentence` varchar(255) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sentence` (`sentence`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -638,7 +638,7 @@ CREATE TABLE `translations_sentencepl` (
 
 LOCK TABLES `translations_sentencepl` WRITE;
 /*!40000 ALTER TABLE `translations_sentencepl` DISABLE KEYS */;
-INSERT INTO `translations_sentencepl` VALUES (4,'Ala ma kota'),(2,'Gdzie jest nowa szkoła?'),(1,'Lubię uczyć się chińskiego.'),(3,'zxvzxv');
+INSERT INTO `translations_sentencepl` VALUES (4,'Ala ma kota'),(5,'Ala ma kota.'),(2,'Gdzie jest nowa szkoła?'),(1,'Lubię uczyć się chińskiego.'),(3,'zxvzxv');
 /*!40000 ALTER TABLE `translations_sentencepl` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -659,7 +659,7 @@ CREATE TABLE `translations_sentencetranslation` (
   KEY `chinesetool_sentencetranslation_9108fd47` (`sentence_pl_id`),
   CONSTRAINT `sentence_pl_id_refs_id_b65767aa` FOREIGN KEY (`sentence_pl_id`) REFERENCES `translations_sentencepl` (`id`),
   CONSTRAINT `sentence_zh_id_refs_id_5b0289db` FOREIGN KEY (`sentence_zh_id`) REFERENCES `translations_sentencezh` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -668,7 +668,7 @@ CREATE TABLE `translations_sentencetranslation` (
 
 LOCK TABLES `translations_sentencetranslation` WRITE;
 /*!40000 ALTER TABLE `translations_sentencetranslation` DISABLE KEYS */;
-INSERT INTO `translations_sentencetranslation` VALUES (1,1,1),(2,2,2),(3,3,3),(4,4,4);
+INSERT INTO `translations_sentencetranslation` VALUES (1,1,1),(6,2,2),(8,6,5);
 /*!40000 ALTER TABLE `translations_sentencetranslation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -684,7 +684,7 @@ CREATE TABLE `translations_sentencezh` (
   `sentence` varchar(255) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sentence` (`sentence`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -693,7 +693,7 @@ CREATE TABLE `translations_sentencezh` (
 
 LOCK TABLES `translations_sentencezh` WRITE;
 /*!40000 ALTER TABLE `translations_sentencezh` DISABLE KEYS */;
-INSERT INTO `translations_sentencezh` VALUES (3,'ZXZX'),(1,'我喜欢学习中文。'),(2,'新的学校在哪里？'),(4,'生动');
+INSERT INTO `translations_sentencezh` VALUES (6,'Ala有猫。'),(3,'ZXZX'),(1,'我喜欢学习中文。'),(2,'新的学校在哪里？'),(5,'歇'),(4,'生动');
 /*!40000 ALTER TABLE `translations_sentencezh` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -718,7 +718,7 @@ CREATE TABLE `translations_wordpl` (
 
 LOCK TABLES `translations_wordpl` WRITE;
 /*!40000 ALTER TABLE `translations_wordpl` DISABLE KEYS */;
-INSERT INTO `translations_wordpl` VALUES (8,'Zx'),(9,'asd'),(3,'dupa'),(4,'ja'),(5,'szkoła'),(2,'tańczyć'),(7,'ty'),(6,'uczeń'),(1,'śpiewać');
+INSERT INTO `translations_wordpl` VALUES (3,'dupa'),(4,'ja'),(5,'szkoła'),(2,'tańczyć'),(7,'ty'),(6,'uczeń'),(1,'śpiewać');
 /*!40000 ALTER TABLE `translations_wordpl` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -748,7 +748,7 @@ CREATE TABLE `translations_wordtranslation` (
 
 LOCK TABLES `translations_wordtranslation` WRITE;
 /*!40000 ALTER TABLE `translations_wordtranslation` DISABLE KEYS */;
-INSERT INTO `translations_wordtranslation` VALUES (1,1,1),(2,2,2),(20,3,3),(4,4,4),(5,5,5),(6,6,6),(29,7,7),(30,8,7),(21,11,8),(22,12,9);
+INSERT INTO `translations_wordtranslation` VALUES (1,1,1),(2,2,2),(20,3,3),(4,4,4),(5,5,5),(6,6,6),(29,7,7),(30,8,7);
 /*!40000 ALTER TABLE `translations_wordtranslation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -765,7 +765,7 @@ CREATE TABLE `translations_wordzh` (
   `pinyin` varchar(100) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `word` (`word`,`pinyin`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -774,7 +774,7 @@ CREATE TABLE `translations_wordzh` (
 
 LOCK TABLES `translations_wordzh` WRITE;
 /*!40000 ALTER TABLE `translations_wordzh` DISABLE KEYS */;
-INSERT INTO `translations_wordzh` VALUES (9,'',''),(11,'123',''),(12,'asda',''),(7,'你','ni3'),(1,'唱歌','chang4ge1'),(5,'学校','xue2xiao4'),(6,'学生','xue2sheng1'),(3,'屁股','pi4gu5'),(8,'您','nin2'),(4,'我','wo3'),(10,'猪','zhu1'),(2,'跳舞','tiao4wu3');
+INSERT INTO `translations_wordzh` VALUES (7,'你','ni3'),(1,'唱歌','chang4ge1'),(5,'学校','xue2xiao4'),(6,'学生','xue2sheng1'),(3,'屁股','pi4gu5'),(8,'您','nin2'),(4,'我','wo3'),(10,'猪','zhu1'),(2,'跳舞','tiao4wu3');
 /*!40000 ALTER TABLE `translations_wordzh` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -847,4 +847,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-05-02 13:47:46
+-- Dump completed on 2015-05-02 15:01:03

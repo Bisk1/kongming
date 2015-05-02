@@ -2,7 +2,7 @@ var getSourceLanguage = function() {
     return $("#source_language").val();
 };
 
-var updateTranslationsTable = function(translations, pinyins) {
+var updateTranslationsTable = function(translations) {
     var translationsTable = $("#translations_table").find("tbody").empty();
         for (var i = 0; i < translations.length; i++) {
             translationsTable

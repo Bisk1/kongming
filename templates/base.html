@@ -143,14 +143,27 @@
                 <li class="has_submenu nlightblue">
                     <a href="#">
                         <!-- Menu name with icon -->
-                        <i class="icon-book"></i>Translations
+                        <i class="icon-book"></i>Words
                         <!-- Icon for dropdown -->
                         <span class="pull-right"><i class="icon-angle-right"></i></span>
                     </a>
 
                     <ul>
-                        <li><a href="{% url 'translations:words_translations_management' source_language='polish' %}">Polsko - chiński</a></li>
-                        <li><a href="{% url 'translations:words_translations_management' source_language='chinese' %}">Chińsko - polski</a></li>
+                        <li><a href="{% url 'translations:words_translations' source_language='polish' %}">Polsko - chiński</a></li>
+                        <li><a href="{% url 'translations:words_translations' source_language='chinese' %}">Chińsko - polski</a></li>
+                    </ul>
+                </li>
+                <li class="has_submenu nlightblue">
+                    <a href="#">
+                        <!-- Menu name with icon -->
+                        <i class="icon-book"></i>Sentences
+                        <!-- Icon for dropdown -->
+                        <span class="pull-right"><i class="icon-angle-right"></i></span>
+                    </a>
+
+                    <ul>
+                        <li><a href="{% url 'translations:sentences_translations' source_language='polish' %}">Polsko - chiński</a></li>
+                        <li><a href="{% url 'translations:sentences_translations' source_language='chinese' %}">Chińsko - polski</a></li>
                     </ul>
                 </li>
 

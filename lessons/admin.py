@@ -1,8 +1,9 @@
 from django.contrib import admin
 
-from models import WordSkill, SentenceZH, SentencePL, \
+from models import SentenceZH, SentencePL, \
     Lesson, ExerciseAction, Exercise, WordZHExercise, WordPLExercise, \
     SentenceZHExercise, SentencePLExercise, ExplanationImageExercise, ExplanationExercise
+from users.models import WordSkill
 
 
 class LessonAdmin(admin.ModelAdmin):

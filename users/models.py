@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from translations.models import WordZH
 
 
 class Subscription(models.Model):
@@ -11,3 +12,11 @@ class Subscription(models.Model):
     def __unicode__(self):
         return unicode(self.name)
 
+
+class WordSkill(models.Model):
+    word_zh = models.ForeignKey(WordZH)
+    user = models.ForeignKey(User)
+    last_time = models.DateTimeField()
+    correct = models.IntegerField(default=0)
+    correct_run = models.IntegerField(default=0)
+    wrong = models.IntegerField(default=0)

@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block content %}
 {% load staticfiles %}
-<script type="text/javascript" src="{% static "translations/js/words_translations_management.js" %}"></script>
+<script type="text/javascript" src="{% static "translations/js/sentences_translations.js" %}"></script>
 
 <div>
     {% trans "Source language: "%}
@@ -14,10 +14,10 @@
 <div>
     <div>
         {% csrf_token %}
-        <input type="text" name="word_to_search" id="word_to_search" value="{{ choice.id }}" />
+        <input type="text" id="sentence_to_search" value="{{ choice.id }}" />
 
-        <label for="word_to_search">{% trans "Word" %}</label><br/>
-        <input type="hidden" id="source_language" name="source_language" value="{{ source_language }}"/>
+        <label for="sentence_to_search">{% trans "Sentence" %}</label><br/>
+        <input type="hidden" id="source_language" value="{{ source_language }}"/>
         <button type="button" id="edit">{% trans "Edit" %}</button>
     </div>
 

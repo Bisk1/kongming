@@ -39,15 +39,6 @@ class Lesson(models.Model):
         return unicode(self.topic)
 
 
-class WordSkill(models.Model):
-    word_zh = models.ForeignKey(WordZH)
-    user = models.ForeignKey(User)
-    last_time = models.DateTimeField()
-    correct = models.IntegerField(default=0)
-    correct_run = models.IntegerField(default=0)
-    wrong = models.IntegerField(default=0)
-
-
 class LessonAction(models.Model):
     total_exercises_number = models.IntegerField(default=0)
     current_exercise_number = models.IntegerField(default=0)
