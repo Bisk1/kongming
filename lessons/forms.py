@@ -1,6 +1,7 @@
 # _*_ coding: utf-8 _*_
 from django import forms
 
+
 class WordZHExerciseForm(forms.Form):
     word_zh = forms.CharField(label="New word")
     pinyin = forms.CharField(label="Pinyin")

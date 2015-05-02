@@ -72,6 +72,7 @@ def modify_lesson(request, lesson_id):
                                       })
     return HttpResponse(template.render(context))
 
+
 def get_exercises(lesson):
     exercises = Exercise.objects.filter(lesson=lesson)
     word_zh_exercises = WordZHExercise.objects.filter(exercise__in=exercises)
@@ -88,7 +89,8 @@ def get_exercises(lesson):
                                  explanation_image_exercises))
 
     return sorted(exercise_details_list,
-                                   key=lambda instance: instance.exercise.number)
+                  key=lambda instance: instance.exercise.number)
+
 
 def display_exercises(request, lesson_id):
     lesson = Lesson.objects.get(pk=lesson_id)
@@ -108,6 +110,7 @@ def delete_lesson(request, lesson_id):
     print "Trying to delete lesson " + lesson_id
     Lesson.objects.get(id=lesson_id).delete()
     return redirect('lessons:lessons_management')
+
 
 def add_requirement(request, lesson_id):
     """
