@@ -1,0 +1,19 @@
+{% extends "base.html"%}
+{% load i18n %}
+{% block content %}
+<ul>
+    {% if user.is_superuser %}
+        <li><a href="{% url 'admin:index' %}">{% trans "Administrator's panel" %}</a></li>
+    {% endif %}
+    <li><a href="{% url 'menu:choose_language' %}">{% trans "Language settings" %}</a></li>
+</ul>
+
+{% endblock %}
+{% block footer %}
+<div style="text-align:center;">
+Element Company
+</div>
+{% endblock %}
+
+
+

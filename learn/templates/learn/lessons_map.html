@@ -1,0 +1,45 @@
+{% extends "base.html"%}
+{% load i18n %}
+{% block content %}
+
+{% trans "Available lessons" %}
+{% if lessons %}
+    <table>
+        <tr>
+            <th>
+                {% trans "Topic" %}
+            </th>
+            <th>
+                {% trans "Requirements" %}
+            </th>
+            <th>
+            </th>
+        </tr>
+        {% for lesson in lessons %}
+            <tr>
+                <td>
+                    {{ lesson.topic }}
+                </td>
+                <td>
+                    {% if lesson.requirements %}
+                        {% for requirement in lesson.requirements.all %}
+                        <div>
+                            {{ requirement.topic }}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <div>
+                        None
+                    </div>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'learn:learn' lesson_id=lesson.id %}">{% trans "Go" %}</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    No lessons available
+{% endif %}
+{% endblock %}

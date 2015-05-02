@@ -1,0 +1,33 @@
+{% extends "base.html"%}
+{% load i18n %}
+{% block content %}
+{% load staticfiles %}
+<script type="text/javascript" src="{% static "translations/js/dictionary.js" %}"></script>
+
+<div>
+    {% trans "Source language: "%}
+    {% ifequal source_language "polish" %}{% trans "Polish"%}{% endifequal %}
+    {% ifequal source_language "chinese" %}{% trans "Chinese"%}{% endifequal %}
+</div>
+
+{% csrf_token %}
+<input type="text" name="word_to_search" id="word_to_search" value="{{ choice.id }}" />
+
+<label for="word_to_search">{% trans "Word to search" %}</label><br />
+<input type="hidden" id="source_language" name="source_language" value="{{ source_language }}"/>
+
+<button type="button" id="search">{% trans "Search" %}</button>
+
+<div id="translations">
+    <table id="translations_table">
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<div id="error_message" style="display: none;">{% trans 'No translations found' %}</div>
+
+{% endblock %}
+
+
+

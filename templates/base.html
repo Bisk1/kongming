@@ -1,0 +1,200 @@
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <head>
+    {% block header %}
+        {% load i18n %}
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <!-- Title and other stuffs -->
+        <title>Dashboard - Metro King</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <meta name="author" content="">
+
+
+        {% load staticfiles %}
+        <script type="text/javascript" src="{% static "translations/js/dictionary.js" %}"></script>
+        <!-- Stylesheets -->
+        <link href="{% static "style/bootstrap.css" %}" rel="stylesheet">
+        <!-- Font awesome icon -->
+        <link rel="stylesheet" href="{% static "style/font-awesome.css" %}">
+        <!-- jQuery UI -->
+        <link rel="stylesheet" href="{% static "style/jquery-ui.css" %}">
+        <!-- Calendar -->
+        <link rel="stylesheet" href="{% static "style/fullcalendar.css" %}">
+        <!-- prettyPhoto -->
+        <link rel="stylesheet" href="{% static "style/prettyPhoto.css" %}">
+        <!-- Star rating -->
+        <link rel="stylesheet" href="{% static "style/rateit.css" %}">
+        <!-- Date picker -->
+        <link rel="stylesheet" href="{% static "style/bootstrap-datetimepicker.min.css" %}">
+        <!-- jQuery Gritter -->
+        <link rel="stylesheet" href="{% static "style/jquery.gritter.css" %}">
+        <!-- CLEditor -->
+        <link rel="stylesheet" href="{% static "style/jquery.cleditor.css" %}">
+        <!-- Bootstrap toggle -->
+        <link rel="stylesheet" href="{% static "style/bootstrap-switch.css" %}">
+        <!-- Main stylesheet -->
+        <link href="{% static "style/style.css" %}" rel="stylesheet">
+        <!-- Widgets stylesheet -->
+        <link href="{% static "style/widgets.css" %}" rel="stylesheet">
+
+        <script src="{% static "js/bootstrap/jquery.js" %}"></script> <!-- jQuery -->
+        <script src="{% static "js/bootstrap/bootstrap.js" %}"></script> <!-- Bootstrap -->
+        <script src="{% static "js/bootstrap/jquery-ui-1.11.2.custom/jquery-ui.min.js" %}"></script> <!-- jQuery UI -->
+
+        <!-- jQuery Flot -->
+        <script src="{% static "js/bootstrap/excanvas.min.js" %}"></script>
+        <script src="{% static "js/bootstrap/jquery.flot.js" %}"></script>
+        <script src="{% static "js/bootstrap/jquery.flot.resize.js" %}"></script>
+        <script src="{% static "js/bootstrap/jquery.flot.pie.js" %}"></script>
+        <script src="{% static "js/bootstrap/jquery.flot.stack.js" %}"></script>
+
+        <script src="{% static "js/bootstrap/jquery.gritter.min.js" %}"></script> <!-- jQuery Gritter -->
+        <script src="{% static "js/bootstrap/sparklines.js" %}"></script> <!-- Sparklines -->
+        <script src="{% static "js/bootstrap/jquery.cleditor.min.js" %}"></script> <!-- CLEditor -->
+        <script src="{% static "js/bootstrap/bootstrap-datetimepicker.min.js" %}"></script> <!-- Date picker -->
+        <script src="{% static "js/bootstrap/bootstrap-switch.min.js" %}"></script> <!-- Bootstrap Toggle -->
+        <script src="{% static "js/bootstrap/filter.js" %}"></script> <!-- Filter for support page -->
+        <script src="{% static "js/bootstrap/custom.js" %}"></script> <!-- Custom codes -->
+        <script src="{% static "js/bootstrap/charts.js" %}"></script> <!-- Custom chart codes -->
+
+        <!-- HTML5 Support for IE -->
+        <!--[if lt IE 9]>
+        <script src="{% static "js/html5shim.js" %}"></script>
+        <![endif]-->
+
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="img/favicon/favicon.png">
+    {% endblock %}
+
+    </head>
+    <body>
+    {% if user.is_authenticated %}
+    {% block top_menu %}
+        <div class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+            <div class="container">
+            <!-- Menu button for smallar screens -->
+		        <div class="navbar-header">
+
+		            <a href="{% url 'menu:index' %}" class="navbar-brand">Chinese <span class="bold">Tool</span></a>
+		        </div>
+            <!-- Site name for smallar screens -->
+
+            <!-- Navigation starts -->
+            <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+
+            <!-- Links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <img src="img/user.jpg" alt="" class="nav-user-pic img-responsive" /><b>{{user.username}}</b> <b class="caret"></b>
+                    </a>
+                    <!-- Dropdown menu -->
+                    <ul class="dropdown-menu">
+                        <li><a href="#"><i class="icon-user"></i> Profile</a></li>
+                        <li><a href="#"><i class="icon-cogs"></i> Settings</a></li>
+                        <li><a href="{% url 'users:logout' %}"><i class="icon-off">{% trans "Log out" %}</i> </a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- Notifications -->
+            <ul class="nav navbar-nav navbar-right">
+            </ul>
+		    </nav>
+            </div>
+        </div>
+        <div class="content">
+    {% endblock %}
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-dropdown"><a href="#">Navigation</a></div>
+
+            <div class="sidebar-inner">
+
+                <!--- Sidebar navigation -->
+                <!-- If the main navigation has sub navigation, then add the class "has_submenu" to "li" of main navigation. -->
+                <ul class="navi">
+
+                <!-- Use the class nred, ngreen, nblue, nlightblue, nviolet or norange to add background color. You need to use this in <li> tag. -->
+
+                <li class="norange"><a href="{% url 'learn:lessons_map' %}"><i class="icon-sitemap"></i>Ucz się!</a></li>
+
+                <!-- Menu with sub menu -->
+                <li class="has_submenu nlightblue">
+                    <a href="#">
+                        <!-- Menu name with icon -->
+                        <i class="icon-book"></i>Słownik
+                        <!-- Icon for dropdown -->
+                        <span class="pull-right"><i class="icon-angle-right"></i></span>
+                    </a>
+
+                    <ul>
+                        <li><a href="{% url 'translations:dictionary' source_language='polish' %}">Polsko - chiński</a></li>
+                        <li><a href="{% url 'translations:dictionary' source_language='chinese' %}">Chińsko - polski</a></li>
+                    </ul>
+                </li>
+
+                <li class="ngreen"><a href="charts.html"><i class="icon-bar-chart"></i>Statystyki</a></li>
+                <li class="nviolet"><a href="{% url 'lessons:lessons_management' %}"><i class="icon-cog"></i>Lessons management</a></li>
+                <li class="has_submenu nlightblue">
+                    <a href="#">
+                        <!-- Menu name with icon -->
+                        <i class="icon-book"></i>Translations
+                        <!-- Icon for dropdown -->
+                        <span class="pull-right"><i class="icon-angle-right"></i></span>
+                    </a>
+
+                    <ul>
+                        <li><a href="{% url 'translations:words_translations_management' source_language='polish' %}">Polsko - chiński</a></li>
+                        <li><a href="{% url 'translations:words_translations_management' source_language='chinese' %}">Chińsko - polski</a></li>
+                    </ul>
+                </li>
+
+                </ul>
+            </div>
+
+        </div>
+	<!-- Main bar -->
+  	<div class="mainbar">
+        <!-- Page heading -->
+        <div class="page-head">
+            <!-- Page heading -->
+            <h2 class="pull-left">Chinese Tool
+              <!-- page meta -->
+              <span class="page-meta">Z nami nauczysz się chińskiego</span>
+            </h2>
+			<div class="clearfix"></div>
+	    </div>
+	    <!-- Page heading ends -->
+
+	    <!-- Matter -->
+
+            <div class="matter">
+                <div class="container">
+
+                    {% block content %}{% endblock %}
+
+                </div>
+            </div>
+        </div>
+     </div>
+    {% else %}
+      <a href="{% url 'menu:login' %}">{% trans "Log in" %}</a>    <a href="{% url 'users:register' %}">{% trans "Register" %}</a>
+
+    {% endif %}
+
+{% block footer %}
+<div id="error_box"/>
+<div style="text-align:center;">
+Element Company
+</div>
+    {% endblock %}
+    <script type="text/javascript">
+
+</script>
+  </body>
+</html>

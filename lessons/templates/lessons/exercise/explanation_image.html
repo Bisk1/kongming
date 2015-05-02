@@ -1,0 +1,10 @@
+{% load staticfiles %}
+<script type="text/javascript" src="{% static "lessons/js/modify_lesson.js" %}"></script>
+
+<div>Lesson: {{ lesson.topic }}</div>
+Add exercise - explanation with image:
+<form id="adding_exercise" enctype="multipart/form-data"action="{% url 'lessons:add_exercise_explanation_image' lesson.id %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+</form>
+<button id="save">Save</button>

@@ -127,7 +127,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$fpVv56qkTUFf$PM9ce8S60mkJIupgqNwdYYWjSOTrvV1HQhfsQg2a4qM=','2015-03-05 18:14:50',1,'admin','','','',1,1,'2015-01-18 22:27:06');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$fpVv56qkTUFf$PM9ce8S60mkJIupgqNwdYYWjSOTrvV1HQhfsQg2a4qM=','2015-05-02 07:53:19',1,'admin','','','',1,1,'2015-01-18 22:27:06');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,542 +190,6 @@ LOCK TABLES `auth_user_user_permissions` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `chinesetool_exercise`
---
-
-DROP TABLE IF EXISTS `chinesetool_exercise`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_exercise` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `lesson_id` int(11) NOT NULL,
-  `type` varchar(1) COLLATE utf8_bin NOT NULL,
-  `number` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `chinesetool_exercise_37003e55` (`lesson_id`),
-  CONSTRAINT `lesson_id_refs_id_027df89d` FOREIGN KEY (`lesson_id`) REFERENCES `chinesetool_lesson` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_exercise`
---
-
-LOCK TABLES `chinesetool_exercise` WRITE;
-/*!40000 ALTER TABLE `chinesetool_exercise` DISABLE KEYS */;
-INSERT INTO `chinesetool_exercise` VALUES (52,4,'c',1),(53,4,'b',3),(54,4,'e',2),(55,4,'d',5),(56,4,'f',4),(57,5,'f',1),(58,5,'f',2),(59,5,'f',3),(60,5,'f',4),(61,6,'f',NULL),(62,6,'f',NULL),(63,6,'f',NULL),(64,6,'f',NULL),(65,6,'f',NULL),(66,6,'f',NULL),(67,6,'f',NULL),(68,6,'f',NULL),(69,6,'f',NULL),(70,6,'f',NULL),(74,8,'f',1),(75,8,'f',2),(76,8,'f',NULL),(77,8,'f',NULL),(78,8,'f',NULL),(79,8,'f',NULL),(80,8,'f',NULL),(81,8,'f',NULL),(82,8,'f',5);
-/*!40000 ALTER TABLE `chinesetool_exercise` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_exerciseaction`
---
-
-DROP TABLE IF EXISTS `chinesetool_exerciseaction`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_exerciseaction` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `exercise_id` int(11) NOT NULL,
-  `lesson_action_id` int(11) NOT NULL,
-  `result` int(11) NOT NULL,
-  `number` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `chinesetool_exerciseaction_c18e0af4` (`exercise_id`),
-  KEY `chinesetool_exerciseaction_ff58a6f6` (`lesson_action_id`),
-  CONSTRAINT `exercise_id_refs_id_d0ef0d56` FOREIGN KEY (`exercise_id`) REFERENCES `chinesetool_exercise` (`id`),
-  CONSTRAINT `lesson_action_id_refs_id_e21c761f` FOREIGN KEY (`lesson_action_id`) REFERENCES `chinesetool_lessonaction` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_exerciseaction`
---
-
-LOCK TABLES `chinesetool_exerciseaction` WRITE;
-/*!40000 ALTER TABLE `chinesetool_exerciseaction` DISABLE KEYS */;
-INSERT INTO `chinesetool_exerciseaction` VALUES (85,52,38,0,1),(86,54,38,0,2),(87,53,38,0,3),(88,56,38,0,4),(89,55,38,0,5);
-/*!40000 ALTER TABLE `chinesetool_exerciseaction` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_explanationexercise`
---
-
-DROP TABLE IF EXISTS `chinesetool_explanationexercise`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_explanationexercise` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `exercise_id` int(11) NOT NULL,
-  `text` longtext COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `chinesetool_explanationexercise_c18e0af4` (`exercise_id`),
-  CONSTRAINT `exercise_id_refs_id_5e9138eb` FOREIGN KEY (`exercise_id`) REFERENCES `chinesetool_exercise` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_explanationexercise`
---
-
-LOCK TABLES `chinesetool_explanationexercise` WRITE;
-/*!40000 ALTER TABLE `chinesetool_explanationexercise` DISABLE KEYS */;
-INSERT INTO `chinesetool_explanationexercise` VALUES (1,56,'Przykładowy slajd z wytłumaczeniem. \r\nLorem ipsum dolor sit amet, consectetur adipisicing elit. Proin nibh augue, suscipit a, scelerisque sed, lacinia in, mi. Cras vel lorem. Etiam pellentesque aliquet tellus. Phasellus pharetra nulla ac diam. Quisque semper justo at risus. Donec venenatis, turpis vel hendrerit interdum, dui ligula ultricies purus, sed posuere libero dui id orci. Nam congue, pede vitae dapibus aliquet, elit magna vulputate arcu, vel tempus metus leo non est. Etiam sit amet lectus quis est congue mollis. Phasellus congue lacus eget neque. Phasellus ornare, ante vitae consectetuer consequat, purus sapien ultricies dolor, et mollis pede metus eget nisi. Praesent sodales velit quis augue. Cras suscipit, urna at aliquam rhoncus, urna quam viverra nisi, in interdum massa nibh nec erat.'),(2,57,'Slajd 1'),(3,58,'Slajd 2'),(4,59,'Slajd 3'),(5,60,'Slajd 4 - slajdy w tej lekcji mialy narzucona kolejnosc wiec wyswietlily sie w z gory znanej kolejnosci (1, 2, 3, 4)'),(6,61,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 1'),(7,62,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 2'),(8,63,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 3'),(9,64,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 4'),(10,65,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 5'),(11,66,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 6'),(12,67,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 7'),(13,68,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 8'),(14,69,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 9'),(15,70,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 10'),(19,74,'Przykład mieszany - 2 pierwsze slajdy są w kolejności ustalonej, następnie 2 wylosowane z puli 6, na koniec 1 slajd ustalony.'),(20,75,'Slajd ustalony nr 2.'),(21,76,'Slajd losowy nr 1'),(22,77,'Slajd losowy nr 2'),(23,78,'Slajd losowy nr 3'),(24,79,'Slajd losowy nr 4'),(25,80,'Slajd losowy nr 5'),(26,81,'Slajd losowy nr 6'),(27,82,'Slajd ustalony nr 5 - ostatni');
-/*!40000 ALTER TABLE `chinesetool_explanationexercise` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_explanationimageexercise`
---
-
-DROP TABLE IF EXISTS `chinesetool_explanationimageexercise`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_explanationimageexercise` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `exercise_id` int(11) NOT NULL,
-  `text` longtext COLLATE utf8_bin NOT NULL,
-  `image` varchar(100) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `chinesetool_explanationimageexercise_c18e0af4` (`exercise_id`),
-  CONSTRAINT `exercise_id_refs_id_2b1196a3` FOREIGN KEY (`exercise_id`) REFERENCES `chinesetool_exercise` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_explanationimageexercise`
---
-
-LOCK TABLES `chinesetool_explanationimageexercise` WRITE;
-/*!40000 ALTER TABLE `chinesetool_explanationimageexercise` DISABLE KEYS */;
-/*!40000 ALTER TABLE `chinesetool_explanationimageexercise` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_lesson`
---
-
-DROP TABLE IF EXISTS `chinesetool_lesson`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_lesson` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `topic` varchar(100) COLLATE utf8_bin NOT NULL,
-  `exercises_number` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_lesson`
---
-
-LOCK TABLES `chinesetool_lesson` WRITE;
-/*!40000 ALTER TABLE `chinesetool_lesson` DISABLE KEYS */;
-INSERT INTO `chinesetool_lesson` VALUES (4,'Szkoła',5),(5,'Przykład - fixed',4),(6,'Przykład - random',4),(8,'Przykład - mixed',5);
-/*!40000 ALTER TABLE `chinesetool_lesson` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_lesson_requirements`
---
-
-DROP TABLE IF EXISTS `chinesetool_lesson_requirements`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_lesson_requirements` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_lesson_id` int(11) NOT NULL,
-  `to_lesson_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `from_lesson_id` (`from_lesson_id`,`to_lesson_id`),
-  KEY `chinesetool_lesson_requirements_f6734edd` (`from_lesson_id`),
-  KEY `chinesetool_lesson_requirements_1e803bb4` (`to_lesson_id`),
-  CONSTRAINT `from_lesson_id_refs_id_d98ff244` FOREIGN KEY (`from_lesson_id`) REFERENCES `chinesetool_lesson` (`id`),
-  CONSTRAINT `to_lesson_id_refs_id_d98ff244` FOREIGN KEY (`to_lesson_id`) REFERENCES `chinesetool_lesson` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_lesson_requirements`
---
-
-LOCK TABLES `chinesetool_lesson_requirements` WRITE;
-/*!40000 ALTER TABLE `chinesetool_lesson_requirements` DISABLE KEYS */;
-/*!40000 ALTER TABLE `chinesetool_lesson_requirements` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_lessonaction`
---
-
-DROP TABLE IF EXISTS `chinesetool_lessonaction`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_lessonaction` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `total_exercises_number` int(11) NOT NULL,
-  `current_exercise_number` int(11) NOT NULL,
-  `fails` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `lesson_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `chinesetool_lessonaction_6340c63c` (`user_id`),
-  KEY `chinesetool_lessonaction_37003e55` (`lesson_id`),
-  CONSTRAINT `lesson_id_refs_id_ea897e7e` FOREIGN KEY (`lesson_id`) REFERENCES `chinesetool_lesson` (`id`),
-  CONSTRAINT `user_id_refs_id_6762f5c2` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_lessonaction`
---
-
-LOCK TABLES `chinesetool_lessonaction` WRITE;
-/*!40000 ALTER TABLE `chinesetool_lessonaction` DISABLE KEYS */;
-INSERT INTO `chinesetool_lessonaction` VALUES (38,5,5,4,1,4);
-/*!40000 ALTER TABLE `chinesetool_lessonaction` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_sentencepl`
---
-
-DROP TABLE IF EXISTS `chinesetool_sentencepl`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_sentencepl` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `sentence` varchar(255) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `sentence` (`sentence`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_sentencepl`
---
-
-LOCK TABLES `chinesetool_sentencepl` WRITE;
-/*!40000 ALTER TABLE `chinesetool_sentencepl` DISABLE KEYS */;
-INSERT INTO `chinesetool_sentencepl` VALUES (2,'Gdzie jest nowa szkoła?'),(1,'Lubię uczyć się chińskiego.');
-/*!40000 ALTER TABLE `chinesetool_sentencepl` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_sentenceplexercise`
---
-
-DROP TABLE IF EXISTS `chinesetool_sentenceplexercise`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_sentenceplexercise` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `exercise_id` int(11) NOT NULL,
-  `sentence_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `chinesetool_sentenceplexercise_c18e0af4` (`exercise_id`),
-  KEY `chinesetool_sentenceplexercise_9bad8f02` (`sentence_id`),
-  CONSTRAINT `exercise_id_refs_id_e47a095f` FOREIGN KEY (`exercise_id`) REFERENCES `chinesetool_exercise` (`id`),
-  CONSTRAINT `sentence_id_refs_id_22799b68` FOREIGN KEY (`sentence_id`) REFERENCES `chinesetool_sentencepl` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_sentenceplexercise`
---
-
-LOCK TABLES `chinesetool_sentenceplexercise` WRITE;
-/*!40000 ALTER TABLE `chinesetool_sentenceplexercise` DISABLE KEYS */;
-INSERT INTO `chinesetool_sentenceplexercise` VALUES (1,55,2);
-/*!40000 ALTER TABLE `chinesetool_sentenceplexercise` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_sentencetranslation`
---
-
-DROP TABLE IF EXISTS `chinesetool_sentencetranslation`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_sentencetranslation` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `sentence_zh_id` int(11) NOT NULL,
-  `sentence_pl_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `sentence_zh_id` (`sentence_zh_id`,`sentence_pl_id`),
-  KEY `chinesetool_sentencetranslation_a86f1aae` (`sentence_zh_id`),
-  KEY `chinesetool_sentencetranslation_9108fd47` (`sentence_pl_id`),
-  CONSTRAINT `sentence_pl_id_refs_id_b65767aa` FOREIGN KEY (`sentence_pl_id`) REFERENCES `chinesetool_sentencepl` (`id`),
-  CONSTRAINT `sentence_zh_id_refs_id_5b0289db` FOREIGN KEY (`sentence_zh_id`) REFERENCES `chinesetool_sentencezh` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_sentencetranslation`
---
-
-LOCK TABLES `chinesetool_sentencetranslation` WRITE;
-/*!40000 ALTER TABLE `chinesetool_sentencetranslation` DISABLE KEYS */;
-INSERT INTO `chinesetool_sentencetranslation` VALUES (1,1,1),(2,2,2);
-/*!40000 ALTER TABLE `chinesetool_sentencetranslation` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_sentencezh`
---
-
-DROP TABLE IF EXISTS `chinesetool_sentencezh`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_sentencezh` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `sentence` varchar(255) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `sentence` (`sentence`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_sentencezh`
---
-
-LOCK TABLES `chinesetool_sentencezh` WRITE;
-/*!40000 ALTER TABLE `chinesetool_sentencezh` DISABLE KEYS */;
-INSERT INTO `chinesetool_sentencezh` VALUES (1,'我喜欢学习中文。'),(2,'新的学校在哪里？');
-/*!40000 ALTER TABLE `chinesetool_sentencezh` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_sentencezhexercise`
---
-
-DROP TABLE IF EXISTS `chinesetool_sentencezhexercise`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_sentencezhexercise` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `exercise_id` int(11) NOT NULL,
-  `sentence_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `chinesetool_sentencezhexercise_c18e0af4` (`exercise_id`),
-  KEY `chinesetool_sentencezhexercise_9bad8f02` (`sentence_id`),
-  CONSTRAINT `exercise_id_refs_id_913ff349` FOREIGN KEY (`exercise_id`) REFERENCES `chinesetool_exercise` (`id`),
-  CONSTRAINT `sentence_id_refs_id_5922332b` FOREIGN KEY (`sentence_id`) REFERENCES `chinesetool_sentencezh` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_sentencezhexercise`
---
-
-LOCK TABLES `chinesetool_sentencezhexercise` WRITE;
-/*!40000 ALTER TABLE `chinesetool_sentencezhexercise` DISABLE KEYS */;
-INSERT INTO `chinesetool_sentencezhexercise` VALUES (1,54,1);
-/*!40000 ALTER TABLE `chinesetool_sentencezhexercise` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_subscription`
---
-
-DROP TABLE IF EXISTS `chinesetool_subscription`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_subscription` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name_id` int(11) NOT NULL,
-  `registration_date` datetime NOT NULL,
-  `last_login_date` datetime NOT NULL,
-  `abo_date` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `chinesetool_subscription_4da47e07` (`name_id`),
-  CONSTRAINT `name_id_refs_id_e6e066ce` FOREIGN KEY (`name_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_subscription`
---
-
-LOCK TABLES `chinesetool_subscription` WRITE;
-/*!40000 ALTER TABLE `chinesetool_subscription` DISABLE KEYS */;
-/*!40000 ALTER TABLE `chinesetool_subscription` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_wordpl`
---
-
-DROP TABLE IF EXISTS `chinesetool_wordpl`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_wordpl` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word` varchar(100) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `word` (`word`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_wordpl`
---
-
-LOCK TABLES `chinesetool_wordpl` WRITE;
-/*!40000 ALTER TABLE `chinesetool_wordpl` DISABLE KEYS */;
-INSERT INTO `chinesetool_wordpl` VALUES (3,'dupa'),(4,'ja'),(5,'szkoła'),(2,'tańczyć'),(6,'uczeń'),(1,'śpiewać');
-/*!40000 ALTER TABLE `chinesetool_wordpl` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_wordplexercise`
---
-
-DROP TABLE IF EXISTS `chinesetool_wordplexercise`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_wordplexercise` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `exercise_id` int(11) NOT NULL,
-  `word_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `chinesetool_wordplexercise_c18e0af4` (`exercise_id`),
-  KEY `chinesetool_wordplexercise_558fda87` (`word_id`),
-  CONSTRAINT `exercise_id_refs_id_0250c6b5` FOREIGN KEY (`exercise_id`) REFERENCES `chinesetool_exercise` (`id`),
-  CONSTRAINT `word_id_refs_id_d0c2d7d4` FOREIGN KEY (`word_id`) REFERENCES `chinesetool_wordpl` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_wordplexercise`
---
-
-LOCK TABLES `chinesetool_wordplexercise` WRITE;
-/*!40000 ALTER TABLE `chinesetool_wordplexercise` DISABLE KEYS */;
-INSERT INTO `chinesetool_wordplexercise` VALUES (3,53,6);
-/*!40000 ALTER TABLE `chinesetool_wordplexercise` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_wordskill`
---
-
-DROP TABLE IF EXISTS `chinesetool_wordskill`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_wordskill` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_zh_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `last_time` datetime NOT NULL,
-  `correct` int(11) NOT NULL,
-  `correct_run` int(11) NOT NULL,
-  `wrong` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `chinesetool_wordskill_e5b47d84` (`word_zh_id`),
-  KEY `chinesetool_wordskill_6340c63c` (`user_id`),
-  CONSTRAINT `user_id_refs_id_f62e30b2` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
-  CONSTRAINT `word_zh_id_refs_id_381ffdf5` FOREIGN KEY (`word_zh_id`) REFERENCES `chinesetool_wordzh` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_wordskill`
---
-
-LOCK TABLES `chinesetool_wordskill` WRITE;
-/*!40000 ALTER TABLE `chinesetool_wordskill` DISABLE KEYS */;
-/*!40000 ALTER TABLE `chinesetool_wordskill` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_wordtranslation`
---
-
-DROP TABLE IF EXISTS `chinesetool_wordtranslation`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_wordtranslation` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_zh_id` int(11) NOT NULL,
-  `word_pl_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `word_zh_id` (`word_zh_id`,`word_pl_id`),
-  KEY `chinesetool_wordtranslation_e5b47d84` (`word_zh_id`),
-  KEY `chinesetool_wordtranslation_1ac5d68e` (`word_pl_id`),
-  CONSTRAINT `word_pl_id_refs_id_6d7a0bbb` FOREIGN KEY (`word_pl_id`) REFERENCES `chinesetool_wordpl` (`id`),
-  CONSTRAINT `word_zh_id_refs_id_d596beb8` FOREIGN KEY (`word_zh_id`) REFERENCES `chinesetool_wordzh` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_wordtranslation`
---
-
-LOCK TABLES `chinesetool_wordtranslation` WRITE;
-/*!40000 ALTER TABLE `chinesetool_wordtranslation` DISABLE KEYS */;
-INSERT INTO `chinesetool_wordtranslation` VALUES (1,1,1),(2,2,2),(3,3,3),(4,4,4),(5,5,5),(6,6,6);
-/*!40000 ALTER TABLE `chinesetool_wordtranslation` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_wordzh`
---
-
-DROP TABLE IF EXISTS `chinesetool_wordzh`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_wordzh` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word` varchar(50) COLLATE utf8_bin NOT NULL,
-  `pinyin` varchar(100) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `word` (`word`,`pinyin`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_wordzh`
---
-
-LOCK TABLES `chinesetool_wordzh` WRITE;
-/*!40000 ALTER TABLE `chinesetool_wordzh` DISABLE KEYS */;
-INSERT INTO `chinesetool_wordzh` VALUES (1,'唱歌',''),(5,'学校',''),(6,'学生',''),(3,'屁股',''),(4,'我',''),(2,'跳舞','');
-/*!40000 ALTER TABLE `chinesetool_wordzh` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chinesetool_wordzhexercise`
---
-
-DROP TABLE IF EXISTS `chinesetool_wordzhexercise`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `chinesetool_wordzhexercise` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `exercise_id` int(11) NOT NULL,
-  `word_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `chinesetool_wordzhexercise_c18e0af4` (`exercise_id`),
-  KEY `chinesetool_wordzhexercise_558fda87` (`word_id`),
-  CONSTRAINT `exercise_id_refs_id_92e8b347` FOREIGN KEY (`exercise_id`) REFERENCES `chinesetool_exercise` (`id`),
-  CONSTRAINT `word_id_refs_id_f3673f16` FOREIGN KEY (`word_id`) REFERENCES `chinesetool_wordzh` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chinesetool_wordzhexercise`
---
-
-LOCK TABLES `chinesetool_wordzhexercise` WRITE;
-/*!40000 ALTER TABLE `chinesetool_wordzhexercise` DISABLE KEYS */;
-INSERT INTO `chinesetool_wordzhexercise` VALUES (3,52,5);
-/*!40000 ALTER TABLE `chinesetool_wordzhexercise` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `django_admin_log`
 --
 
@@ -746,7 +210,7 @@ CREATE TABLE `django_admin_log` (
   KEY `django_admin_log_37ef4eb4` (`content_type_id`),
   CONSTRAINT `content_type_id_refs_id_93d2d1f8` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `user_id_refs_id_c0d12874` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -755,7 +219,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2015-01-22 21:05:44',1,18,'2','Śpiew 2',3,''),(2,'2015-01-22 21:05:44',1,18,'1','Śpiew 1',3,''),(3,'2015-01-31 13:23:25',1,18,'31','Śpiew 31',3,''),(4,'2015-01-31 13:23:25',1,18,'30','Śpiew 30',3,''),(5,'2015-01-31 13:23:25',1,18,'29','Śpiew 29',3,''),(6,'2015-01-31 13:23:25',1,18,'28','Śpiew 28',3,''),(7,'2015-01-31 13:23:25',1,18,'27','Śpiew 27',3,''),(8,'2015-01-31 13:23:25',1,18,'26','Śpiew 26',3,''),(9,'2015-01-31 13:23:25',1,18,'25','Śpiew 25',3,''),(10,'2015-01-31 13:23:25',1,18,'24','Śpiew 24',3,''),(11,'2015-01-31 13:23:25',1,18,'23','Śpiew 23',3,''),(12,'2015-01-31 13:23:25',1,18,'22','Śpiew 22',3,''),(13,'2015-01-31 13:23:25',1,18,'21','Śpiew 21',3,''),(14,'2015-01-31 13:23:25',1,18,'20','Śpiew 20',3,''),(15,'2015-01-31 13:23:25',1,18,'19','Śpiew 19',3,''),(16,'2015-01-31 13:23:25',1,18,'18','Śpiew 18',3,''),(17,'2015-01-31 13:23:25',1,18,'17','Śpiew 17',3,''),(18,'2015-01-31 13:23:25',1,18,'16','Śpiew 16',3,''),(19,'2015-01-31 13:23:25',1,18,'15','Śpiew 15',3,''),(20,'2015-01-31 13:23:25',1,18,'14','Śpiew 14',3,''),(21,'2015-01-31 13:23:25',1,18,'13','Śpiew 13',3,''),(22,'2015-01-31 13:23:25',1,18,'12','Śpiew 12',3,''),(23,'2015-01-31 13:23:25',1,18,'11','Śpiew 11',3,''),(24,'2015-01-31 13:23:25',1,18,'10','Śpiew 10',3,''),(25,'2015-01-31 13:23:25',1,18,'9','Śpiew 9',3,''),(26,'2015-01-31 13:23:25',1,18,'8','Śpiew 8',3,''),(27,'2015-01-31 13:23:25',1,18,'7','Śpiew 7',3,''),(28,'2015-01-31 13:23:25',1,18,'6','Śpiew 6',3,''),(29,'2015-01-31 13:23:25',1,18,'5','Śpiew 5',3,'');
+INSERT INTO `django_admin_log` VALUES (1,'2015-01-22 21:05:44',1,18,'2','Śpiew 2',3,''),(2,'2015-01-22 21:05:44',1,18,'1','Śpiew 1',3,''),(3,'2015-01-31 13:23:25',1,18,'31','Śpiew 31',3,''),(4,'2015-01-31 13:23:25',1,18,'30','Śpiew 30',3,''),(5,'2015-01-31 13:23:25',1,18,'29','Śpiew 29',3,''),(6,'2015-01-31 13:23:25',1,18,'28','Śpiew 28',3,''),(7,'2015-01-31 13:23:25',1,18,'27','Śpiew 27',3,''),(8,'2015-01-31 13:23:25',1,18,'26','Śpiew 26',3,''),(9,'2015-01-31 13:23:25',1,18,'25','Śpiew 25',3,''),(10,'2015-01-31 13:23:25',1,18,'24','Śpiew 24',3,''),(11,'2015-01-31 13:23:25',1,18,'23','Śpiew 23',3,''),(12,'2015-01-31 13:23:25',1,18,'22','Śpiew 22',3,''),(13,'2015-01-31 13:23:25',1,18,'21','Śpiew 21',3,''),(14,'2015-01-31 13:23:25',1,18,'20','Śpiew 20',3,''),(15,'2015-01-31 13:23:25',1,18,'19','Śpiew 19',3,''),(16,'2015-01-31 13:23:25',1,18,'18','Śpiew 18',3,''),(17,'2015-01-31 13:23:25',1,18,'17','Śpiew 17',3,''),(18,'2015-01-31 13:23:25',1,18,'16','Śpiew 16',3,''),(19,'2015-01-31 13:23:25',1,18,'15','Śpiew 15',3,''),(20,'2015-01-31 13:23:25',1,18,'14','Śpiew 14',3,''),(21,'2015-01-31 13:23:25',1,18,'13','Śpiew 13',3,''),(22,'2015-01-31 13:23:25',1,18,'12','Śpiew 12',3,''),(23,'2015-01-31 13:23:25',1,18,'11','Śpiew 11',3,''),(24,'2015-01-31 13:23:25',1,18,'10','Śpiew 10',3,''),(25,'2015-01-31 13:23:25',1,18,'9','Śpiew 9',3,''),(26,'2015-01-31 13:23:25',1,18,'8','Śpiew 8',3,''),(27,'2015-01-31 13:23:25',1,18,'7','Śpiew 7',3,''),(28,'2015-01-31 13:23:25',1,18,'6','Śpiew 6',3,''),(29,'2015-01-31 13:23:25',1,18,'5','Śpiew 5',3,''),(30,'2015-05-01 14:27:53',1,10,'7','你 [ni3]',2,'Zmieniono pinyin'),(31,'2015-05-01 14:28:01',1,10,'6','学生 [xue2sheng1]',2,'Zmieniono pinyin'),(32,'2015-05-01 14:28:07',1,10,'5','学校 [xue2xiao4]',2,'Zmieniono pinyin'),(33,'2015-05-01 14:28:13',1,10,'4','我 [wo3]',2,'Zmieniono pinyin'),(34,'2015-05-01 14:28:19',1,10,'3','屁股 [pi4gu5]',2,'Zmieniono pinyin'),(35,'2015-05-01 14:28:32',1,10,'2','跳舞 [tiao4wu3]',2,'Zmieniono pinyin'),(36,'2015-05-01 14:28:39',1,10,'1','唱歌 [chang4ge1]',2,'Zmieniono pinyin');
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -808,8 +272,324 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('46sb40z4it6ll4ntiq8avovign3st603','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-03-19 18:14:50'),('8pbjyr0ck14qenjlmy6b0mvakn7xlwz7','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-02-05 21:14:40'),('92qbprqu3hopxfzn4fr1l294wyz3tiv9','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-02-01 22:27:49'),('k0h8vdh3hbffpc9y9jwbgjrundnk8eal','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-03-19 17:40:57');
+INSERT INTO `django_session` VALUES ('46sb40z4it6ll4ntiq8avovign3st603','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-03-19 18:14:50'),('6wbjby7ok6m5lg1vhxk9itqv7bzs8a4c','ODM0OTlmYTcxYTBmOGIyNjA4N2FkYTlkMjFlOTgyYjM1YmY3OTM1MDp7ImRqYW5nb19sYW5ndWFnZSI6InBsIn0=','2015-05-13 19:34:16'),('8pbjyr0ck14qenjlmy6b0mvakn7xlwz7','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-02-05 21:14:40'),('8wreqz89urjqe6ut7e6zryuddse76h2y','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-05-16 07:53:19'),('92qbprqu3hopxfzn4fr1l294wyz3tiv9','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-02-01 22:27:49'),('a7vgvyhnuk4b1h2rh0aqesjdkomi59rv','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-04-29 19:14:54'),('k0h8vdh3hbffpc9y9jwbgjrundnk8eal','OGVlODk1ZWE0ZWExNmE0MWRiZWY2MWVjZDE3NTgxZmQ4MzdkNmI0Yzp7Il9hdXRoX3VzZXJfaWQiOjEsImRqYW5nb19sYW5ndWFnZSI6ImVuIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ==','2015-03-30 20:11:32');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lessons_exercise`
+--
+
+DROP TABLE IF EXISTS `lessons_exercise`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lessons_exercise` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `lesson_id` int(11) NOT NULL,
+  `type` varchar(1) COLLATE utf8_bin NOT NULL,
+  `number` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `chinesetool_exercise_37003e55` (`lesson_id`),
+  CONSTRAINT `lesson_id_refs_id_027df89d` FOREIGN KEY (`lesson_id`) REFERENCES `lessons_lesson` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lessons_exercise`
+--
+
+LOCK TABLES `lessons_exercise` WRITE;
+/*!40000 ALTER TABLE `lessons_exercise` DISABLE KEYS */;
+INSERT INTO `lessons_exercise` VALUES (52,4,'c',1),(53,4,'b',3),(54,4,'e',2),(55,4,'d',5),(56,4,'f',4),(57,5,'f',1),(58,5,'f',2),(59,5,'f',3),(60,5,'f',4),(61,6,'f',NULL),(62,6,'f',NULL),(63,6,'f',NULL),(64,6,'f',NULL),(65,6,'f',NULL),(66,6,'f',NULL),(67,6,'f',NULL),(68,6,'f',NULL),(69,6,'f',NULL),(70,6,'f',NULL),(74,8,'f',1),(75,8,'f',2),(76,8,'f',NULL),(77,8,'f',NULL),(78,8,'f',NULL),(79,8,'f',NULL),(80,8,'f',NULL),(81,8,'f',NULL),(82,8,'f',5),(92,16,'g',1),(93,17,'d',1),(94,17,'d',2);
+/*!40000 ALTER TABLE `lessons_exercise` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lessons_exerciseaction`
+--
+
+DROP TABLE IF EXISTS `lessons_exerciseaction`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lessons_exerciseaction` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `exercise_id` int(11) NOT NULL,
+  `lesson_action_id` int(11) NOT NULL,
+  `result` int(11) NOT NULL,
+  `number` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `chinesetool_exerciseaction_c18e0af4` (`exercise_id`),
+  KEY `chinesetool_exerciseaction_ff58a6f6` (`lesson_action_id`),
+  CONSTRAINT `exercise_id_refs_id_d0ef0d56` FOREIGN KEY (`exercise_id`) REFERENCES `lessons_exercise` (`id`),
+  CONSTRAINT `lesson_action_id_refs_id_e21c761f` FOREIGN KEY (`lesson_action_id`) REFERENCES `lessons_lessonaction` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=280 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lessons_exerciseaction`
+--
+
+LOCK TABLES `lessons_exerciseaction` WRITE;
+/*!40000 ALTER TABLE `lessons_exerciseaction` DISABLE KEYS */;
+INSERT INTO `lessons_exerciseaction` VALUES (275,52,83,0,1),(276,54,83,0,2),(277,53,83,0,3),(278,56,83,0,4),(279,55,83,0,5);
+/*!40000 ALTER TABLE `lessons_exerciseaction` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lessons_explanationexercise`
+--
+
+DROP TABLE IF EXISTS `lessons_explanationexercise`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lessons_explanationexercise` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `exercise_id` int(11) NOT NULL,
+  `text` longtext COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `chinesetool_explanationexercise_c18e0af4` (`exercise_id`),
+  CONSTRAINT `exercise_id_refs_id_5e9138eb` FOREIGN KEY (`exercise_id`) REFERENCES `lessons_exercise` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lessons_explanationexercise`
+--
+
+LOCK TABLES `lessons_explanationexercise` WRITE;
+/*!40000 ALTER TABLE `lessons_explanationexercise` DISABLE KEYS */;
+INSERT INTO `lessons_explanationexercise` VALUES (1,56,'Przykładowy slajd z wytłumaczeniem. \r\nLorem ipsum dolor sit amet, consectetur adipisicing elit. Proin nibh augue, suscipit a, scelerisque sed, lacinia in, mi. Cras vel lorem. Etiam pellentesque aliquet tellus. Phasellus pharetra nulla ac diam. Quisque semper justo at risus. Donec venenatis, turpis vel hendrerit interdum, dui ligula ultricies purus, sed posuere libero dui id orci. Nam congue, pede vitae dapibus aliquet, elit magna vulputate arcu, vel tempus metus leo non est. Etiam sit amet lectus quis est congue mollis. Phasellus congue lacus eget neque. Phasellus ornare, ante vitae consectetuer consequat, purus sapien ultricies dolor, et mollis pede metus eget nisi. Praesent sodales velit quis augue. Cras suscipit, urna at aliquam rhoncus, urna quam viverra nisi, in interdum massa nibh nec erat.'),(2,57,'Slajd 1'),(3,58,'Slajd 2'),(4,59,'Slajd 3'),(5,60,'Slajd 4 - slajdy w tej lekcji mialy narzucona kolejnosc wiec wyswietlily sie w z gory znanej kolejnosci (1, 2, 3, 4)'),(6,61,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 1'),(7,62,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 2'),(8,63,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 3'),(9,64,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 4'),(10,65,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 5'),(11,66,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 6'),(12,67,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 7'),(13,68,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 8'),(14,69,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 9'),(15,70,'W tej lekcji kolejność jest losowa więc slajdy są losowane podczas działania z puli. Wylosowanych jest 4 z 10 dostępnych\r\n\r\nSlajd 10'),(19,74,'Przykład mieszany - 2 pierwsze slajdy są w kolejności ustalonej, następnie 2 wylosowane z puli 6, na koniec 1 slajd ustalony.'),(20,75,'Slajd ustalony nr 2.'),(21,76,'Slajd losowy nr 1'),(22,77,'Slajd losowy nr 2'),(23,78,'Slajd losowy nr 3'),(24,79,'Slajd losowy nr 4'),(25,80,'Slajd losowy nr 5'),(26,81,'Slajd losowy nr 6'),(27,82,'Slajd ustalony nr 5 - ostatni');
+/*!40000 ALTER TABLE `lessons_explanationexercise` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lessons_explanationimageexercise`
+--
+
+DROP TABLE IF EXISTS `lessons_explanationimageexercise`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lessons_explanationimageexercise` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `exercise_id` int(11) NOT NULL,
+  `text` longtext COLLATE utf8_bin NOT NULL,
+  `image` varchar(100) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `chinesetool_explanationimageexercise_c18e0af4` (`exercise_id`),
+  CONSTRAINT `exercise_id_refs_id_2b1196a3` FOREIGN KEY (`exercise_id`) REFERENCES `lessons_exercise` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lessons_explanationimageexercise`
+--
+
+LOCK TABLES `lessons_explanationimageexercise` WRITE;
+/*!40000 ALTER TABLE `lessons_explanationimageexercise` DISABLE KEYS */;
+INSERT INTO `lessons_explanationimageexercise` VALUES (1,92,'asdasd','image/d4a4f926-5b5a-497f-aca0-aeea59d66088.jpg');
+/*!40000 ALTER TABLE `lessons_explanationimageexercise` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lessons_lesson`
+--
+
+DROP TABLE IF EXISTS `lessons_lesson`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lessons_lesson` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `topic` varchar(100) COLLATE utf8_bin NOT NULL,
+  `exercises_number` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lessons_lesson`
+--
+
+LOCK TABLES `lessons_lesson` WRITE;
+/*!40000 ALTER TABLE `lessons_lesson` DISABLE KEYS */;
+INSERT INTO `lessons_lesson` VALUES (4,'Szkoła',5),(5,'Przykład - fixed',4),(6,'Przykład - random',4),(8,'Przykład - mixed',5),(16,'Witaj!',1),(17,'asdgadsg',0);
+/*!40000 ALTER TABLE `lessons_lesson` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lessons_lesson_requirements`
+--
+
+DROP TABLE IF EXISTS `lessons_lesson_requirements`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lessons_lesson_requirements` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `from_lesson_id` int(11) NOT NULL,
+  `to_lesson_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `from_lesson_id` (`from_lesson_id`,`to_lesson_id`),
+  KEY `chinesetool_lesson_requirements_f6734edd` (`from_lesson_id`),
+  KEY `chinesetool_lesson_requirements_1e803bb4` (`to_lesson_id`),
+  CONSTRAINT `from_lesson_id_refs_id_d98ff244` FOREIGN KEY (`from_lesson_id`) REFERENCES `lessons_lesson` (`id`),
+  CONSTRAINT `to_lesson_id_refs_id_d98ff244` FOREIGN KEY (`to_lesson_id`) REFERENCES `lessons_lesson` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lessons_lesson_requirements`
+--
+
+LOCK TABLES `lessons_lesson_requirements` WRITE;
+/*!40000 ALTER TABLE `lessons_lesson_requirements` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lessons_lesson_requirements` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lessons_lessonaction`
+--
+
+DROP TABLE IF EXISTS `lessons_lessonaction`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lessons_lessonaction` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `total_exercises_number` int(11) NOT NULL,
+  `current_exercise_number` int(11) NOT NULL,
+  `fails` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `lesson_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `chinesetool_lessonaction_6340c63c` (`user_id`),
+  KEY `chinesetool_lessonaction_37003e55` (`lesson_id`),
+  CONSTRAINT `lesson_id_refs_id_ea897e7e` FOREIGN KEY (`lesson_id`) REFERENCES `lessons_lesson` (`id`),
+  CONSTRAINT `user_id_refs_id_6762f5c2` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lessons_lessonaction`
+--
+
+LOCK TABLES `lessons_lessonaction` WRITE;
+/*!40000 ALTER TABLE `lessons_lessonaction` DISABLE KEYS */;
+INSERT INTO `lessons_lessonaction` VALUES (83,5,5,4,1,4);
+/*!40000 ALTER TABLE `lessons_lessonaction` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lessons_sentenceplexercise`
+--
+
+DROP TABLE IF EXISTS `lessons_sentenceplexercise`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lessons_sentenceplexercise` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `exercise_id` int(11) NOT NULL,
+  `sentence_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `chinesetool_sentenceplexercise_c18e0af4` (`exercise_id`),
+  KEY `chinesetool_sentenceplexercise_9bad8f02` (`sentence_id`),
+  CONSTRAINT `exercise_id_refs_id_e47a095f` FOREIGN KEY (`exercise_id`) REFERENCES `lessons_exercise` (`id`),
+  CONSTRAINT `sentence_id_refs_id_22799b68` FOREIGN KEY (`sentence_id`) REFERENCES `translations_sentencepl` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lessons_sentenceplexercise`
+--
+
+LOCK TABLES `lessons_sentenceplexercise` WRITE;
+/*!40000 ALTER TABLE `lessons_sentenceplexercise` DISABLE KEYS */;
+INSERT INTO `lessons_sentenceplexercise` VALUES (1,55,2),(2,93,3),(3,94,4);
+/*!40000 ALTER TABLE `lessons_sentenceplexercise` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lessons_sentencezhexercise`
+--
+
+DROP TABLE IF EXISTS `lessons_sentencezhexercise`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lessons_sentencezhexercise` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `exercise_id` int(11) NOT NULL,
+  `sentence_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `chinesetool_sentencezhexercise_c18e0af4` (`exercise_id`),
+  KEY `chinesetool_sentencezhexercise_9bad8f02` (`sentence_id`),
+  CONSTRAINT `exercise_id_refs_id_913ff349` FOREIGN KEY (`exercise_id`) REFERENCES `lessons_exercise` (`id`),
+  CONSTRAINT `sentence_id_refs_id_5922332b` FOREIGN KEY (`sentence_id`) REFERENCES `translations_sentencezh` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lessons_sentencezhexercise`
+--
+
+LOCK TABLES `lessons_sentencezhexercise` WRITE;
+/*!40000 ALTER TABLE `lessons_sentencezhexercise` DISABLE KEYS */;
+INSERT INTO `lessons_sentencezhexercise` VALUES (1,54,1);
+/*!40000 ALTER TABLE `lessons_sentencezhexercise` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lessons_wordplexercise`
+--
+
+DROP TABLE IF EXISTS `lessons_wordplexercise`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lessons_wordplexercise` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `exercise_id` int(11) NOT NULL,
+  `word_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `chinesetool_wordplexercise_c18e0af4` (`exercise_id`),
+  KEY `chinesetool_wordplexercise_558fda87` (`word_id`),
+  CONSTRAINT `exercise_id_refs_id_0250c6b5` FOREIGN KEY (`exercise_id`) REFERENCES `lessons_exercise` (`id`),
+  CONSTRAINT `word_id_refs_id_d0c2d7d4` FOREIGN KEY (`word_id`) REFERENCES `translations_wordpl` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lessons_wordplexercise`
+--
+
+LOCK TABLES `lessons_wordplexercise` WRITE;
+/*!40000 ALTER TABLE `lessons_wordplexercise` DISABLE KEYS */;
+INSERT INTO `lessons_wordplexercise` VALUES (3,53,6);
+/*!40000 ALTER TABLE `lessons_wordplexercise` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lessons_wordzhexercise`
+--
+
+DROP TABLE IF EXISTS `lessons_wordzhexercise`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lessons_wordzhexercise` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `exercise_id` int(11) NOT NULL,
+  `word_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `chinesetool_wordzhexercise_c18e0af4` (`exercise_id`),
+  KEY `chinesetool_wordzhexercise_558fda87` (`word_id`),
+  CONSTRAINT `exercise_id_refs_id_92e8b347` FOREIGN KEY (`exercise_id`) REFERENCES `lessons_exercise` (`id`),
+  CONSTRAINT `word_id_refs_id_f3673f16` FOREIGN KEY (`word_id`) REFERENCES `translations_wordzh` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lessons_wordzhexercise`
+--
+
+LOCK TABLES `lessons_wordzhexercise` WRITE;
+/*!40000 ALTER TABLE `lessons_wordzhexercise` DISABLE KEYS */;
+INSERT INTO `lessons_wordzhexercise` VALUES (3,52,5);
+/*!40000 ALTER TABLE `lessons_wordzhexercise` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -836,6 +616,227 @@ LOCK TABLES `south_migrationhistory` WRITE;
 /*!40000 ALTER TABLE `south_migrationhistory` DISABLE KEYS */;
 /*!40000 ALTER TABLE `south_migrationhistory` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `translations_sentencepl`
+--
+
+DROP TABLE IF EXISTS `translations_sentencepl`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `translations_sentencepl` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sentence` varchar(255) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sentence` (`sentence`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `translations_sentencepl`
+--
+
+LOCK TABLES `translations_sentencepl` WRITE;
+/*!40000 ALTER TABLE `translations_sentencepl` DISABLE KEYS */;
+INSERT INTO `translations_sentencepl` VALUES (4,'Ala ma kota'),(2,'Gdzie jest nowa szkoła?'),(1,'Lubię uczyć się chińskiego.'),(3,'zxvzxv');
+/*!40000 ALTER TABLE `translations_sentencepl` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `translations_sentencetranslation`
+--
+
+DROP TABLE IF EXISTS `translations_sentencetranslation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `translations_sentencetranslation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sentence_zh_id` int(11) NOT NULL,
+  `sentence_pl_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sentence_zh_id` (`sentence_zh_id`,`sentence_pl_id`),
+  KEY `chinesetool_sentencetranslation_a86f1aae` (`sentence_zh_id`),
+  KEY `chinesetool_sentencetranslation_9108fd47` (`sentence_pl_id`),
+  CONSTRAINT `sentence_pl_id_refs_id_b65767aa` FOREIGN KEY (`sentence_pl_id`) REFERENCES `translations_sentencepl` (`id`),
+  CONSTRAINT `sentence_zh_id_refs_id_5b0289db` FOREIGN KEY (`sentence_zh_id`) REFERENCES `translations_sentencezh` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `translations_sentencetranslation`
+--
+
+LOCK TABLES `translations_sentencetranslation` WRITE;
+/*!40000 ALTER TABLE `translations_sentencetranslation` DISABLE KEYS */;
+INSERT INTO `translations_sentencetranslation` VALUES (1,1,1),(2,2,2),(3,3,3),(4,4,4);
+/*!40000 ALTER TABLE `translations_sentencetranslation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `translations_sentencezh`
+--
+
+DROP TABLE IF EXISTS `translations_sentencezh`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `translations_sentencezh` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sentence` varchar(255) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sentence` (`sentence`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `translations_sentencezh`
+--
+
+LOCK TABLES `translations_sentencezh` WRITE;
+/*!40000 ALTER TABLE `translations_sentencezh` DISABLE KEYS */;
+INSERT INTO `translations_sentencezh` VALUES (3,'ZXZX'),(1,'我喜欢学习中文。'),(2,'新的学校在哪里？'),(4,'生动');
+/*!40000 ALTER TABLE `translations_sentencezh` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `translations_wordpl`
+--
+
+DROP TABLE IF EXISTS `translations_wordpl`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `translations_wordpl` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `word` varchar(100) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `word` (`word`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `translations_wordpl`
+--
+
+LOCK TABLES `translations_wordpl` WRITE;
+/*!40000 ALTER TABLE `translations_wordpl` DISABLE KEYS */;
+INSERT INTO `translations_wordpl` VALUES (8,'Zx'),(9,'asd'),(3,'dupa'),(4,'ja'),(5,'szkoła'),(2,'tańczyć'),(7,'ty'),(6,'uczeń'),(1,'śpiewać');
+/*!40000 ALTER TABLE `translations_wordpl` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `translations_wordtranslation`
+--
+
+DROP TABLE IF EXISTS `translations_wordtranslation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `translations_wordtranslation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `word_zh_id` int(11) NOT NULL,
+  `word_pl_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `word_zh_id` (`word_zh_id`,`word_pl_id`),
+  KEY `chinesetool_wordtranslation_e5b47d84` (`word_zh_id`),
+  KEY `chinesetool_wordtranslation_1ac5d68e` (`word_pl_id`),
+  CONSTRAINT `word_pl_id_refs_id_6d7a0bbb` FOREIGN KEY (`word_pl_id`) REFERENCES `translations_wordpl` (`id`),
+  CONSTRAINT `word_zh_id_refs_id_d596beb8` FOREIGN KEY (`word_zh_id`) REFERENCES `translations_wordzh` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `translations_wordtranslation`
+--
+
+LOCK TABLES `translations_wordtranslation` WRITE;
+/*!40000 ALTER TABLE `translations_wordtranslation` DISABLE KEYS */;
+INSERT INTO `translations_wordtranslation` VALUES (1,1,1),(2,2,2),(20,3,3),(4,4,4),(5,5,5),(6,6,6),(29,7,7),(30,8,7),(21,11,8),(22,12,9);
+/*!40000 ALTER TABLE `translations_wordtranslation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `translations_wordzh`
+--
+
+DROP TABLE IF EXISTS `translations_wordzh`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `translations_wordzh` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `word` varchar(50) COLLATE utf8_bin NOT NULL,
+  `pinyin` varchar(100) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `word` (`word`,`pinyin`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `translations_wordzh`
+--
+
+LOCK TABLES `translations_wordzh` WRITE;
+/*!40000 ALTER TABLE `translations_wordzh` DISABLE KEYS */;
+INSERT INTO `translations_wordzh` VALUES (9,'',''),(11,'123',''),(12,'asda',''),(7,'你','ni3'),(1,'唱歌','chang4ge1'),(5,'学校','xue2xiao4'),(6,'学生','xue2sheng1'),(3,'屁股','pi4gu5'),(8,'您','nin2'),(4,'我','wo3'),(10,'猪','zhu1'),(2,'跳舞','tiao4wu3');
+/*!40000 ALTER TABLE `translations_wordzh` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users_subscription`
+--
+
+DROP TABLE IF EXISTS `users_subscription`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users_subscription` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name_id` int(11) NOT NULL,
+  `registration_date` datetime NOT NULL,
+  `last_login_date` datetime NOT NULL,
+  `abo_date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `chinesetool_subscription_4da47e07` (`name_id`),
+  CONSTRAINT `name_id_refs_id_e6e066ce` FOREIGN KEY (`name_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users_subscription`
+--
+
+LOCK TABLES `users_subscription` WRITE;
+/*!40000 ALTER TABLE `users_subscription` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users_subscription` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users_wordskill`
+--
+
+DROP TABLE IF EXISTS `users_wordskill`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users_wordskill` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `word_zh_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `last_time` datetime NOT NULL,
+  `correct` int(11) NOT NULL,
+  `correct_run` int(11) NOT NULL,
+  `wrong` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `chinesetool_wordskill_e5b47d84` (`word_zh_id`),
+  KEY `chinesetool_wordskill_6340c63c` (`user_id`),
+  CONSTRAINT `user_id_refs_id_f62e30b2` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `word_zh_id_refs_id_381ffdf5` FOREIGN KEY (`word_zh_id`) REFERENCES `translations_wordzh` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users_wordskill`
+--
+
+LOCK TABLES `users_wordskill` WRITE;
+/*!40000 ALTER TABLE `users_wordskill` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users_wordskill` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -846,4 +847,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-05 19:18:49
+-- Dump completed on 2015-05-02 13:47:46

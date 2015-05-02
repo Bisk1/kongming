@@ -1,0 +1,8 @@
+{% load i18n %}
+{% block title %} - {% trans "Registration was successful" %}{% endblock %}
+{% block header %}<h2><center>{% trans "You have been registered, your login is" %}: {{username}}</center></h2>{% endblock %}
+{% block content%}
+{% url 'users:login' as login_url %}
+{% url 'users:index' as index_url %}
+ <center><h3>{% blocktrans %}Now you can <a href="{{ login_url }}">login</a> or go back to <a href="{{ index_url }}">the main page</a>.{% endblocktrans %}</h3></center>
+{% endblock %}
