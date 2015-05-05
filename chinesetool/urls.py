@@ -6,6 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^', include('menu.urls', namespace='menu')),
+    url(r'login/$', 'django.contrib.auth.views.login', name='login'),
     url(r'^translations/', include('translations.urls', namespace='translations')),
     url(r'^learn/', include('learn.urls', namespace='learn')),
     url(r'^users/', include('users.urls', namespace='users')),
