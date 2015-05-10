@@ -1,78 +1,40 @@
 {% extends "base.html"%}
 {% load i18n %}
 {% block content %}
-<script type="text/javascript">
+{% load staticfiles %}
 
-    $(function(){
-       $("#menu").change(function(){
-           $("#content").load($("#menu option:selected").attr('addr'));
-               return false;
-       })
-    })
 
-    $(function(){
-       $("#add").click(function(){
-           $("#add_exercise").toggle();
-           $("#content").load($("#menu option:selected").attr('addr'));
-
-       })
-    })
-
-</script>
 
 <div>
 Lesson topic:
-<form action="{% url 'lessons:modify_lesson' lesson.id %}" method="post">
-    {% csrf_token %}
     <input type="text" id="topic" name="topic" value="{{ lesson.topic }}"/>
-    <button>Update</button>
-</form>
 </div>
 <div>
 Exercises number:
-</div>
-<div>
-<form action="{% url 'lessons:modify_lesson' lesson.id %}" method="post">
-    {% csrf_token %}
     <input type="number" id="exercises_number" name="exercises_number" value="{{ lesson.exercises_number }}"/>
-    <button>Update</button>
-</form>
 </div>
-    <div>Required topics:</div>
-    <div class="requirements">
-        <table>
-            {% for requirement in requirements %}
-                <tr>
-                    <td>{{ requirement.topic }}</td>
-                    <td>
-                        <form action="{% url 'lessons:modify_lesson' lesson.id %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="requirement_to_remove" value="{{ requirement.id }}"/>
-                            <button>Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-        <a href="{% url 'lessons:add_requirement' lesson.id %}">Add requirement</a>
-    </div>Exercises:<div>
-    <div id="exercises" link="{% url 'lessons:display_exercises' lesson.id %}">
-    <table>
-        {% for exercise_details in exercise_details_list %}
-            <tr>
-                <td>{{ exercise_details.exercise.number }}:&nbsp;</td>
-                <td>{{ exercise_details }}</td>
-                <td>{{ exercise_details.exercise.type }}</td>
-                <td>
-                    <form action="{% url 'lessons:modify_lesson' lesson.id %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="exercise_to_remove" value="{{ exercise_details.exercise.id }}"/>
-                        <button>Delete</button>
-                    </form>
-                </td>
-            </tr>
+
+Wymaganie:
+    <select id="new_requirement">
+        <option value="None">Brak</option>
+
+    {% for other_lesson in other_lessons %}
+
+        {% if requirements.topic == other_lesson.topic %}
+            <option value="{{ other_lesson.id }}" selected>{{ other_lesson.topic }}</option>
+        {% endif %}
+        {% if requirements.topic != other_lesson.topic %}
+            <option value="{{ other_lesson.id }}">{{ other_lesson.topic }}</option>
+        {% endif %}
         {% endfor %}
-    </table>
+    </select>
+    <br/>
+<button id="update" action="{% url 'lessons:modify_lesson' lesson.id %}">Update</button>
+<div id="updated" hidden>Updated</div>
+
+    </div>Exercises:
+    <div id="exercises" link="{% url 'lessons:display_exercises' lesson.id %}">
+    {% include "lessons/exercises.html" %}
     </div>
     <button id="add">Add</button>
 
@@ -88,6 +50,7 @@ Exercises number:
         <div id="content"></div>
 
     </div>
+<script type="text/javascript" src='{% static "lessons/js/modify_lesson.js" %}'></script>
 
 {% endblock %}
 {% block footer %}

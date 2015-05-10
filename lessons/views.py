@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.http import *
 from django.template import loader, RequestContext
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from forms import WordZHExerciseForm, WordPLExerciseForm, SentenceZHExerciseForm, \
     SentencePLExerciseForm, ExplanationExerciseForm, ExplanationImageExerciseForm
@@ -40,7 +41,6 @@ def lessons_management(request):
     context = RequestContext(request, {'lessons': lessons})
     return HttpResponse(template.render(context))
 
-
 def modify_lesson(request, lesson_id):
 
     """
@@ -48,6 +48,7 @@ def modify_lesson(request, lesson_id):
     :param request: HTTP request
     :return: HTTP response
     """
+    print "ABC"
     lesson = Lesson.objects.get(pk=lesson_id)
     if request.POST.get('topic', False):
         lesson.topic = request.POST.get('topic')
@@ -55,22 +56,28 @@ def modify_lesson(request, lesson_id):
     if request.POST.get('exercises_number', False):
         lesson.exercises_number = request.POST.get('exercises_number')
         lesson.save()
-    if request.POST.get('requirement_to_remove', False):
-        requirement_to_remove = Lesson.objects.get(pk=request.POST.get('requirement_to_remove'))
-        lesson.requirements.remove(requirement_to_remove)
-        lesson.save()
+
+    if request.POST.get('new_requirement', False):
+        lesson.requirements.clear()
+        new = request.POST.get('new_requirement')
+        if new != "None":
+            lesson.requirements.add(request.POST.get('new_requirement'))
+            lesson.save()
+
     if request.POST.get('exercise_to_remove', False):
+        print "Removing"
+
         exercise_to_remove = Exercise.objects.get(pk=request.POST.get('exercise_to_remove'))
         exercise_to_remove.delete()
-
+    other_lessons = Lesson.objects.all().order_by('-topic')
     requirements = lesson.requirements.all()
+    if len(requirements) > 0:
+        requirements = requirements[0]
     exercise_details_list = get_exercises(lesson)
 
-    template = loader.get_template('lessons/modify_lesson.html')
-    context = RequestContext(request, {'lesson': lesson, 'requirements': requirements,
-                                       'exercise_details_list': exercise_details_list,
+    return render(request, 'lessons/modify_lesson.html', {'lesson': lesson, 'requirements': requirements,
+                                       'exercise_details_list': exercise_details_list, 'other_lessons':other_lessons,
                                       })
-    return HttpResponse(template.render(context))
 
 
 def get_exercises(lesson):
@@ -94,8 +101,6 @@ def get_exercises(lesson):
 
 def display_exercises(request, lesson_id):
     lesson = Lesson.objects.get(pk=lesson_id)
-    print lesson_id
-    print lesson
     exercise_details_list = get_exercises(lesson)
 
     return render(request, 'lessons/exercises.html', {'exercise_details_list': exercise_details_list, 'lesson':lesson})
@@ -121,11 +126,12 @@ def add_requirement(request, lesson_id):
     """
     lesson = Lesson.objects.get(pk=lesson_id)
     if request.method == 'POST':
-        lesson.requirements.add(request.POST.get('new_requirement'))
-        lesson.save()
-        return HttpResponseRedirect(reverse('lessons:modify_lesson', args=(lesson_id,)))
-    other_lessons = Lesson.objects.all().order_by('-topic')
-    return render(request, 'lessons/exercise/requirement.html', {'other_lessons': other_lessons, 'lesson': lesson})
+        lesson.requirements.clear()
+        new = request.POST.get('new_requirement')
+        if new != "None":
+            lesson.requirements.add(request.POST.get('new_requirement'))
+            lesson.save()
+
 
 
 def add_exercise_word_zh(request, lesson_id):

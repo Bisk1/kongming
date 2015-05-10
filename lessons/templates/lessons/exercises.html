@@ -1,15 +1,15 @@
- <table>
+{% load staticfiles %}
+<script type="text/javascript" src='{% static "lessons/js/modify_lesson.js" %}'></script>
+
+<table>
         {% for exercise_details in exercise_details_list %}
             <tr>
                 <td>{{ exercise_details.exercise.number }}:&nbsp;</td>
                 <td>{{ exercise_details }}</td>
                 <td>{{ exercise_details.exercise.type }}</td>
                 <td>
-                    <form action="{% url 'lessons:modify_lesson' lesson.id %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="exercise_to_remove" value="{{ exercise_details.exercise.id }}"/>
-                        <button>Delete</button>
-                    </form>
+                    <button class="delete" action="{% url 'lessons:modify_lesson' lesson.id %}" value="{{ exercise_details.exercise.id }}">Delete</button>
+
                 </td>
             </tr>
         {% endfor %}
