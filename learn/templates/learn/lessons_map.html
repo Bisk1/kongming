@@ -10,7 +10,7 @@
                 {% trans "Topic" %}
             </th>
             <th>
-                {% trans "Requirements" %}
+                {% trans "Requirement" %}
             </th>
             <th>
             </th>
@@ -21,16 +21,14 @@
                     {{ lesson.topic }}
                 </td>
                 <td>
-                    {% if lesson.requirements %}
-                        {% for requirement in lesson.requirements.all %}
+                    {% if lesson.requirement %}
                         <div>
-                            {{ requirement.topic }}
+                            {{ lesson.requirement.topic }}
                         </div>
-                        {% endfor %}
                     {% else %}
-                    <div>
-                        None
-                    </div>
+                        <div>
+                            None
+                        </div>
                     {% endif %}
                 </td>
                 <td>

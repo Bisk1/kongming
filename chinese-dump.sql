@@ -127,7 +127,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$fpVv56qkTUFf$PM9ce8S60mkJIupgqNwdYYWjSOTrvV1HQhfsQg2a4qM=','2015-05-02 07:53:19',1,'admin','','','',1,1,'2015-01-18 22:27:06');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$fpVv56qkTUFf$PM9ce8S60mkJIupgqNwdYYWjSOTrvV1HQhfsQg2a4qM=','2015-05-13 18:10:10',1,'admin','','','',1,1,'2015-01-18 22:27:06');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -272,7 +272,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('46sb40z4it6ll4ntiq8avovign3st603','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-03-19 18:14:50'),('6wbjby7ok6m5lg1vhxk9itqv7bzs8a4c','ODM0OTlmYTcxYTBmOGIyNjA4N2FkYTlkMjFlOTgyYjM1YmY3OTM1MDp7ImRqYW5nb19sYW5ndWFnZSI6InBsIn0=','2015-05-13 19:34:16'),('8pbjyr0ck14qenjlmy6b0mvakn7xlwz7','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-02-05 21:14:40'),('8wreqz89urjqe6ut7e6zryuddse76h2y','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-05-16 07:53:19'),('92qbprqu3hopxfzn4fr1l294wyz3tiv9','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-02-01 22:27:49'),('a7vgvyhnuk4b1h2rh0aqesjdkomi59rv','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-04-29 19:14:54'),('k0h8vdh3hbffpc9y9jwbgjrundnk8eal','OGVlODk1ZWE0ZWExNmE0MWRiZWY2MWVjZDE3NTgxZmQ4MzdkNmI0Yzp7Il9hdXRoX3VzZXJfaWQiOjEsImRqYW5nb19sYW5ndWFnZSI6ImVuIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ==','2015-03-30 20:11:32');
+INSERT INTO `django_session` VALUES ('46sb40z4it6ll4ntiq8avovign3st603','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-03-19 18:14:50'),('6wbjby7ok6m5lg1vhxk9itqv7bzs8a4c','ODM0OTlmYTcxYTBmOGIyNjA4N2FkYTlkMjFlOTgyYjM1YmY3OTM1MDp7ImRqYW5nb19sYW5ndWFnZSI6InBsIn0=','2015-05-13 19:34:16'),('8pbjyr0ck14qenjlmy6b0mvakn7xlwz7','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-02-05 21:14:40'),('8wreqz89urjqe6ut7e6zryuddse76h2y','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-05-16 07:53:19'),('92qbprqu3hopxfzn4fr1l294wyz3tiv9','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-02-01 22:27:49'),('a7vgvyhnuk4b1h2rh0aqesjdkomi59rv','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-04-29 19:14:54'),('k0h8vdh3hbffpc9y9jwbgjrundnk8eal','OGVlODk1ZWE0ZWExNmE0MWRiZWY2MWVjZDE3NTgxZmQ4MzdkNmI0Yzp7Il9hdXRoX3VzZXJfaWQiOjEsImRqYW5nb19sYW5ndWFnZSI6ImVuIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ==','2015-03-30 20:11:32'),('w65qa1pnj4mcvly604vigtd4r4magwkr','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-05-27 18:10:11');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -401,6 +401,7 @@ CREATE TABLE `lessons_lesson` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `topic` varchar(100) COLLATE utf8_bin NOT NULL,
   `exercises_number` int(11) NOT NULL,
+  `requirement_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -411,37 +412,8 @@ CREATE TABLE `lessons_lesson` (
 
 LOCK TABLES `lessons_lesson` WRITE;
 /*!40000 ALTER TABLE `lessons_lesson` DISABLE KEYS */;
-INSERT INTO `lessons_lesson` VALUES (4,'Szkoła',5),(5,'Przykład - fixed',4),(6,'Przykład - random',4),(8,'Przykład - mixed',5),(16,'Witaj!',1),(17,'asdgadsg',0);
+INSERT INTO `lessons_lesson` VALUES (4,'Szkoła',5,16),(5,'Przykład - fixed',4,4),(6,'Przykład - random',4,NULL),(8,'Przykład - mixed',5,NULL),(16,'Witaj!',1,NULL),(17,'asdgadsg',0,NULL);
 /*!40000 ALTER TABLE `lessons_lesson` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `lessons_lesson_requirements`
---
-
-DROP TABLE IF EXISTS `lessons_lesson_requirements`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `lessons_lesson_requirements` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_lesson_id` int(11) NOT NULL,
-  `to_lesson_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `from_lesson_id` (`from_lesson_id`,`to_lesson_id`),
-  KEY `chinesetool_lesson_requirements_f6734edd` (`from_lesson_id`),
-  KEY `chinesetool_lesson_requirements_1e803bb4` (`to_lesson_id`),
-  CONSTRAINT `from_lesson_id_refs_id_d98ff244` FOREIGN KEY (`from_lesson_id`) REFERENCES `lessons_lesson` (`id`),
-  CONSTRAINT `to_lesson_id_refs_id_d98ff244` FOREIGN KEY (`to_lesson_id`) REFERENCES `lessons_lesson` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `lessons_lesson_requirements`
---
-
-LOCK TABLES `lessons_lesson_requirements` WRITE;
-/*!40000 ALTER TABLE `lessons_lesson_requirements` DISABLE KEYS */;
-/*!40000 ALTER TABLE `lessons_lesson_requirements` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -847,4 +819,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-05-02 15:01:03
+-- Dump completed on 2015-05-13 20:10:39

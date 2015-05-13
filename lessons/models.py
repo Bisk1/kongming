@@ -33,7 +33,7 @@ class Lesson(models.Model):
     """
     topic = models.CharField(max_length=100, default="NO-NAME")
     exercises_number = models.IntegerField()
-    requirements = models.ManyToManyField("self", symmetrical=False)
+    requirement = models.ForeignKey("self", null=True)
 
     def __unicode__(self):
         return unicode(self.topic)

@@ -44,11 +44,11 @@ def lessons_management(request):
 def modify_lesson(request, lesson_id):
 
     """
-    Modifies lesson - allows to change requirements and exercises
+    Modifies lesson - allows to change requirement and exercises
     :param request: HTTP request
     :return: HTTP response
     """
-    print "ABC"
+    print request.POST
     lesson = Lesson.objects.get(pk=lesson_id)
     if request.POST.get('topic', False):
         lesson.topic = request.POST.get('topic')
@@ -56,26 +56,21 @@ def modify_lesson(request, lesson_id):
     if request.POST.get('exercises_number', False):
         lesson.exercises_number = request.POST.get('exercises_number')
         lesson.save()
-
     if request.POST.get('new_requirement', False):
-        lesson.requirements.clear()
-        new = request.POST.get('new_requirement')
-        if new != "None":
-            lesson.requirements.add(request.POST.get('new_requirement'))
-            lesson.save()
-
+        new_requirement_id = request.POST.get('new_requirement')
+        if new_requirement_id != "None":
+            requirement = Lesson.objects.get(pk=new_requirement_id)
+            lesson.requirement = requirement
+        else:
+            lesson.requirement = None
+        lesson.save()
     if request.POST.get('exercise_to_remove', False):
-        print "Removing"
-
         exercise_to_remove = Exercise.objects.get(pk=request.POST.get('exercise_to_remove'))
         exercise_to_remove.delete()
     other_lessons = Lesson.objects.all().order_by('-topic')
-    requirements = lesson.requirements.all()
-    if len(requirements) > 0:
-        requirements = requirements[0]
     exercise_details_list = get_exercises(lesson)
 
-    return render(request, 'lessons/modify_lesson.html', {'lesson': lesson, 'requirements': requirements,
+    return render(request, 'lessons/modify_lesson.html', {'lesson': lesson,
                                        'exercise_details_list': exercise_details_list, 'other_lessons':other_lessons,
                                       })
 
@@ -115,23 +110,6 @@ def delete_lesson(request, lesson_id):
     print "Trying to delete lesson " + lesson_id
     Lesson.objects.get(id=lesson_id).delete()
     return redirect('lessons:lessons_management')
-
-
-def add_requirement(request, lesson_id):
-    """
-    Adds requirement for lesson - a lesson that should be learned first
-    :param request: HTTP request
-    :param lesson_id: lesson id
-    :return: HTTP response
-    """
-    lesson = Lesson.objects.get(pk=lesson_id)
-    if request.method == 'POST':
-        lesson.requirements.clear()
-        new = request.POST.get('new_requirement')
-        if new != "None":
-            lesson.requirements.add(request.POST.get('new_requirement'))
-            lesson.save()
-
 
 
 def add_exercise_word_zh(request, lesson_id):

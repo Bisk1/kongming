@@ -3,8 +3,6 @@
 {% block content %}
 {% load staticfiles %}
 
-
-
 <div>
 Lesson topic:
     <input type="text" id="topic" name="topic" value="{{ lesson.topic }}"/>
@@ -14,16 +12,15 @@ Exercises number:
     <input type="number" id="exercises_number" name="exercises_number" value="{{ lesson.exercises_number }}"/>
 </div>
 
-Wymaganie:
+Requirement:
     <select id="new_requirement">
         <option value="None">Brak</option>
 
     {% for other_lesson in other_lessons %}
-
-        {% if requirements.topic == other_lesson.topic %}
+        {% if lesson.requirement.topic == other_lesson.topic %}
             <option value="{{ other_lesson.id }}" selected>{{ other_lesson.topic }}</option>
         {% endif %}
-        {% if requirements.topic != other_lesson.topic %}
+        {% if lesson.requirement.topic != other_lesson.topic %}
             <option value="{{ other_lesson.id }}">{{ other_lesson.topic }}</option>
         {% endif %}
         {% endfor %}
@@ -32,7 +29,7 @@ Wymaganie:
 <button id="update" action="{% url 'lessons:modify_lesson' lesson.id %}">Update</button>
 <div id="updated" hidden>Updated</div>
 
-    </div>Exercises:
+    Exercises:
     <div id="exercises" link="{% url 'lessons:display_exercises' lesson.id %}">
     {% include "lessons/exercises.html" %}
     </div>
