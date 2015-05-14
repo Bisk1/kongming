@@ -92,6 +92,7 @@ def learn(request, lesson_id):
                 response = lesson_action.get_final_response()
         return HttpResponse(json.dumps(response),
                             content_type='application/javascript')
+    LessonAction.objects.filter(user=request.user, lesson=lesson, status=None).delete()
     lesson_action = LessonAction.create_lesson_action(request.user, lesson=lesson)
     response = {'lesson_action': lesson_action}
     template = loader.get_template('learn/learn.html')

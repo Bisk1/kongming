@@ -119,10 +119,12 @@ class LessonAction(models.Model):
 
     def mark_status_as_failed(self):
         self.status = FAIL
+        self.save()
 
     def mark_status_as_success_if_not_failed(self):
         if self.status != FAIL:
             self.status = PASS
+            self.save()
 
 
 class Exercise(models.Model):
