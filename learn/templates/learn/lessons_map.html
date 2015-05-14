@@ -11,12 +11,11 @@ function generateLearnURL(lesson_id){
 }
 
 $(document).ready(function(){
-    var lessons_levels = JSON.parse('{{ lessons_levels|safe }}');
+    var lessons_levels = {{ lessons_levels|safe }};
     drawMap(lessons_levels, '#map');
 });
 </script>
 
-    <div id="map-container">
-        <svg id="map" width="1000" height="1000"></svg>
-    </div>
+
+<svg id="map" width="1000" height="1000"></svg>
 {% endblock %}

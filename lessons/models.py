@@ -8,6 +8,9 @@ from enum import Enum
 from translations.models import WordPL, WordZH, SentencePL, SentenceZH
 
 
+PASS = 'p'
+FAIL = 'f'
+
 NONE = 'a'
 WORD_PL = 'b'
 WORD_ZH = 'c'
@@ -26,6 +29,7 @@ LANGUAGE_CHOICES = {
     (EXPLANATION_IMAGE, 'explanation_image')
 }
 
+
 class Lesson(models.Model):
     """
     Single Chinese lesson is defined by level
@@ -34,6 +38,15 @@ class Lesson(models.Model):
     topic = models.CharField(max_length=100, default="NO-NAME")
     exercises_number = models.IntegerField()
     requirement = models.ForeignKey("self", null=True)
+
+    def determine_status(self, user):
+        lesson_actions = LessonAction.objects.filter(lesson=self,user=user)
+        if lesson_actions.filter(status='p').count() > 0:
+            return PASS
+        elif lesson_actions.filter(status='f').count() > 0:
+            return FAIL
+        else:
+            return None
 
     def __unicode__(self):
         return unicode(self.topic)
@@ -45,6 +58,7 @@ class LessonAction(models.Model):
     fails = models.IntegerField(default=0)
     user = models.ForeignKey(User)
     lesson = models.ForeignKey(Lesson, null=True)
+    status = models.CharField(null=True, default=None, max_length=1)
 
     @classmethod
     def create_lesson_action(cls, user, lesson):
@@ -93,6 +107,7 @@ class LessonAction(models.Model):
         return self.add_lesson_specific_data(response)
 
     def get_final_response(self):
+        self.mark_status_as_success_if_not_failed()
         response = {'final': True}
         return self.add_lesson_specific_data(response)
 
@@ -101,6 +116,13 @@ class LessonAction(models.Model):
         response['current_exercise_number'] = self.current_exercise_number
         response['total_exercises_number'] = self.total_exercises_number
         return response
+
+    def mark_status_as_failed(self):
+        self.status = FAIL
+
+    def mark_status_as_success_if_not_failed(self):
+        if self.status != FAIL:
+            self.status = PASS
 
 
 class Exercise(models.Model):

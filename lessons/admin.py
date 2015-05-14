@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from models import SentenceZH, SentencePL, \
-    Lesson, ExerciseAction, Exercise, WordZHExercise, WordPLExercise, \
+    Lesson, LessonAction, ExerciseAction, Exercise, WordZHExercise, WordPLExercise, \
     SentenceZHExercise, SentencePLExercise, ExplanationImageExercise, ExplanationExercise
 from users.models import WordSkill
 
@@ -21,6 +21,7 @@ class WordPLExerciseDetailsAdmin(admin.ModelAdmin):
 admin.site.register(SentenceZH)
 admin.site.register(SentencePL)
 admin.site.register(Lesson)
+admin.site.register(LessonAction)
 admin.site.register(WordSkill)
 admin.site.register(ExerciseAction)
 admin.site.register(Exercise, ExerciseAdmin)

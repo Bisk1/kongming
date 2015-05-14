@@ -75,31 +75,50 @@ var findLessonWithKey = function(lessons_levels, key) {
 };
 
 /**
+ * Return color to fill a lesson container dependent on lesson status
+ * @param status lesson status
+ * @returns {string} RGB color for style attribute
+ */
+var statusColor = function(status) {
+    if (status == 'p') {
+        return "rgb(0, 250, 154)";
+    } else if (status == 'f') {
+        return "rgb(255, 0, 0)";
+    } else {
+        return "rgb(190, 190, 190)";
+    }
+};
+
+
+/**
  * D3 plugin to add a lesson container to the SVG container that it is called on
  * @param lesson lesson that is used to generate container content
  * @returns {d3.selection} element that function is called on
  */
 (function() {
   d3.selection.prototype.drawLessonContainer = function(lesson) {
-    var svgGroup = this.append("g");
+    var svgGroup =
+        this
+        .append("a")
+            .attr("xlink:href", generateLearnURL(lesson.pk))
+            .append("g");
+
     svgGroup
         .append("rect")
             .attr("x", lesson.x)
             .attr("y", lesson.y)
             .attr("width", lessonWidth)
             .attr("height", "100")
-            .attr("style", "fill:rgb(255,228,151);stroke-width:3;stroke:rgb(0,0,0)");
+            .attr("style", "fill:" + statusColor(lesson.status) + ";stroke-width:3;stroke:rgb(0,0,0)");
     svgGroup
-        .append("a")
-            .attr("xlink:href", generateLearnURL(lesson.pk))
         .append("text")
             .attr("x", lesson.x + lessonWidth/2)
             .attr("y", lesson.y + lessonHeight/2)
             .attr("font-family", "Verdana")
             .attr("font-size", "11s")
-            .attr("fill", "green")
+            .attr("fill", "black")
             .attr("style","text-anchor: middle;")
-            .text(lesson.fields.topic);
+            .text(lesson.topic);
 
     return this;
   };
@@ -126,7 +145,7 @@ var drawLessons = function(lessons_levels, map_selector) {
  * @param map_selector  map SVG selector
  */
 var drawArrow = function(lesson, lessons_levels, map_selector) {
-    var requirement = findLessonWithKey(lessons_levels, lesson.fields.requirement);
+    var requirement = findLessonWithKey(lessons_levels, lesson.requirement);
     d3.select(map_selector)
             .append("line")
             .attr("x1", requirement.x + lessonWidth/2)
