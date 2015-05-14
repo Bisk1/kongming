@@ -291,7 +291,7 @@ CREATE TABLE `lessons_exercise` (
   PRIMARY KEY (`id`),
   KEY `chinesetool_exercise_37003e55` (`lesson_id`),
   CONSTRAINT `lesson_id_refs_id_027df89d` FOREIGN KEY (`lesson_id`) REFERENCES `lessons_lesson` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -322,7 +322,7 @@ CREATE TABLE `lessons_exerciseaction` (
   KEY `chinesetool_exerciseaction_ff58a6f6` (`lesson_action_id`),
   CONSTRAINT `exercise_id_refs_id_d0ef0d56` FOREIGN KEY (`exercise_id`) REFERENCES `lessons_exercise` (`id`),
   CONSTRAINT `lesson_action_id_refs_id_e21c761f` FOREIGN KEY (`lesson_action_id`) REFERENCES `lessons_lessonaction` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=280 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=294 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -331,7 +331,7 @@ CREATE TABLE `lessons_exerciseaction` (
 
 LOCK TABLES `lessons_exerciseaction` WRITE;
 /*!40000 ALTER TABLE `lessons_exerciseaction` DISABLE KEYS */;
-INSERT INTO `lessons_exerciseaction` VALUES (275,52,83,0,1),(276,54,83,0,2),(277,53,83,0,3),(278,56,83,0,4),(279,55,83,0,5);
+INSERT INTO `lessons_exerciseaction` VALUES (289,74,86,0,1),(290,75,86,0,2),(291,79,86,0,3),(292,82,86,0,4),(293,82,86,0,5);
 /*!40000 ALTER TABLE `lessons_exerciseaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -349,7 +349,7 @@ CREATE TABLE `lessons_explanationexercise` (
   PRIMARY KEY (`id`),
   KEY `chinesetool_explanationexercise_c18e0af4` (`exercise_id`),
   CONSTRAINT `exercise_id_refs_id_5e9138eb` FOREIGN KEY (`exercise_id`) REFERENCES `lessons_exercise` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -412,7 +412,7 @@ CREATE TABLE `lessons_lesson` (
 
 LOCK TABLES `lessons_lesson` WRITE;
 /*!40000 ALTER TABLE `lessons_lesson` DISABLE KEYS */;
-INSERT INTO `lessons_lesson` VALUES (4,'Szkoła',5,16),(5,'Przykład - fixed',4,4),(6,'Przykład - random',4,NULL),(8,'Przykład - mixed',5,NULL),(16,'Witaj!',1,NULL),(17,'asdgadsg',0,NULL);
+INSERT INTO `lessons_lesson` VALUES (4,'Szkoła',5,5),(5,'Przykład - fixed',4,16),(6,'Przykład - random',4,16),(8,'Przykład - mixed',5,16),(16,'Witaj!',1,NULL),(17,'asdgadsg',0,6);
 /*!40000 ALTER TABLE `lessons_lesson` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -435,7 +435,7 @@ CREATE TABLE `lessons_lessonaction` (
   KEY `chinesetool_lessonaction_37003e55` (`lesson_id`),
   CONSTRAINT `lesson_id_refs_id_ea897e7e` FOREIGN KEY (`lesson_id`) REFERENCES `lessons_lesson` (`id`),
   CONSTRAINT `user_id_refs_id_6762f5c2` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -444,7 +444,7 @@ CREATE TABLE `lessons_lessonaction` (
 
 LOCK TABLES `lessons_lessonaction` WRITE;
 /*!40000 ALTER TABLE `lessons_lessonaction` DISABLE KEYS */;
-INSERT INTO `lessons_lessonaction` VALUES (83,5,5,4,1,4);
+INSERT INTO `lessons_lessonaction` VALUES (86,5,0,0,1,8);
 /*!40000 ALTER TABLE `lessons_lessonaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -681,7 +681,7 @@ CREATE TABLE `translations_wordpl` (
   `word` varchar(100) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `word` (`word`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -737,7 +737,7 @@ CREATE TABLE `translations_wordzh` (
   `pinyin` varchar(100) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `word` (`word`,`pinyin`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -819,4 +819,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-05-13 20:10:39
+-- Dump completed on 2015-05-14 14:53:31

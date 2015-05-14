@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.template import loader
 from django.http import *
 from django.template import RequestContext
+from django.core import serializers
 
 from lessons.models import LessonAction, Lesson
 
@@ -19,8 +20,22 @@ def lessons_map(request):
     """
     lessons = Lesson.objects.all()
     template = loader.get_template('learn/lessons_map.html')
-    context = RequestContext(request, {'lessons': lessons})
+    lessons_levels = determine_lessons_levels()
+    lessons_levels_serialized = "[" + ",".join(serializers.serialize('json', query_set) for query_set in lessons_levels) + "]"
+    context = RequestContext(request, {'lessons': lessons,
+                                       'lessons_levels': lessons_levels_serialized})
     return HttpResponse(template.render(context))
+
+
+def determine_lessons_levels():
+    levels = list()
+    next_level = Lesson.objects.filter(requirement=None).order_by('pk')  # first level - no requirements
+    while next_level:
+        levels.append(next_level)
+        # Each level requires lessons from previous level.
+        # Ordering prevents crossing lines in template (lessons are close to their requirements).
+        next_level = Lesson.objects.filter(requirement__in=next_level).order_by('requirement')
+    return levels
 
 
 @login_required
