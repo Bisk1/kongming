@@ -21,7 +21,6 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 $.ajaxSetup({
-
     beforeSend: function(xhr, settings) {
         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -29,87 +28,76 @@ $.ajaxSetup({
     }
 });
 
-$("#save").click(function(){
-        var url = $("#adding_exercise").attr("action");
-        var lesson = $("#adding_exercise").attr("lesson");
-        var formData = {};
-        $("#adding_exercise").find("input[name]").each(function (index, node) {
-            formData[node.name] = node.value;
-        });
-        $("#adding_exercise").find("textarea[name]").each(function (index, node) {
-            formData[node.name] = node.value;
-        });
-        console.log("my object: %o", formData);
-       $.ajax({
-            url : url,
-            type: "POST",
-            data : formData,
-            success: function() {
-                var link = $("#exercises").attr("link");
-                $("#exercises").load(link);
-
+$(document).on('click', '#save', function(){
+    var url = $("#adding_exercise").attr("action");
+    var lesson = $("#adding_exercise").attr("lesson");
+    var formData = {};
+    $("#adding_exercise").find("input[name]").each(function (index, node) {
+        formData[node.name] = node.value;
+    });
+    $("#adding_exercise").find("textarea[name]").each(function (index, node) {
+        formData[node.name] = node.value;
+    });
+    console.log("my object: %o", formData);
+    $.ajax({
+        url : url,
+        type: "POST",
+        data : formData,
+        success: function() {
+            var link = $("#exercises").attr("link");
+            $("#exercises").load(link);
+            $("#adding_exercise").closest('form').find("input, textarea").val("");
             }
-        });
     });
-        $(".delete").click(function(){
-            var url = $(this).attr("action");
-            var exercise_id = $(this).attr("value");
-            var formData = {};
-            formData["exercise_to_remove"] = exercise_id;
-            console.log("my object: %o", formData);
+});
 
-       $.ajax({
-            url : url,
-            type: "POST",
-            data : formData,
-            success: function() {
-                var link = $("#exercises").attr("link");
-                $("#exercises").load(link);
+$(document).on('click', '.delete', function(){
+    var url = $(this).attr("action");
+    var exercise_id = $(this).attr("value");
+    var formData = {};
+    formData["exercise_to_remove"] = exercise_id;
+    console.log("my object: %o", formData);
 
-            }
-       });
+    $.ajax({
+        url : url,
+        type: "POST",
+        data : formData,
+        success: function() {
+            var link = $("#exercises").attr("link");
+            $("#exercises").load(link);
+        }
     });
-    $(function(){
-       $("#menu").change(function(){
-           $("#content").load($("#menu option:selected").attr('addr'));
-               return false;
-       });
+});
+
+$(document).on('change', '#menu', function(){
+    $("#content").load($("#menu option:selected").attr('addr'));
+    return false;
+});
+
+
+$(document).on('click', '#add', function() {
+    $("#add_exercise").toggle();
+    $("#content").load($("#menu option:selected").attr('addr'));
+});
+
+$(document).on('click', '#update', function() {
+    var topic = $("#topic").val();
+    var exercises_number = $("#exercises_number").val();
+    var new_requirement = $("#new_requirement option:selected").val();
+
+    var url = $(this).attr("action");
+    var formData = {};
+    formData["topic"] = topic
+    formData["exercises_number"] = exercises_number
+    formData["new_requirement"] = new_requirement
+
+    $.ajax({
+        url : url,
+        type: "POST",
+        data : formData,
+        success: function() {
+            $("#updated").show();
+            $("#update").css("background-color", "green");
+        }
     });
-
-    $(function(){
-       $("#add").click(function(){
-           $("#add_exercise").toggle();
-           $("#content").load($("#menu option:selected").attr('addr'));
-
-       });
-    });
-    $(function(){
-        $("#update").click(function(){
-            var topic = $("#topic").val();
-            var exercises_number = $("#exercises_number").val();
-            var new_requirement = $("#new_requirement option:selected").val();
-
-
-           var url = $(this).attr("action");
-            var formData = {};
-            formData["topic"] = topic
-            formData["exercises_number"] = exercises_number
-            formData["new_requirement"] = new_requirement
-
-            $.ajax({
-                url : url,
-                type: "POST",
-                data : formData,
-                success: function() {
-                    $("#updated").show();
-                    $("#update").css("background-color", "green");
-                }
-            });
-
-       });
-    });
-
-
-    //
-    //<input type="text" id="topic" name="topic" value="{{ lesson.topic }}"/>
-    //<button action="{% url 'lessons:modify_lesson' lesson.id %}">Update</button>
+});
