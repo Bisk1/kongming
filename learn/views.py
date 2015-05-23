@@ -78,9 +78,8 @@ def learn(request, lesson_id):
     :param lesson_id: id of the lesson that user will study
     :return: HTTP response
     """
-    lesson = Lesson.objects.get(pk=lesson_id)
     if request.is_ajax():
-        lesson_action = LessonAction.objects.get(lesson=lesson, user=request.user)
+        lesson_action = LessonAction.objects.get(pk=request.POST.get('lesson_action_id'))
         proposition = request.POST.get('proposition')
         if proposition is not None:
             response = lesson_action.check(proposition)
@@ -92,9 +91,11 @@ def learn(request, lesson_id):
                 response = lesson_action.get_final_response()
         return HttpResponse(json.dumps(response),
                             content_type='application/javascript')
-    LessonAction.objects.filter(user=request.user, lesson=lesson, status=None).delete()
-    lesson_action = LessonAction.create_lesson_action(request.user, lesson=lesson)
-    response = {'lesson_action': lesson_action}
-    template = loader.get_template('learn/learn.html')
-    context = RequestContext(request, response)
-    return HttpResponse(template.render(context))
+    else:
+        lesson = Lesson.objects.get(pk=lesson_id)
+        LessonAction.objects.filter(user=request.user, lesson=lesson, status=None).delete()
+        lesson_action = LessonAction.create_lesson_action(request.user, lesson=lesson)
+        response = {'lesson_action': lesson_action}
+        template = loader.get_template('learn/learn.html')
+        context = RequestContext(request, response)
+        return HttpResponse(template.render(context))
