@@ -9,6 +9,15 @@ function handleResult(success) {
         $('#negative_result').show();
         $('#positive_result').hide();
     }
+    updateResultsIcons(success);
+}
+
+function updateResultsIcons(success) {
+    if (success) {
+        $("#results-icons-container").append('<i style="color: green" class="icon-ok"></i>');
+    } else {
+        $("#results-icons-container").append('<i style="color: red" class="icon-minus-sign">');
+    }
 }
 
 /**
@@ -38,20 +47,22 @@ function showExerciseContent(exercise_type, json) {
  * @param exercise_type exercise type
  */
 function showDivForExerciseType(exercise_type) {
+    $('#explanation_exercise').hide();
+    $('#explanation_image').hide();
+    $('#word_or_sentence_exercise').hide();
     switch (exercise_type) {
         case('word_zh'):
         case('word_pl'):
         case('sentence_zh'):
         case('sentence_pl'):
             $('#word_or_sentence_exercise').show();
-            $('#explanation_exercise').hide();
             break;
         case('explanation'):
-            $('#word_or_sentence_exercise').hide();
             $('#explanation_exercise').show();
             break;
     }
 }
+
 
 /**
  * Switches Chinese input feature -
@@ -71,17 +82,24 @@ function toggleChineseInput(active) {
         $("#proposition").unbind(); // remove all events from element
     }
 }
+
+function updateProgressbar(exercisesFinished) {
+    var totalExercises = $('#total_exercises_number').val();
+    var coverage = (100 * exercisesFinished/totalExercises) + "%";
+     $('#progress-bar').attr('aria-valuenow', coverage)
+                       .width(coverage)
+                        .text(exercisesFinished + " / " + totalExercises);
+}
+
 $(document).ready(function() {
     $("#check").click(function() {
-        var proposition = $("#proposition").val();
-        var lesson_id = $("#lesson_id").val();
         $.ajax({
             url : window.location.href,
             type : "POST",
             dataType: "json",
             data : {
-                proposition : proposition,
-                lesson_id : lesson_id,
+                proposition : $("#proposition").val(),
+                lesson_action_id: $("#lesson_action_id").val(),
                 csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
                 },
             success : function(json) {
@@ -102,6 +120,8 @@ $(document).ready(function() {
                 }
                 $('#current_exercise_number').html(json.current_exercise_number);
                 $('#fails').html(json.fails);
+                updateProgressbar(json.current_exercise_number);
+
             },
             error : function(xhr,errmsg,err) {
                 $('#result').html((xhr.status + ": " + xhr.responseText)).show();
@@ -110,13 +130,12 @@ $(document).ready(function() {
     });
 
     $("#next").click(function() {
-        var lesson_id = $("#lesson_id").val();
         $.ajax({
             url : window.location.href,
             type : "POST",
             dataType: "json",
             data : {
-                lesson_id : lesson_id,
+                lesson_action_id: $("#lesson_action_id").val(),
                 csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
                 },
             success : function(json) {
@@ -126,8 +145,10 @@ $(document).ready(function() {
                 $('#result').hide();
                 if (json.final) {
                     $('#check').hide();
-                    $('#return_link').show();
+                    $('#to-lesson-map').show();
                     $('#final').show();
+                    $('#next').hide();
+                    showDivForExerciseType();
                 }
                 else {
                     $('#current_exercise_number').html(json.current_exercise_number).show();
@@ -139,6 +160,7 @@ $(document).ready(function() {
                         $('#check').hide();
                         $('#next').html("Continue").show();
                     } else {
+                        $('#next').hide();
                         $('#proposition').val('').show();
                         $('#check').html("Check").show();
                     }
@@ -153,6 +175,7 @@ $(document).ready(function() {
                             break;
                     }
                 }
+                updateProgressbar(json.current_exercise_number);
             },
             error : function(xhr,errmsg,err) {
                 $('#result').html((xhr.status + ": " + xhr.responseText)).show();

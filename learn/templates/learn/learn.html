@@ -15,71 +15,65 @@
 
 {% csrf_token %}
 
-<div id="word_or_sentence_exercise">
-    <div id="word_or_sentence"></div>
-    <input type="text" name="proposition" id="proposition" hidden/>
-    <div id="chinese-ime" style="display: none;">
-        <div class="typing"></div>
-        <ul class="options" style="display: inline; list-style-type: none;">
-        </ul>
-    </div>
-    <div id="correct" style="display: none;"></div>
-    <div id="comment" style="display: none;"></div>
-</div>
-
-
-<div id="explanation_exercise">
-    <div id="explanation_text"></div>
-</div>
-
-<div id="explanation_image"></div>
-
-<div id="result">
-    <div id="positive_result" style="display: none;">
-        Correct answer!
-    </div>
-    <div id="negative_result" style="display: none;">
-        Wrong answer!
-    </div>
-</div>
-
-<div id="final" hidden>
-    <h1>
-        That's it!
-    </h1>
-</div>
-
-<button type="button" id="check" hidden>Check</button>
-<button type="button" id="next">Start</button>
-
-<div id="lesson_data">
-    <input type="hidden" name="lesson_id" id="lesson_id" value="{{ lesson_action.lesson.id }}">
+<div id="lesson-container" style="height: 100px">
+    <input type="hidden" id="lesson_action_id" value="{{ lesson_action.id }}">
+    <input type="hidden" id="total_exercises_number" value="{{ lesson_action.total_exercises_number }}">
     <div>
-        Total exercises count:
-        <div id="total_exercises_number" style="display: inline-block;">
-            {{ lesson_action.total_exercises_number }}
-        </div>
-    </div>
-    <div>
-        Current exercise number:
-        <div id="current_exercise_number" style="display: inline-block;">
-            {{ lesson_action.current_exercise_number }}
-        </div>
-    </div>
-    <div>
-        Failed exercises:
-        <div id="fails" style="display: inline-block;">
-            {{ lesson_action.fails }}
-        </div>
-    </div>
-    <div>
-        Lesson topic:
-        <div id="topic" style="display: inline-block;">
+        <div id="topic" style="display: inline-block; font-size: 18px">
             {{ lesson_action.lesson.topic }}
         </div>
     </div>
+    <div class="progress progress-striped active">
+        <div id="progress-bar" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar"
+            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
+    </div>
+    <div>
+        <div id="results-icons-container"></div>
+    </div>
+</div>
+
+<div id="exercise-container" style="height: 100px">
+    <div id="word_or_sentence_exercise">
+        <div id="word_or_sentence"></div>
+        <input type="text" name="proposition" id="proposition" hidden/>
+        <div id="chinese-ime" style="display: none;">
+            <div class="typing"></div>
+            <ul class="options" style="display: inline; list-style-type: none;">
+            </ul>
+        </div>
+        <div id="correct" style="display: none; color:blue"></div>
+        <div id="comment" style="display: none;"></div>
+    </div>
+
+    <div id="explanation_exercise">
+        <div id="explanation_text"></div>
+    </div>
+
+    <div id="explanation_image"></div>
+
 </div>
 
 
-<a href="{% url 'menu:index' %}" id="return_link" style="display: none;">{% trans "Return" %}</a>
+<div id="result-container" style="height: 40px">
+    <div id="result">
+        <div id="positive_result" style="display: none; color:green">
+            Correct answer!
+        </div>
+        <div id="negative_result" style="display: none; color:red">
+            Wrong answer!
+        </div>
+    </div>
+
+</div>
+
+
+
+<button class="btn btn-default" id="check" style="display: none">Check</button>
+<button class="btn btn-default" id="next">Start</button>
+<a class="btn btn-default" id="to-lesson-map" style="display: none" href="{% url 'learn:lessons_map' %}" id="to-lesson-map">To lesson map</a>
+
+<h1 id="final" hidden>
+    You finished the lesson!
+</h1>
+
 {% endblock %}

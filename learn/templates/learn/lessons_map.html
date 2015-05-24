@@ -1,43 +1,21 @@
 {% extends "base.html"%}
 {% load i18n %}
 {% block content %}
+{%  load staticfiles %}
+<script type="text/javascript" src="{% static "js/d3/d3.js" %}"></script>
+<script type="text/javascript" src="{% static "learn/js/lessons_map.js" %}"></script>
+<script type="text/javascript">
 
-{% trans "Available lessons" %}
-{% if lessons %}
-    <table>
-        <tr>
-            <th>
-                {% trans "Topic" %}
-            </th>
-            <th>
-                {% trans "Requirement" %}
-            </th>
-            <th>
-            </th>
-        </tr>
-        {% for lesson in lessons %}
-            <tr>
-                <td>
-                    {{ lesson.topic }}
-                </td>
-                <td>
-                    {% if lesson.requirement %}
-                        <div>
-                            {{ lesson.requirement.topic }}
-                        </div>
-                    {% else %}
-                        <div>
-                            None
-                        </div>
-                    {% endif %}
-                </td>
-                <td>
-                    <a href="{% url 'learn:learn' lesson_id=lesson.id %}">{% trans "Go" %}</a>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-{% else %}
-    No lessons available
-{% endif %}
+function generateLearnURL(lesson_id){
+    return "{% url 'learn:learn' lesson_id=112233 %}".replace("112233", lesson_id);
+}
+
+$(document).ready(function(){
+    var lessons_levels = {{ lessons_levels|safe }};
+    drawMap(lessons_levels, '#map');
+});
+</script>
+
+
+<svg id="map" width="1000" height="1000"></svg>
 {% endblock %}
