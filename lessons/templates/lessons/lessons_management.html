@@ -46,10 +46,10 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}">{% trans "Modify" %}</a>
+                    <a class="btn btn-default" href="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}">{% trans "Modify" %}</a>
                 </td>
                 <td>
-                    <a href="{% url 'lessons:delete_lesson' lesson_id=lesson.id %}">{% trans "Delete" %}</a>
+                    <a class="btn btn-default" href="{% url 'lessons:delete_lesson' lesson_id=lesson.id %}">{% trans "Delete" %}</a>
                 </td>
             </tr>
         {% endfor %}
