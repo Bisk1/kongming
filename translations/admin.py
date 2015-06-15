@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from models import WordPL, WordZH, WordTranslation, SentenceTranslation
+from models import WordPL, WordZH, WordTranslation, SentenceTranslation, SentencePL, SentenceZH
 
 
 class WordTranslationAdmin(admin.ModelAdmin):
@@ -27,3 +27,5 @@ admin.site.register(WordPL)
 admin.site.register(WordZH, WordZHAdmin)
 admin.site.register(WordTranslation, WordTranslationAdmin)
 admin.site.register(SentenceTranslation, SentenceTranslationAdmin)
+admin.site.register(SentencePL)
+admin.site.register(SentenceZH)

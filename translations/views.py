@@ -117,9 +117,7 @@ def sentences_translations(request, source_language):
     :return: HTTP response
     """
     if request.is_ajax() and request.method == 'POST':
-        print request.POST
         source_sentence_model = language_name_to_sentence_model(source_language)
-
         if 'translations' in request.POST:
             delete_sentence_translations(request.POST['sentence_to_translate'], source_sentence_model)
 

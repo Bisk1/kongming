@@ -2,18 +2,19 @@
 {% load i18n %}
 {% block content %}
 {% load staticfiles %}
+<script type="text/javascript" src='{% static "lessons/js/modify_lesson.js" %}'></script>
 
 <div>
-Lesson topic:
+Temat lekcji:
     <input type="text" id="topic" name="topic" value="{{ lesson.topic }}"/>
 </div>
 <div>
-Exercises number:
+Liczba ćwiczeń:
     <input type="number" id="exercises_number" name="exercises_number" value="{{ lesson.exercises_number }}"/>
 </div>
-
-Requirement:
-    <select id="new_requirement">
+<div>
+Wymaganie:
+    <select id="requirement">
         <option value="None">Brak</option>
 
     {% for other_lesson in other_lessons %}
@@ -25,29 +26,30 @@ Requirement:
         {% endif %}
         {% endfor %}
     </select>
-    <br/>
-<button id="update" action="{% url 'lessons:modify_lesson' lesson.id %}">Update</button>
-<div id="updated" hidden>Updated</div>
+</div>
 
-    Exercises:
-    <div id="exercises" link="{% url 'lessons:display_exercises' lesson.id %}">
+<button id="update" class="btn btn-default" action="{% url 'lessons:modify_lesson' lesson.id %}">Aktualizuj</button>
+<div id="updated" hidden>Zaktualizowano</div>
+<div>
+    Ćwiczenia:
+    <div id="exercises">
     {% include "lessons/exercises.html" %}
     </div>
-    <button id="add">Add</button>
+    Dodaj ćwiczenie:
+    <form action="{% url 'exercises:add_exercise' lesson_id=lesson.id %}" method="post">
+    {% csrf_token %}
+        <select id="exercise_type" name="exercise_type">
+            <option value='word_zh'>Chinese word</option>
+            <option value='word_pl'>Polish word</option>
+            <option value='sentence_zh'>Chinese sentence</option>
+            <option value='sentence_pl'>Polish sentence</option>
+            <option value='explanation'>Explanation</option>
+            <option value='explanation_image'>Explanation image</option>
+        </select>
+        <input type="submit" value="Dodaj" class="btn btn-default">
+    </form>
+</div>
 
-    <div id="add_exercise" hidden>
-    <select id="menu">
-        <option addr="{% url 'lessons:add_exercise_word_zh' lesson.id %}">Chinese word</option>
-        <option addr="{% url 'lessons:add_exercise_word_pl' lesson.id %}">Polish word</option>
-        <option addr="{% url 'lessons:add_exercise_sentence_zh' lesson.id %}">Chinese sentence</option>
-        <option addr="{% url 'lessons:add_exercise_sentence_pl' lesson.id %}">Polish sentence</option>
-        <option addr="{% url 'lessons:add_exercise_explanation' lesson.id %}">Explanation</option>
-        <option addr="{% url 'lessons:add_exercise_explanation_image' lesson.id %}">Explanation with image</option>
-    </select>
-        <div id="content"></div>
-
-    </div>
-<script type="text/javascript" src='{% static "lessons/js/modify_lesson.js" %}'></script>
 
 {% endblock %}
 {% block footer %}

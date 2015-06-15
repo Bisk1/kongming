@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'menu',
     'learn',
     'lessons',
+    'exercises',
     'users',
     'translations',
     'django_pdb'

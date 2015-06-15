@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^learn/', include('learn.urls', namespace='learn')),
     url(r'^users/', include('users.urls', namespace='users')),
     url(r'^lessons/', include('lessons.urls', namespace='lessons')),
+    url(r'^exercises/', include('exercises.urls', namespace='exercises')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^i18n/', include('django.conf.urls.i18n')),
 )

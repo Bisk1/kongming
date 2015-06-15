@@ -1,15 +1,26 @@
 {% load staticfiles %}
 
-<table>
+<form action="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}" method="post">
+    {% csrf_token %}
+    <table>
         {% for exercise_details in exercise_details_list %}
+            {% with exercise=exercise_details.exercise %}
             <tr>
-                <td>{{ exercise_details.exercise.number }}:&nbsp;</td>
+                <td><input name="exercise{{exercise.id }}"
+                   {% if exercise.number %}value="{{ exercise.number }}" {% endif %}
+                   size="1">
+                </td>
                 <td>{{ exercise_details }}</td>
-                <td>{{ exercise_details.exercise.type }}</td>
+                <td>{{ exercise.type }}</td>
                 <td>
-                    <button class="delete" action="{% url 'lessons:modify_lesson' lesson.id %}" value="{{ exercise_details.exercise.id }}">Delete</button>
-
+                    <a class="modify btn btn-default" href="{% url 'exercises:modify_exercise' exercise_id=exercise.id %}">Edytuj</a>
+                </td>
+                <td>
+                    <a class="delete btn btn-default" href="{% url 'exercises:delete_exercise' exercise_id=exercise.id %}">Usuń</a>
                 </td>
             </tr>
+            {% endwith %}
         {% endfor %}
-</table>
+    </table>
+    <input type="submit" id="save" class="btn btn-default" value="Zapisz"></button>
+</form>

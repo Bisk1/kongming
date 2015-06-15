@@ -1,9 +1,0 @@
-{% load staticfiles %}
-
-<div>Lesson: {{ lesson.topic }}</div>
-Add exercise - Polish sentence:
-<form id="adding_exercise" action="{% url 'lessons:add_exercise_sentence_pl' lesson.id %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-</form>
-<button id="save">Save</button>

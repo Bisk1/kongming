@@ -1,0 +1,36 @@
+{% extends "base.html"%}
+{% load i18n %}
+{% block content %}
+{% load staticfiles %}
+
+<script type="text/javascript" src="{% static "exercises/js/modify_sentence.js" %}"></script>
+<div id="translate_sentence_url" style="visibility: hidden">{% url 'translations:sentences_translations' source_language='polish' %}</div>
+
+<div>Lekcja: {{ lesson.topic }}</div>
+Add exercise - Polish sentence:
+<form action="{% url 'exercises:modify_exercise_sentence_pl' lesson_id=lesson.id %}" method="post">
+    {% csrf_token %}
+    <label>Zdanie polskie</label>
+    <input class="sentence_to_search" name="sentence_pl" value="{{ exercise.sentence }}">
+    <div>Tłumaczenia:</div>
+    <div id="translations-container">
+        <table id="translations_table">
+            <tbody>
+            {% for translation in exercise.sentence.sentencezh_set.all %}
+                <tr>
+                    <td>
+                        <label>Zdanie chińskie</label>
+                        <input name="translations" value="{{ translation.sentence }}">
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    <button type="button" id="add_translation_button" class="btn btn-default">Dodaj</button>
+    </div>
+    <input type="submit" id="save" class="btn btn-default" value="Zapisz"></button>
+</form>
+
+{% endblock %}
+{% block footer %}
+{% endblock %}

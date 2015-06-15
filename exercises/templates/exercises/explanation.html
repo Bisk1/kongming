@@ -1,0 +1,17 @@
+{% extends "base.html"%}
+{% load i18n %}
+{% block content %}
+{% load staticfiles %}
+
+<div>Lekcja: {{ lesson.topic }}</div>
+Exercise - explanation:
+<form action="{% url 'exercises:modify_exercise_explanation' lesson_id=lesson.id %}" method="post">
+    {% csrf_token %}
+    <label for="text">Treść wyjaśnienia:</label>
+    <textarea id="text" name="text">{{ exercise.text }}</textarea>
+    <input type="submit" id="save" class="btn btn-default" value="Zapisz"></button>
+</form>
+
+{% endblock %}
+{% block footer %}
+{% endblock %}

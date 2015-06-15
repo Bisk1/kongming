@@ -6,10 +6,11 @@ from django.template import loader
 from django.http import *
 from django.template import RequestContext
 
-from lessons.models import LessonAction, Lesson
+from lessons.models import Lesson
+from models import LessonAction, PASS, FAIL
+
 
 logger = logging.getLogger(__name__)
-
 
 @login_required
 def lessons_map(request):
@@ -61,12 +62,23 @@ def simple_lesson_level_dicts(lessons_query_set, user):
     lessons_levels_dicts = list()
     for lesson in lessons_query_set:
         if lesson.requirement is None:
+
             lessons_levels_dicts.append({'pk': lesson.pk, 'topic': lesson.topic, 'requirement': None,
-                                         'status': lesson.determine_status(user)})
+                                         'status': determine_lesson_status_for_user(lesson, user)})
         else:
             lessons_levels_dicts.append({'pk': lesson.pk, 'topic': lesson.topic, 'requirement': lesson.requirement.pk,
-                                         'status': lesson.determine_status(user)})
+                                         'status': determine_lesson_status_for_user(lesson, user)})
     return lessons_levels_dicts
+
+
+def determine_lesson_status_for_user(lesson, user):
+    lesson_actions = LessonAction.objects.filter(lesson=lesson,user=user)
+    if lesson_actions.filter(status='p').count() > 0:
+        return PASS
+    elif lesson_actions.filter(status='f').count() > 0:
+        return FAIL
+    else:
+        return None
 
 
 @login_required

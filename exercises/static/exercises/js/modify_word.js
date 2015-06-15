@@ -1,5 +1,5 @@
 var getSourceLanguage = function() {
-    return $("#source_language").val();
+    return $("#source_language").text();
 };
 
 var updateTranslationsTable = function(translations) {
@@ -27,36 +27,6 @@ var checkAndUpdateTranslationsForm = function(word_to_translate) {
             $("#translations_header").html('Word: '  + word_to_translate);
             updateTranslationsTable(data.translations);
             $('#add_translation_button').show();
-        },
-        error: function(xhr, errmsg, err) {
-            $('#error_box').html(xhr.status + ": " + xhr.responseText).show();
-        }
-    });
-};
-
-var saveTranslations = function() {
-    $("#save_message").html('Saving...');
-    var word_to_translate = $("#word_to_search").val();
-    var translations = [];
-    var isTranslationsChinese = (getSourceLanguage() == 'polish');
-    $("#translations_table tr").each(function() {
-        if (isTranslationsChinese) {
-            translations.push({word: $(this).find(":nth-child(2) > input").val(), pinyin: $(this).find(":nth-child(4) > input").val()});
-        } else {
-            translations.push({word: $(this).find(":nth-child(2) > input").val()});
-        }
-    });
-    $.ajax({
-        url: window.location.href,
-        type: 'POST',
-        dataType: "json",
-        data: {
-            word_to_translate : word_to_translate,
-            translations : JSON.stringify(translations),
-            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
-        },
-        success: function(data) {
-            $("#save_message").html('Saved!');
         },
         error: function(xhr, errmsg, err) {
             $('#error_box').html(xhr.status + ": " + xhr.responseText).show();
@@ -147,11 +117,7 @@ $(document).ready(function() {
         .insertWordInput();
     });
 
-    $('#edit').click(function() {
-        checkAndUpdateTranslationsForm();
-    });
-
-    $("#word_to_search").keypress(function(e) {
+    $(".word_to_search").keypress(function(e) {
         if (e.which == 13) {
             checkAndUpdateTranslationsForm();
         }
@@ -161,7 +127,7 @@ $(document).ready(function() {
         ($(this)).parent().parent().remove();
     });
 
-    $("#word_to_search" ).autocomplete({
+    $(".word_to_search" ).autocomplete({
         source: function(request, response) {
             $.ajax({
                 url: window.location.href,
@@ -184,7 +150,4 @@ $(document).ready(function() {
         }
     });
 
-    $("#save_button").click(function() {
-        saveTranslations();
-    })
 });
