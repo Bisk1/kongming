@@ -11,29 +11,6 @@ from models import WordZH, WordPL, WordTranslation, SentencePL, SentenceZH, Sent
 logger = logging.getLogger(__name__)
 
 
-def dictionary(request, source_language):
-    """
-    Word dictionary. It translates words from source language.
-    :param request: HTTP request
-    :param source_language: language to translate words from
-    :return: HTTP response
-    """
-    if request.method == 'POST':
-        word_to_search = request.POST['word_to_search']
-        translations = []
-        matching_words = []
-        if request.POST['source_language'] == "polish":
-            matching_words = WordPL.objects.filter(word=word_to_search)
-        elif request.POST['source_language'] == "chinese":
-            matching_words = WordZH.objects.filter(word=word_to_search)
-        if matching_words:
-            translations = matching_words[0].get_translations().values_list('word', flat=True)
-        return HttpResponse(json.dumps({'translations': list(translations)}), mimetype='application/javascript')
-    template = loader.get_template('translations/dictionary.html')
-    context = RequestContext(request, {'source_language': source_language})
-    return HttpResponse(template.render(context))
-
-
 def words_translations(request, source_language):
     """
     Manage words translations. Allow selecting words to edit.

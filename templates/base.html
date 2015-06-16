@@ -14,7 +14,6 @@
         <meta name="author" content="">
 
         {% load staticfiles %}
-        <script type="text/javascript" src="{% static "translations/js/dictionary.js" %}"></script>
         <!-- Stylesheets -->
         <link href="{% static "style/bootstrap.css" %}" rel="stylesheet">
         <!-- Font awesome icon -->
@@ -130,11 +129,6 @@
                         <!-- Icon for dropdown -->
                         <span class="pull-right"><i class="icon-angle-right"></i></span>
                     </a>
-
-                    <ul>
-                        <li><a href="{% url 'translations:dictionary' source_language='polish' %}">Polsko - chiński</a></li>
-                        <li><a href="{% url 'translations:dictionary' source_language='chinese' %}">Chińsko - polski</a></li>
-                    </ul>
                 </li>
 
                 <li class="ngreen"><a href="charts.html"><i class="icon-bar-chart"></i>Statystyki</a></li>
