@@ -6,18 +6,22 @@
 <div id="source_language" style="visibility: hidden">chinese</div>
 
 <div>Lekcja: {{ lesson.topic }}</div>
-Add exercise - Chinese word:
-<form action="{% url 'exercises:modify_exercise_word_zh' lesson_id=lesson.id %}" method="post">
+Exercise - Chinese word:
+{% if exercise_details %}
+    <form action="{% url 'exercises:modify_exercise_word_zh' exercise_id=exercise_details.exercise.id %}" method="post">
+{% else %}
+    <form action="{% url 'exercises:add_exercise_word_zh' lesson_id=lesson.id %}" method="post">
+{% endif %}
     {% csrf_token %}
     <label>Słowo chińskie</label>
-    <input class="word_to_search" id="word_zh" name="word_zh" value="{{ exercise.word.word }}">
+    <input class="word_to_search" id="word_zh" name="word_zh" value="{{ exercise_details.word.word }}">
     <label>Pinyin</label>
-    <input name="pinyin" name="pinyin" value="{{ exercise.word.pinyin }}">
+    <input name="pinyin" name="pinyin" value="{{ exercise_details.word.pinyin }}">
     <div>Tłumaczenia:</div>
     <div id="translations-container">
         <table id="translations_table">
             <tbody>
-            {% for translation in exercise.word.wordpl_set.all %}
+            {% for translation in exercise_details.word.wordpl_set.all %}
                 <tr>
                     <td>
                         <label>Słowo polskie</label>

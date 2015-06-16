@@ -4,17 +4,17 @@
 {% load staticfiles %}
 <script type="text/javascript" src='{% static "lessons/js/modify_lesson.js" %}'></script>
 
-<div>
-Temat lekcji:
-    <input type="text" id="topic" name="topic" value="{{ lesson.topic }}"/>
+<div class="form-group">
+    <label for="topic">Temat lekcji:</label>
+    <input type="text" class="form-control" id="topic" name="topic" value="{{ lesson.topic }}"/>
 </div>
-<div>
-Liczba ćwiczeń:
-    <input type="number" id="exercises_number" name="exercises_number" value="{{ lesson.exercises_number }}"/>
+<div class="form-group">
+    <label class="control-label" for="exercises_number">Liczba ćwiczeń:</label>
+    <input type="number" class="form-control" id="exercises_number" name="exercises_number" value="{{ lesson.exercises_number }}"/>
 </div>
-<div>
-Wymaganie:
-    <select id="requirement">
+<div class="form-group">
+    <label for="requirement">Wymaganie:</label>
+    <select  class="form-control" id="requirement">
         <option value="None">Brak</option>
 
     {% for other_lesson in other_lessons %}
@@ -27,9 +27,10 @@ Wymaganie:
         {% endfor %}
     </select>
 </div>
-
 <button id="update" class="btn btn-default" action="{% url 'lessons:modify_lesson' lesson.id %}">Aktualizuj</button>
 <div id="updated" hidden>Zaktualizowano</div>
+
+
 <div>
     Ćwiczenia:
     <div id="exercises">

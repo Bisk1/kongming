@@ -7,16 +7,20 @@
 <div id="translate_sentence_url" style="visibility: hidden">{% url 'translations:sentences_translations' source_language='chinese' %}</div>
 
 <div>Lekcja: {{ lesson.topic }}</div>
-Add exercise - Chinese sentence:
-<form action="{% url 'exercises:modify_exercise_sentence_zh' lesson_id=lesson.id %}" method="post">
+Exercise - Chinese sentence:
+{% if exercise_details %}
+    <form action="{% url 'exercises:modify_exercise_sentence_zh' exercise_id=exercise_details.exercise.id %}" method="post">
+{% else %}
+    <form action="{% url 'exercises:add_exercise_sentence_zh' lesson_id=lesson.id %}" method="post">
+{% endif %}
     {% csrf_token %}
     <label>Zdanie chińskie</label>
-    <input class="sentence_to_search" name="sentence_zh" value="{{ exercise.sentence }}">
+    <input class="sentence_to_search" name="sentence_zh" value="{{ exercise_details.exercise.sentence }}">
     <div>Tłumaczenia:</div>
     <div id="translations-container">
         <table id="translations_table">
             <tbody>
-            {% for translation in exercise.sentence.sentencepl_set.all %}
+            {% for translation in exercise_details.sentence.sentencepl_set.all %}
                 <tr>
                     <td>
                         <label>Zdanie polskie</label>

@@ -11,7 +11,7 @@
                    size="1">
                 </td>
                 <td>{{ exercise_details }}</td>
-                <td>{{ exercise.type }}</td>
+                <td>{{ exercise.pretty_type_name }}</td>
                 <td>
                     <a class="modify btn btn-default" href="{% url 'exercises:modify_exercise' exercise_id=exercise.id %}">Edytuj</a>
                 </td>
@@ -22,5 +22,5 @@
             {% endwith %}
         {% endfor %}
     </table>
-    <input type="submit" id="save" class="btn btn-default" value="Zapisz"></button>
+    <input type="submit" id="save" class="btn btn-primary" value="Zapisz"></button>
 </form>

@@ -5,10 +5,16 @@
 
 <div>Lekcja: {{ lesson.topic }}</div>
 Exercise - explanation:
-<form action="{% url 'exercises:modify_exercise_explanation' lesson_id=lesson.id %}" method="post">
-    {% csrf_token %}
-    <label for="text">Treść wyjaśnienia:</label>
-    <textarea id="text" name="text">{{ exercise.text }}</textarea>
+{% if exercise_details %}
+    <form action="{% url 'exercises:modify_exercise_explanation' exercise_id=exercise_details.exercise.id %}" method="post">
+{% else %}
+    <form action="{% url 'exercises:add_exercise_explanation' lesson_id=lesson.id %}" method="post">
+{% endif %}
+{% csrf_token %}
+    <div class="form-group">
+        <label for="text">Treść wyjaśnienia:</label>
+        <textarea id="text" class="form-control" name="text">{{ exercise_details.text }}</textarea>
+    </div>
     <input type="submit" id="save" class="btn btn-default" value="Zapisz"></button>
 </form>
 

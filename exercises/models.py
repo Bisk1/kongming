@@ -32,14 +32,22 @@ class Exercise(models.Model):
     type = models.CharField(max_length=1, choices=LANGUAGE_CHOICES)
     number = models.IntegerField(null=True)
 
-    exercise_type_to_name_map = {
-        WORD_PL: 'word_pl',
-        WORD_ZH: 'word_zh',
-        SENTENCE_PL: 'sentence_pl',
-        SENTENCE_ZH: 'sentence_zh',
-        EXPLANATION: 'explanation',
-        EXPLANATION_IMAGE: 'explanation_image'
-    }
+    @property
+    def pretty_type_name(self):
+        if self.type == WORD_PL:
+            return 'Word PL'
+        elif self.type == WORD_ZH:
+            return 'Word ZH'
+        elif self.type == SENTENCE_PL:
+            return 'Sentence PL'
+        elif self.type == SENTENCE_ZH:
+            return 'Sentence ZH'
+        elif self.type == EXPLANATION:
+            return 'Explanation'
+        elif self.type == EXPLANATION_IMAGE:
+            return 'Explanation with image'
+        raise Exception("Unknown type name: " + self.type)
+
 
     def __unicode__(self):
         return unicode(self.lesson) + ' ' + unicode(self.id)
@@ -151,6 +159,14 @@ class ExplanationImageExercise(AbstractExercise):
     def __unicode__(self):
         return unicode(self.text)
 
+exercise_type_to_name_map = {
+    WORD_PL: 'word_pl',
+    WORD_ZH: 'word_zh',
+    SENTENCE_PL: 'sentence_pl',
+    SENTENCE_ZH: 'sentence_zh',
+    EXPLANATION: 'explanation',
+    EXPLANATION_IMAGE: 'explanation_image'
+}
 
 exercise_type_to_model_map = {
     WORD_PL: WordPLExercise,

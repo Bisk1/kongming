@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from models import WordZH, WordPL, Lesson, \
     WordZHExercise, WORD_ZH, Exercise, WordPLExercise, SentenceZHExercise, SentencePLExercise, ExplanationExercise, \
     EXPLANATION, SENTENCE_PL, SENTENCE_ZH, WORD_PL, SentencePL, SentenceZH, \
-    EXPLANATION_IMAGE, ExplanationImageExercise, exercise_type_to_model_map
+    EXPLANATION_IMAGE, ExplanationImageExercise, exercise_type_to_model_map, exercise_type_to_name_map
 from translations.models import SentenceTranslation, WordTranslation
 
 
@@ -19,16 +19,13 @@ logger = logging.getLogger(__name__)
 
 def add_exercise(request, lesson_id):
     exercise_type = request.POST.get('exercise_type')
-    return redirect('exercises:modify_exercise_' + exercise_type, lesson_id=lesson_id)
+    return redirect('exercises:add_exercise_' + exercise_type, lesson_id=lesson_id)
 
 
 def modify_exercise(request, exercise_id):
-    exercise = Exercise.objects.get(pk=exercise_id)
-    exercise_details = exercise_type_to_model_map.get(exercise.type).objects.get(exercise=exercise)
-    exercise_type = Exercise.exercise_type_to_name_map.get(exercise.type)
-    template = 'exercises/' + exercise_type + '.html'
-    lesson = exercise.lesson
-    return render(request, template, {'exercise': exercise_details, 'lesson': lesson})
+    exercise = Exercise.objects.get(id=exercise_id)
+    exercise_type = exercise_type_to_name_map.get(exercise.type)
+    return redirect('exercises:modify_exercise_' + exercise_type, exercise_id=exercise_id)
 
 
 def delete_exercise(request, exercise_id):
@@ -38,7 +35,24 @@ def delete_exercise(request, exercise_id):
     return redirect('lessons:modify_lesson', lesson_id=lesson_id)
 
 
-def modify_exercise_word_zh(request, lesson_id, exercise_id=None):
+def add_exercise_word_zh(request, lesson_id):
+    lesson = Lesson.objects.get(id=lesson_id)
+    if request.method == 'POST':
+        exercise_type = WORD_ZH
+        exercise = Exercise(lesson=lesson, type=exercise_type)
+        exercise.save()
+        word_zh = WordZH.objects.get_or_create(word=request.POST.get('word_zh'), pinyin=request.POST.get('pinyin'))[0]
+        for translation_pl in request.POST.getlist('translations'):
+            word_pl = WordPL.objects.get_or_create(word=translation_pl)[0]
+            WordTranslation.objects.get_or_create(word_zh=word_zh, word_pl=word_pl)
+        new_exercise_word_zh = WordZHExercise(exercise=exercise, word=word_zh)
+        new_exercise_word_zh.save()
+        return redirect('lessons:modify_lesson', lesson_id=lesson_id)
+    else:
+        return render(request, 'exercises/word_zh.html', {'lesson': lesson})
+
+
+def modify_exercise_word_zh(request, exercise_id):
     """
     Modify exercise - Chinese word - for a lesson
     :param request: HTTP request
@@ -46,37 +60,37 @@ def modify_exercise_word_zh(request, lesson_id, exercise_id=None):
     :param exercise_id: id of the exercise
     :return: HTTP response
     """
-    lesson = Lesson.objects.get(id=lesson_id)
-    if exercise_id is None:
-        if request.method == 'POST':
-            exercise_type = WORD_ZH
-            exercise = Exercise(lesson=lesson, type=exercise_type)
-            exercise.save()
-            word_zh = WordZH.objects.get_or_create(word=request.POST.get('word_zh'), pinyin=request.POST.get('pinyin'))[0]
-            for translation_pl in request.POST.getlist('translations'):
-                word_pl = WordPL.objects.get_or_create(word=translation_pl)[0]
-                WordTranslation.objects.get_or_create(word_zh=word_zh, word_pl=word_pl)
-            new_exercise_word_zh = WordZHExercise(exercise=exercise, word=word_zh)
-            new_exercise_word_zh.save()
-            return redirect('lessons:modify_lesson', lesson_id=lesson_id)
-        else:
-            return render(request, 'exercises/word_zh.html', {'lesson': lesson})
+    exercise = Exercise.objects.get(id=exercise_id)
+    exercise_word_zh = WordZHExercise.objects.get(exercise=exercise)
+    if request.method == 'POST':
+        word_zh = WordZH.objects.get_or_create(word=request.POST.get('word_zh'), pinyin=request.POST.get('pinyin'))[0]
+        for translation_pl in request.POST.getlist('translations'):
+            word_pl = WordPL.objects.get_or_create(word=translation_pl)[0]
+            WordTranslation.objects.get_or_create(word_zh=word_zh, word_pl=word_pl)
+        exercise_word_zh.word = word_zh
+        exercise_word_zh.save()
+        return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
     else:
-        exercise = Exercise.objects.get(exercise_id)
-        exercise_word_zh = WordZHExercise.objects.get(exercise=exercise)
-        if request.method == 'POST':
-            word_zh = WordZH.objects.get_or_create(word=request.POST.get('word_zh'), pinyin=request.POST.get('pinyin'))[0]
-            for translation_pl in request.POST.getlist('translations'):
-                word_pl = WordPL.objects.get_or_create(word=translation_pl)[0]
-                WordTranslation.objects.get_or_create(word_zh=word_zh, word_pl=word_pl)
-            exercise_word_zh.word = word_zh
-            exercise_word_zh.save()
-            return redirect('lessons:modify_lesson', lesson_id=lesson_id)
-        else:
-            return render(request, 'exercises/word_zh.html', {'lesson': lesson_id, 'exercise': exercise})
+        return render(request, 'exercises/word_zh.html', {'exercise_details': exercise_word_zh})
 
 
-def modify_exercise_word_pl(request, lesson_id, exercise_id=None):
+def add_exercise_word_pl(request, lesson_id):
+    lesson = Lesson.objects.get(id=lesson_id)
+    if request.method == 'POST':
+        exercise_type = WORD_PL
+        exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number'))
+        exercise.save()
+        word_pl = WordPL.objects.get_or_create(word=request.POST.get('word_pl'))[0]
+        for translation_zh in request.POST.getlist('translations_zh'):
+            word_zh = WordZH.objects.get_or_create(word=translation_zh)[0]
+            WordTranslation.objects.get_or_create(word_zh=word_zh, word_pl=word_pl)
+        new_exercise_word_pl = WordPLExercise(exercise=exercise, word=word_pl)
+        new_exercise_word_pl.save()
+        return redirect('lessons:modify_lesson', lesson_id=lesson_id)
+    return render(request, 'exercises/word_pl.html', {'lesson': lesson})
+
+
+def modify_exercise_word_pl(request, exercise_id):
     """
     Modify exercise - Polish word - for a lesson
     :param request: HTTP request
@@ -84,35 +98,38 @@ def modify_exercise_word_pl(request, lesson_id, exercise_id=None):
     :param exercise_id: id of the exercise
     :return: HTTP response
     """
-    lesson = Lesson.objects.get(id=lesson_id)
-    if exercise_id is None:
-        if request.method == 'POST':
-            exercise_type = WORD_PL
-            exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number'))
-            exercise.save()
-            word_pl = WordPL.objects.get_or_create(word=request.POST.get('word_pl'))[0]
-            for translation_zh in request.POST.getlist('translations_zh'):
-                word_zh = WordZH.objects.get_or_create(word=translation_zh)[0]
-                WordTranslation.objects.get_or_create(word_zh=word_zh, word_pl=word_pl)
-            new_exercise_word_pl = WordPLExercise(exercise=exercise, word=word_pl)
-            new_exercise_word_pl.save()
-            return redirect('lessons:modify_lesson', lesson_id=lesson_id)
-        return render(request, 'exercises/word_pl.html', {'lesson': lesson})
+    exercise = Exercise.objects.get(id=exercise_id)
+    exercise_word_pl = WordPLExercise.objects.get(exercise=exercise)
+    if request.method == 'POST':
+        word_pl = WordPL.objects.get_or_create(word=request.POST.get('word_pl'))[0]
+        for translation_zh in request.POST.getlist('translations'):
+            word_zh = WordZH.objects.get_or_create(word=translation_zh)[0]
+            WordTranslation.objects.get_or_create(word_zh=word_zh, word_pl=word_pl)
+        exercise_word_pl.word = word_pl
+        exercise_word_pl.save()
+        return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
     else:
-        exercise = Exercise.objects.get(exercise_id)
-        exercise_word_pl = WordPLExercise.objects.get(exercise=exercise)
-        if request.method == 'POST':
-            word_pl = WordPL.objects.get_or_create(word=request.POST.get('word_pl'))[0]
-            for translation_zh in request.POST.getlist('translations'):
-                word_zh = WordZH.objects.get_or_create(word=translation_zh)[0]
-                WordTranslation.objects.get_or_create(word_zh=word_zh, word_pl=word_pl)
-            exercise_word_pl.word = word_pl
-            exercise_word_pl.save()
-        else:
-            return render(request, 'exercises/word_pl.html', {'lesson': lesson_id, 'exercise': exercise})
+        return render(request, 'exercises/word_pl.html', {'exercise_details': exercise_word_pl})
 
 
-def modify_exercise_sentence_zh(request, lesson_id, exercise_id=None):
+def add_exercise_sentence_zh(request, lesson_id):
+    lesson = Lesson.objects.get(id=lesson_id)
+    if request.method == 'POST':
+        exercise_type = SENTENCE_ZH
+        exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number'))
+        exercise.save()
+        sentence_zh = SentenceZH.objects.get_or_create(sentence=request.POST.get('sentence_zh'))[0]
+        for translation_pl in request.POST.getlist('translations_pl'):
+            sentence_pl = SentencePL.objects.get_or_create(sentence=translation_pl)[0]
+            SentenceTranslation.objects.get_or_create(sentence_zh=sentence_zh, sentence_pl=sentence_pl)
+        new_exercise_sentence_zh = SentenceZHExercise(exercise=exercise, sentence=sentence_zh)
+        new_exercise_sentence_zh.save()
+        return redirect('lessons:modify_lesson', lesson_id=lesson_id)
+    else:
+        return render(request, 'exercises/sentence_zh.html', {'lesson': lesson})
+
+
+def modify_exercise_sentence_zh(request, exercise_id):
     """
     Modify exercise - Chinese sentence - for a lesson
     :param request: HTTP request
@@ -120,36 +137,38 @@ def modify_exercise_sentence_zh(request, lesson_id, exercise_id=None):
     :param exercise_id: id of the exercise
     :return: HTTP response
     """
-    lesson = Lesson.objects.get(id=lesson_id)
-    if exercise_id is None:
-        if request.method == 'POST':
-            exercise_type = SENTENCE_ZH
-            exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number'))
-            exercise.save()
-            sentence_zh = SentenceZH.objects.get_or_create(sentence=request.POST.get('sentence_zh'))[0]
-            for translation_pl in request.POST.getlist('translations_pl'):
-                sentence_pl = SentencePL.objects.get_or_create(sentence=translation_pl)[0]
-                SentenceTranslation.objects.get_or_create(sentence_zh=sentence_zh, sentence_pl=sentence_pl)
-            new_exercise_sentence_zh = SentenceZHExercise(exercise=exercise, sentence=sentence_zh)
-            new_exercise_sentence_zh.save()
-            return redirect('lessons:modify_lesson', lesson_id=lesson_id)
-        else:
-            return render(request, 'exercises/sentence_zh.html', {'lesson': lesson})
+    exercise = Exercise.objects.get(id=exercise_id)
+    exercise_sentence_zh = SentenceZHExercise.objects.get(exercise=exercise)
+    if request.method == 'POST':
+        sentence_zh = SentenceZH.objects.get_or_create(word=request.POST.get('sentence_zh'))[0]
+        for translation_zh in request.POST.getlist('translations'):
+            sentence_pl = SentencePL.objects.get_or_create(word=translation_zh)[0]
+            SentenceTranslation.objects.get_or_create(sentence_zh=sentence_zh, sentence_pl=sentence_pl)
+        exercise_sentence_zh.word = sentence_zh
+        exercise_sentence_zh.save()
+        return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
     else:
-        exercise = Exercise.objects.get(exercise_id)
-        exercise_sentence_zh = SentenceZHExercise.objects.get(exercise=exercise)
-        if request.method == 'POST':
-            sentence_zh = SentenceZH.objects.get_or_create(word=request.POST.get('sentence_zh'))[0]
-            for translation_zh in request.POST.getlist('translations'):
-                sentence_pl = SentencePL.objects.get_or_create(word=translation_zh)[0]
-                SentenceTranslation.objects.get_or_create(sentence_zh=sentence_zh, sentence_pl=sentence_pl)
-            exercise_sentence_zh.word = sentence_zh
-            exercise_sentence_zh.save()
-        else:
-            return render(request, 'exercises/sentence_zh.html', {'lesson': lesson_id, 'exercise': exercise})
+        return render(request, 'exercises/sentence_zh.html', {'exercise_details': exercise_sentence_zh})
 
 
-def modify_exercise_sentence_pl(request, lesson_id, exercise_id=None):
+def add_exercise_sentence_pl(request, lesson_id):
+    lesson = Lesson.objects.get(id=lesson_id)
+    if request.method == 'POST':
+        exercise_type = SENTENCE_PL
+        exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number'))
+        exercise.save()
+        sentence_pl = SentencePL.objects.get_or_create(sentence=request.POST.get('sentence_pl'))[0]
+        for translation_zh in request.POST.getlist('translations_zh'):
+            sentence_zh = SentenceZH.objects.get_or_create(sentence=translation_zh)[0]
+            SentenceTranslation.objects.get_or_create(sentence_zh=sentence_zh, sentence_pl=sentence_pl)
+        new_sentence_pl_exercise = SentencePLExercise(exercise=exercise, sentence=sentence_pl)
+        new_sentence_pl_exercise.save()
+        return redirect('lessons:modify_lesson', lesson_id=lesson_id)
+    else:
+        return render(request, 'exercises/sentence_pl.html', {'lesson': lesson})
+
+
+def modify_exercise_sentence_pl(request, exercise_id):
     """
     Modify exercise - Polish sentence - for a lesson
     :param request: HTTP request
@@ -157,36 +176,32 @@ def modify_exercise_sentence_pl(request, lesson_id, exercise_id=None):
     :param exercise_id: id of the exercise
     :return: HTTP response
     """
-    lesson = Lesson.objects.get(id=lesson_id)
-    if exercise_id is None:
-        if request.method == 'POST':
-            exercise_type = SENTENCE_PL
-            exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number'))
-            exercise.save()
-            sentence_pl = SentencePL.objects.get_or_create(sentence=request.POST.get('sentence_pl'))[0]
-            for translation_zh in request.POST.getlist('translations_zh'):
-                sentence_zh = SentenceZH.objects.get_or_create(sentence=translation_zh)[0]
-                SentenceTranslation.objects.get_or_create(sentence_zh=sentence_zh, sentence_pl=sentence_pl)
-            new_sentence_pl_exercise = SentencePLExercise(exercise=exercise, sentence=sentence_pl)
-            new_sentence_pl_exercise.save()
-            return redirect('lessons:modify_lesson', lesson_id=lesson_id)
-        else:
-            return render(request, 'exercises/sentence_pl.html', {'lesson': lesson})
+    exercise = Exercise.objects.get(id=exercise_id)
+    exercise_sentence_pl = SentencePLExercise.objects.get(exercise=exercise)
+    if request.method == 'POST':
+        sentence_pl = SentencePL.objects.get_or_create(word=request.POST.get('sentence_pl'))[0]
+        for translation_zh in request.POST.getlist('translations'):
+            sentence_zh = SentenceZH.objects.get_or_create(word=translation_zh)[0]
+            SentenceTranslation.objects.get_or_create(sentence_zh=sentence_zh, sentence_pl=sentence_pl)
+        exercise_sentence_pl.word = sentence_pl
+        exercise_sentence_pl.save()
+        return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
     else:
-        exercise = Exercise.objects.get(exercise_id)
-        exercise_sentence_pl = SentencePLExercise.objects.get(exercise=exercise)
-        if request.method == 'POST':
-            sentence_pl = SentencePL.objects.get_or_create(word=request.POST.get('sentence_pl'))[0]
-            for translation_zh in request.POST.getlist('translations'):
-                sentence_zh = SentenceZH.objects.get_or_create(word=translation_zh)[0]
-                SentenceTranslation.objects.get_or_create(sentence_zh=sentence_zh, sentence_pl=sentence_pl)
-            exercise_sentence_pl.word = sentence_pl
-            exercise_sentence_pl.save()
-        else:
-            return render(request, 'exercises/sentence_pl.html', {'lesson': lesson_id, 'exercise': exercise})
+        return render(request, 'exercises/sentence_pl.html', {'exercise_details': exercise_sentence_pl})
 
+def add_exercise_explanation(request, lesson_id):
+    lesson = Lesson.objects.get(id=lesson_id)
+    if request.method == 'POST':
+        exercise_type = EXPLANATION
+        exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number') or None)
+        exercise.save()
+        explanation = ExplanationExercise(text=request.POST.get('text'), exercise=exercise)
+        explanation.save()
+        return redirect('lessons:modify_lesson', lesson_id=lesson_id)
+    else:
+        return render(request, 'exercises/explanation.html', {'lesson': lesson})
 
-def modify_exercise_explanation(request, lesson_id, exercise_id=None):
+def modify_exercise_explanation(request, exercise_id):
     """
     Modify exercise - explanation - for a lesson
     :param request: HTTP request
@@ -194,28 +209,32 @@ def modify_exercise_explanation(request, lesson_id, exercise_id=None):
     :param exercise_id: id of the exercise
     :return: HTTP response
     """
-    lesson = Lesson.objects.get(id=lesson_id)
-    if exercise_id is None:
-        if request.method == 'POST':
-            exercise_type = EXPLANATION
-            exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number') or None)
-            exercise.save()
-            explanation = ExplanationExercise(text=request.POST.get('text'), exercise=exercise)
-            explanation.save()
-            return redirect('lessons:modify_lesson', lesson_id=lesson_id)
-        else:
-            return render(request, 'exercises/explanation.html', {'lesson': lesson})
+    exercise = Exercise.objects.get(id=exercise_id)
+    exercise_explanation = ExplanationExercise.objects.get(exercise=exercise)
+    if request.method == 'POST':
+        exercise_explanation.text = request.POST.get('text')
+        exercise_explanation.save()
+        return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
     else:
-        exercise = Exercise.objects.get(exercise_id)
-        exercise_explanation = ExplanationExercise.objects.get(exercise=exercise)
-        if request.method == 'POST':
-            exercise_explanation.text = request.POST.get('text')
-            exercise_explanation.save()
-        else:
-            return render(request, 'exercises/explanation.html', {'lesson': lesson_id, 'exercise': exercise})
+        return render(request, 'exercises/explanation.html', {'exercise_details': exercise_explanation})
 
 
-def modify_exercise_explanation_image(request, lesson_id, exercise_id=None):
+def add_exercise_explanation_image(request, lesson_id):
+    lesson = Lesson.objects.get(id=lesson_id)
+    if request.method == 'POST':
+        exercise_type = EXPLANATION_IMAGE
+        exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number'))
+        exercise.save()
+        file = request.FILES['file']
+        file.name = unicode(uuid.uuid4()) + "." + file.name.split(".")[-1]
+        explanation_image = ExplanationImageExercise(text=request.POST.get('text'), image=file, exercise=exercise)
+        explanation_image.save()
+        return redirect('lessons:modify_lesson', lesson=lesson)
+    else:
+        return render(request, 'exercises/explanation_image.html', {'lesson': lesson})
+
+
+def modify_exercise_explanation_image(request, exercise_id):
     """
     Modify exercise - explanation with image - for a lesson
     :param request: HTTP request
@@ -223,30 +242,17 @@ def modify_exercise_explanation_image(request, lesson_id, exercise_id=None):
     :param exercise_id: id of the exercise
     :return: HTTP response
     """
-    lesson = Lesson.objects.get(id=lesson_id)
-    if exercise_id is None:
-        if request.method == 'POST':
-            exercise_type = EXPLANATION_IMAGE
-            exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number'))
-            exercise.save()
-            file = request.FILES['file']
-            file.name = unicode(uuid.uuid4()) + "." + file.name.split(".")[-1]
-            explanation_image = ExplanationImageExercise(text=request.POST.get('text'), image=file, exercise=exercise)
-            explanation_image.save()
-            return redirect('lessons:modify_lesson', lesson=lesson)
-        else:
-            return render(request, 'exercises/explanation_image.html', {'lesson': lesson})
+    exercise = Exercise.objects.get(id=exercise_id)
+    exercise_explanation_image = ExplanationImageExercise.objects.get(exercise=exercise)
+    if request.method == 'POST':
+        exercise_explanation_image.text=request.POST.get('text')
+        file = request.FILES['file']
+        file.name = unicode(uuid.uuid4()) + "." + file.name.split(".")[-1]
+        exercise_explanation_image.image = file
+        exercise_explanation_image.save()
+        return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
     else:
-        exercise = Exercise.objects.get(exercise_id)
-        exercise_explanation_image = ExplanationImageExercise.objects.get(exercise=exercise)
-        if request.method == 'POST':
-            exercise_explanation_image.text=request.POST.get('text')
-            file = request.FILES['file']
-            file.name = unicode(uuid.uuid4()) + "." + file.name.split(".")[-1]
-            exercise_explanation_image.image = file
-            exercise_explanation_image.save()
-        else:
-            return render(request, 'exercises/explanation_image.html', {'lesson': lesson_id, 'exercise': exercise})
+        return render(request, 'exercises/explanation_image.html', {'exercise_details': exercise_explanation_image})
 
 
 def save_image_for_exercise(file):
