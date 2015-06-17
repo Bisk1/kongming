@@ -38,6 +38,8 @@
         <link href="{% static "style/style.css" %}" rel="stylesheet">
         <!-- Widgets stylesheet -->
         <link href="{% static "style/widgets.css" %}" rel="stylesheet">
+        <!-- Element customization -->
+        <link href="{% static "style/base.css" %}" rel="stylesheet">
 
         <script src="{% static "js/bootstrap/jquery.js" %}"></script> <!-- jQuery -->
         <script src="{% static "js/bootstrap/bootstrap.js" %}"></script> <!-- Bootstrap -->
@@ -107,6 +109,7 @@
         </div>
         <div class="content">
     {% endblock %}
+        {% if user.is_superuser %}
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-dropdown"><a href="#">Navigation</a></div>
@@ -120,16 +123,6 @@
                 <!-- Use the class nred, ngreen, nblue, nlightblue, nviolet or norange to add background color. You need to use this in <li> tag. -->
 
                 <li class="norange"><a href="{% url 'learn:lessons_map' %}"><i class="icon-sitemap"></i>Ucz się!</a></li>
-
-                <!-- Menu with sub menu -->
-                <li class="has_submenu nlightblue">
-                    <a href="#">
-                        <!-- Menu name with icon -->
-                        <i class="icon-book"></i>Słownik
-                        <!-- Icon for dropdown -->
-                        <span class="pull-right"><i class="icon-angle-right"></i></span>
-                    </a>
-                </li>
 
                 <li class="ngreen"><a href="charts.html"><i class="icon-bar-chart"></i>Statystyki</a></li>
                 <li class="nviolet"><a href="{% url 'lessons:lessons_management' %}"><i class="icon-cog"></i>Lessons management</a></li>
@@ -164,8 +157,14 @@
             </div>
 
         </div>
+        {% endif %}
 	<!-- Main bar -->
+    {% if user.is_superuser %}
   	<div class="mainbar">
+    {% else %}
+  	<div class="mainbar mainbar-nomargin">
+    {% endif %}
+
         <!-- Page heading -->
         <div class="page-head">
             <!-- Page heading -->
