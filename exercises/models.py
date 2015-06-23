@@ -14,7 +14,6 @@ WORD_ZH = 'c'
 SENTENCE_PL = 'd'
 SENTENCE_ZH = 'e'
 EXPLANATION = 'f'
-EXPLANATION_IMAGE = 'g'
 
 LANGUAGE_CHOICES = {
     (NONE, 'none'),
@@ -22,8 +21,7 @@ LANGUAGE_CHOICES = {
     (WORD_ZH, 'word_zh'),
     (SENTENCE_PL, 'sentence_pl'),
     (SENTENCE_ZH, 'sentence_zh'),
-    (EXPLANATION, 'explanation'),
-    (EXPLANATION_IMAGE, 'explanation_image')
+    (EXPLANATION, 'explanation')
 }
 
 
@@ -44,8 +42,6 @@ class Exercise(models.Model):
             return 'Sentence ZH'
         elif self.type == EXPLANATION:
             return 'Explanation'
-        elif self.type == EXPLANATION_IMAGE:
-            return 'Explanation with image'
         raise Exception("Unknown type name: " + self.type)
 
 
@@ -53,7 +49,7 @@ class Exercise(models.Model):
         return unicode(self.lesson) + ' ' + unicode(self.id)
 
     def type_name(self):
-        return Exercise.exercise_type_to_name_map[self.type]
+        return exercise_type_to_name_map[self.type]
 
 
 class ExerciseResultState(Enum):
@@ -135,6 +131,7 @@ class SentencePLExercise(AbstractExercise):
 
 class ExplanationExercise(AbstractExercise):
     text = models.TextField()
+    image = models.FileField(upload_to="image/", null=True)
 
     def check(self, proposition):
         raise Exception("ExplanationExerciseDetails has no check method")
@@ -146,18 +143,6 @@ class ExplanationExercise(AbstractExercise):
         return unicode(self.text)
 
 
-class ExplanationImageExercise(AbstractExercise):
-    text = models.TextField()
-    image = models.FileField(upload_to="image/")
-
-    def check(self, proposition):
-        raise Exception("ExplanationExerciseDetails has no check method")
-
-    def prepare(self):
-        return {'text': self.text}
-
-    def __unicode__(self):
-        return unicode(self.text)
 
 exercise_type_to_name_map = {
     WORD_PL: 'word_pl',
@@ -165,7 +150,6 @@ exercise_type_to_name_map = {
     SENTENCE_PL: 'sentence_pl',
     SENTENCE_ZH: 'sentence_zh',
     EXPLANATION: 'explanation',
-    EXPLANATION_IMAGE: 'explanation_image'
 }
 
 exercise_type_to_model_map = {
@@ -174,7 +158,6 @@ exercise_type_to_model_map = {
     SENTENCE_PL: SentencePLExercise,
     SENTENCE_ZH: SentenceZHExercise,
     EXPLANATION: ExplanationExercise,
-    EXPLANATION_IMAGE: ExplanationImageExercise
 }
 
 exercise_model_to_type_map = {
@@ -183,7 +166,6 @@ exercise_model_to_type_map = {
     SentencePLExercise: SENTENCE_PL,
     SentenceZHExercise: SENTENCE_ZH,
     ExplanationExercise: EXPLANATION,
-    ExplanationImageExercise: EXPLANATION_IMAGE
 }
 
 

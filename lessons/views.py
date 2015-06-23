@@ -8,7 +8,7 @@ from django.template import loader, RequestContext
 
 from models import Lesson
 from exercises.models import Exercise, SentenceZHExercise, SentencePLExercise, WordZHExercise, \
-    WordPLExercise, ExplanationExercise, ExplanationImageExercise
+    WordPLExercise, ExplanationExercise
 
 
 logger = logging.getLogger(__name__)
@@ -82,13 +82,11 @@ def get_exercises_details(lesson):
     sentence_zh_exercises = SentenceZHExercise.objects.filter(exercise__in=exercises)
     sentence_pl_exercises = SentencePLExercise.objects.filter(exercise__in=exercises)
     explanation_exercises = ExplanationExercise.objects.filter(exercise__in=exercises)
-    explanation_image_exercises = ExplanationImageExercise.objects.filter(exercise__in=exercises)
     exercise_details_list = list(chain(word_zh_exercises,
                                  word_pl_exercises,
                                  sentence_zh_exercises,
                                  sentence_pl_exercises,
-                                 explanation_exercises,
-                                 explanation_image_exercises))
+                                 explanation_exercises))
 
     return sorted(exercise_details_list,
                   key=lambda instance: instance.exercise.number)

@@ -9,8 +9,7 @@ from django.core.urlresolvers import reverse
 
 from models import WordZH, WordPL, Lesson, \
     WordZHExercise, WORD_ZH, Exercise, WordPLExercise, SentenceZHExercise, SentencePLExercise, ExplanationExercise, \
-    EXPLANATION, SENTENCE_PL, SENTENCE_ZH, WORD_PL, SentencePL, SentenceZH, \
-    EXPLANATION_IMAGE, ExplanationImageExercise, exercise_type_to_model_map, exercise_type_to_name_map
+    EXPLANATION, SENTENCE_PL, SENTENCE_ZH, WORD_PL, SentencePL, SentenceZH, exercise_type_to_name_map
 from translations.models import SentenceTranslation, WordTranslation
 
 
@@ -189,17 +188,23 @@ def modify_exercise_sentence_pl(request, exercise_id):
     else:
         return render(request, 'exercises/sentence_pl.html', {'exercise_details': exercise_sentence_pl})
 
+
 def add_exercise_explanation(request, lesson_id):
     lesson = Lesson.objects.get(id=lesson_id)
     if request.method == 'POST':
         exercise_type = EXPLANATION
         exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number') or None)
         exercise.save()
-        explanation = ExplanationExercise(text=request.POST.get('text'), exercise=exercise)
-        explanation.save()
+        exercise_explanation = ExplanationExercise(text=request.POST.get('text'), exercise=exercise)
+        if 'file' in request.FILES:
+            image_file = request.FILES['file']
+            image_file.name = save_image_for_exercise(image_file)
+            exercise_explanation.image = image_file
+        exercise_explanation.save()
         return redirect('lessons:modify_lesson', lesson_id=lesson_id)
     else:
         return render(request, 'exercises/explanation.html', {'lesson': lesson})
+
 
 def modify_exercise_explanation(request, exercise_id):
     """
@@ -213,46 +218,14 @@ def modify_exercise_explanation(request, exercise_id):
     exercise_explanation = ExplanationExercise.objects.get(exercise=exercise)
     if request.method == 'POST':
         exercise_explanation.text = request.POST.get('text')
+        if 'file' in request.FILES:
+            image_file = request.FILES['file']
+            image_file.name = save_image_for_exercise(image_file)
+            exercise_explanation.image = image_file
         exercise_explanation.save()
         return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
     else:
         return render(request, 'exercises/explanation.html', {'exercise_details': exercise_explanation})
-
-
-def add_exercise_explanation_image(request, lesson_id):
-    lesson = Lesson.objects.get(id=lesson_id)
-    if request.method == 'POST':
-        exercise_type = EXPLANATION_IMAGE
-        exercise = Exercise(lesson=lesson, type=exercise_type, number=request.POST.get('number'))
-        exercise.save()
-        file = request.FILES['file']
-        file.name = unicode(uuid.uuid4()) + "." + file.name.split(".")[-1]
-        explanation_image = ExplanationImageExercise(text=request.POST.get('text'), image=file, exercise=exercise)
-        explanation_image.save()
-        return redirect('lessons:modify_lesson', lesson=lesson)
-    else:
-        return render(request, 'exercises/explanation_image.html', {'lesson': lesson})
-
-
-def modify_exercise_explanation_image(request, exercise_id):
-    """
-    Modify exercise - explanation with image - for a lesson
-    :param request: HTTP request
-    :param lesson_id: id of lesson that exercise belongs to
-    :param exercise_id: id of the exercise
-    :return: HTTP response
-    """
-    exercise = Exercise.objects.get(id=exercise_id)
-    exercise_explanation_image = ExplanationImageExercise.objects.get(exercise=exercise)
-    if request.method == 'POST':
-        exercise_explanation_image.text=request.POST.get('text')
-        file = request.FILES['file']
-        file.name = unicode(uuid.uuid4()) + "." + file.name.split(".")[-1]
-        exercise_explanation_image.image = file
-        exercise_explanation_image.save()
-        return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
-    else:
-        return render(request, 'exercises/explanation_image.html', {'exercise_details': exercise_explanation_image})
 
 
 def save_image_for_exercise(file):

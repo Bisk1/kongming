@@ -22,7 +22,5 @@ urlpatterns = patterns('',
     url(r'^add_exercise_explanation/(?P<lesson_id>\d+)/$', views.add_exercise_explanation, name='add_exercise_explanation'),
     url(r'^modify_exercise_explanation/(?P<exercise_id>\d+)/$', views.modify_exercise_explanation, name='modify_exercise_explanation'),
 
-    url(r'^add_exercise_explanation_image/(?P<lesson_id>\d+)/$', views.add_exercise_explanation_image, name='add_exercise_explanation_image'),
-    url(r'^modify_exercise_explanation_image/(?P<exercise_id>\d+)/$', views.modify_exercise_explanation_image, name='modify_exercise_explanation_image'),
 
 )
