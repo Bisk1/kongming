@@ -118,7 +118,7 @@ CREATE TABLE `auth_user` (
   `date_joined` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -127,7 +127,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$fpVv56qkTUFf$PM9ce8S60mkJIupgqNwdYYWjSOTrvV1HQhfsQg2a4qM=','2015-06-07 11:23:05',1,'admin','','','',1,1,'2015-01-18 22:27:06');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$fpVv56qkTUFf$PM9ce8S60mkJIupgqNwdYYWjSOTrvV1HQhfsQg2a4qM=','2015-06-17 17:10:42',1,'admin','','','',1,1,'2015-01-18 22:27:06'),(2,'pbkdf2_sha256$12000$wK5OlvLN4QTD$Od/cRnk+z6p3lEhR9cZhLSthgndiTLRn6l1zJamMzU4=','2015-06-16 19:49:26',0,'daniel','','','bisker@op.pl',0,1,'2015-06-16 19:49:15'),(3,'pbkdf2_sha256$12000$8n6FJU8XDUcT$vNXyd5tZhe5ZWS/JZ1dfV+aScnuYWLxjO9e2oH7ZrHo=','2015-06-17 17:10:25',0,'daniel1','','','bisker@op.pl',0,1,'2015-06-17 17:04:24');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -237,7 +237,7 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_label` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -246,7 +246,7 @@ CREATE TABLE `django_content_type` (
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'log entry','admin','logentry'),(2,'permission','auth','permission'),(3,'group','auth','group'),(4,'user','auth','user'),(5,'content type','contenttypes','contenttype'),(6,'session','sessions','session'),(8,'lesson','chinesetool','lesson'),(9,'word pl','chinesetool','wordpl'),(10,'word zh','chinesetool','wordzh'),(11,'word translation','chinesetool','wordtranslation'),(12,'sentence pl','chinesetool','sentencepl'),(13,'sentence zh','chinesetool','sentencezh'),(14,'sentence translation','chinesetool','sentencetranslation'),(15,'subscription','chinesetool','subscription'),(16,'word skill','chinesetool','wordskill'),(17,'lesson action','chinesetool','lessonaction'),(18,'exercise','chinesetool','exercise'),(19,'exercise action','chinesetool','exerciseaction'),(20,'word zh exercise','chinesetool','wordzhexercise'),(21,'word pl exercise','chinesetool','wordplexercise'),(22,'sentence zh exercise','chinesetool','sentencezhexercise'),(23,'sentence pl exercise','chinesetool','sentenceplexercise'),(24,'explanation exercise','chinesetool','explanationexercise'),(25,'explanation image exercise','chinesetool','explanationimageexercise'),(26,'migration history','south','migrationhistory'),(27,'sentence pl','translations','sentencepl'),(28,'sentence translation','translations','sentencetranslation'),(29,'word zh','translations','wordzh'),(30,'word pl','translations','wordpl'),(31,'lesson action','lessons','lessonaction'),(32,'exercise','lessons','exercise');
+INSERT INTO `django_content_type` VALUES (1,'log entry','admin','logentry'),(2,'permission','auth','permission'),(3,'group','auth','group'),(4,'user','auth','user'),(5,'content type','contenttypes','contenttype'),(6,'session','sessions','session'),(8,'lesson','chinesetool','lesson'),(9,'word pl','chinesetool','wordpl'),(10,'word zh','chinesetool','wordzh'),(11,'word translation','chinesetool','wordtranslation'),(12,'sentence pl','chinesetool','sentencepl'),(13,'sentence zh','chinesetool','sentencezh'),(14,'sentence translation','chinesetool','sentencetranslation'),(15,'subscription','chinesetool','subscription'),(16,'word skill','chinesetool','wordskill'),(17,'lesson action','chinesetool','lessonaction'),(18,'exercise','chinesetool','exercise'),(19,'exercise action','chinesetool','exerciseaction'),(20,'word zh exercise','chinesetool','wordzhexercise'),(21,'word pl exercise','chinesetool','wordplexercise'),(22,'sentence zh exercise','chinesetool','sentencezhexercise'),(23,'sentence pl exercise','chinesetool','sentenceplexercise'),(24,'explanation exercise','chinesetool','explanationexercise'),(25,'explanation image exercise','chinesetool','explanationimageexercise'),(26,'migration history','south','migrationhistory'),(27,'sentence pl','translations','sentencepl'),(28,'sentence translation','translations','sentencetranslation'),(29,'word zh','translations','wordzh'),(30,'word pl','translations','wordpl'),(31,'lesson action','lessons','lessonaction'),(32,'exercise','lessons','exercise'),(33,'explanation exercise','exercises','explanationexercise'),(34,'exercise','exercises','exercise');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -272,7 +272,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('380iatljerywpo96v0bijyqh6dyalw2l','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-06-21 11:23:05'),('46sb40z4it6ll4ntiq8avovign3st603','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-03-19 18:14:50'),('6wbjby7ok6m5lg1vhxk9itqv7bzs8a4c','ODM0OTlmYTcxYTBmOGIyNjA4N2FkYTlkMjFlOTgyYjM1YmY3OTM1MDp7ImRqYW5nb19sYW5ndWFnZSI6InBsIn0=','2015-05-13 19:34:16'),('8pbjyr0ck14qenjlmy6b0mvakn7xlwz7','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-02-05 21:14:40'),('8wreqz89urjqe6ut7e6zryuddse76h2y','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-05-16 07:53:19'),('92qbprqu3hopxfzn4fr1l294wyz3tiv9','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-02-01 22:27:49'),('a7vgvyhnuk4b1h2rh0aqesjdkomi59rv','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-04-29 19:14:54'),('k0h8vdh3hbffpc9y9jwbgjrundnk8eal','OGVlODk1ZWE0ZWExNmE0MWRiZWY2MWVjZDE3NTgxZmQ4MzdkNmI0Yzp7Il9hdXRoX3VzZXJfaWQiOjEsImRqYW5nb19sYW5ndWFnZSI6ImVuIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ==','2015-03-30 20:11:32'),('w65qa1pnj4mcvly604vigtd4r4magwkr','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-05-27 18:10:11');
+INSERT INTO `django_session` VALUES ('46sb40z4it6ll4ntiq8avovign3st603','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-03-19 18:14:50'),('5idzjxs0zwx5knbg7kaxfj4gla5iz2qc','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-07-01 17:10:42'),('6wbjby7ok6m5lg1vhxk9itqv7bzs8a4c','ODM0OTlmYTcxYTBmOGIyNjA4N2FkYTlkMjFlOTgyYjM1YmY3OTM1MDp7ImRqYW5nb19sYW5ndWFnZSI6InBsIn0=','2015-05-13 19:34:16'),('8pbjyr0ck14qenjlmy6b0mvakn7xlwz7','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-02-05 21:14:40'),('8wreqz89urjqe6ut7e6zryuddse76h2y','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-05-16 07:53:19'),('92qbprqu3hopxfzn4fr1l294wyz3tiv9','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-02-01 22:27:49'),('a7vgvyhnuk4b1h2rh0aqesjdkomi59rv','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-04-29 19:14:54'),('k0h8vdh3hbffpc9y9jwbgjrundnk8eal','OGVlODk1ZWE0ZWExNmE0MWRiZWY2MWVjZDE3NTgxZmQ4MzdkNmI0Yzp7Il9hdXRoX3VzZXJfaWQiOjEsImRqYW5nb19sYW5ndWFnZSI6ImVuIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ==','2015-03-30 20:11:32'),('w65qa1pnj4mcvly604vigtd4r4magwkr','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-05-27 18:10:11');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -291,7 +291,7 @@ CREATE TABLE `exercises_exercise` (
   PRIMARY KEY (`id`),
   KEY `chinesetool_exercise_37003e55` (`lesson_id`),
   CONSTRAINT `lesson_id_refs_id_027df89d` FOREIGN KEY (`lesson_id`) REFERENCES `lessons_lesson` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=193 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=203 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -300,7 +300,7 @@ CREATE TABLE `exercises_exercise` (
 
 LOCK TABLES `exercises_exercise` WRITE;
 /*!40000 ALTER TABLE `exercises_exercise` DISABLE KEYS */;
-INSERT INTO `exercises_exercise` VALUES (96,16,'f',1),(97,16,'f',2),(98,16,'b',3),(99,16,'f',4),(100,16,'f',5),(101,16,'c',6),(102,16,'f',7),(103,18,'f',1),(104,18,'f',2),(105,18,'b',3),(106,18,'b',4),(107,18,'f',5),(108,18,'b',6),(111,18,'b',9),(112,18,'c',10),(113,18,'c',7),(114,18,'c',8),(115,18,'c',11),(117,19,'c',2),(118,19,'b',3),(119,19,'c',4),(121,19,'f',1),(123,19,'b',5),(125,19,'b',7),(127,19,'c',6),(128,19,'c',9),(129,19,'b',8),(130,19,'c',10),(131,20,'f',1),(133,20,'d',3),(134,20,'e',5),(135,20,'e',4),(136,20,'f',2),(139,21,'f',1),(140,21,'f',2),(141,20,'d',NULL),(142,20,'d',NULL),(149,16,'c',NULL),(150,16,'c',NULL),(151,16,'c',NULL),(152,16,'c',NULL),(153,16,'c',NULL),(154,16,'c',NULL),(155,16,'c',NULL),(156,16,'c',NULL),(157,16,'c',NULL),(158,16,'c',NULL),(161,16,'c',NULL),(162,16,'c',NULL),(164,16,'c',NULL),(166,16,'c',NULL),(167,16,'c',NULL),(169,16,'c',NULL),(173,16,'c',NULL),(174,16,'c',NULL),(175,16,'c',NULL),(176,20,'c',NULL),(177,20,'c',NULL),(178,20,'c',NULL),(179,20,'c',NULL),(180,20,'c',NULL),(181,20,'d',NULL),(182,20,'d',NULL),(183,20,'d',6),(184,20,'f',NULL),(185,20,'f',7),(186,16,'d',NULL),(187,16,'d',NULL),(188,16,'d',NULL),(189,16,'d',NULL),(190,16,'d',NULL),(191,16,'d',NULL),(192,16,'d',NULL);
+INSERT INTO `exercises_exercise` VALUES (96,16,'f',1),(97,16,'f',2),(98,16,'b',3),(99,16,'f',4),(100,16,'f',5),(101,16,'c',6),(102,16,'f',7),(103,18,'f',1),(104,18,'f',2),(105,18,'b',3),(106,18,'b',4),(107,18,'f',5),(108,18,'b',6),(111,18,'b',9),(112,18,'c',10),(113,18,'c',7),(114,18,'c',8),(115,18,'c',11),(117,19,'c',2),(118,19,'b',3),(119,19,'c',4),(121,19,'f',1),(123,19,'b',5),(125,19,'b',7),(127,19,'c',6),(128,19,'c',9),(129,19,'b',8),(130,19,'c',10),(131,20,'f',1),(133,20,'d',3),(134,20,'e',5),(135,20,'e',4),(136,20,'f',2),(139,21,'f',1),(140,21,'f',2),(141,20,'d',NULL),(142,20,'d',NULL),(149,16,'c',NULL),(150,16,'c',NULL),(151,16,'c',NULL),(152,16,'c',NULL),(153,16,'c',NULL),(154,16,'c',NULL),(155,16,'c',NULL),(156,16,'c',NULL),(157,16,'c',NULL),(158,16,'c',NULL),(161,16,'c',NULL),(162,16,'c',NULL),(164,16,'c',NULL),(166,16,'c',NULL),(167,16,'c',NULL),(169,16,'c',NULL),(173,16,'c',NULL),(174,16,'c',NULL),(175,16,'c',NULL),(176,20,'c',NULL),(177,20,'c',NULL),(178,20,'c',NULL),(179,20,'c',NULL),(180,20,'c',NULL),(181,20,'d',NULL),(182,20,'d',NULL),(183,20,'d',6),(184,20,'f',NULL),(185,20,'f',7),(186,16,'d',NULL),(187,16,'d',NULL),(188,16,'d',NULL),(189,16,'d',NULL),(190,16,'d',NULL),(191,16,'d',NULL),(192,16,'d',NULL),(193,22,'f',NULL),(194,22,'f',NULL),(195,22,'f',NULL),(196,22,'f',1),(197,22,'e',2),(198,22,'f',3),(199,22,'f',4),(200,22,'f',5),(201,22,'d',6),(202,22,'e',7);
 /*!40000 ALTER TABLE `exercises_exercise` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -315,10 +315,11 @@ CREATE TABLE `exercises_explanationexercise` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `exercise_id` int(11) NOT NULL,
   `text` longtext COLLATE utf8_bin NOT NULL,
+  `image` varchar(100) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `chinesetool_explanationexercise_c18e0af4` (`exercise_id`),
   CONSTRAINT `exercise_id_refs_id_5e9138eb` FOREIGN KEY (`exercise_id`) REFERENCES `exercises_exercise` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -327,35 +328,8 @@ CREATE TABLE `exercises_explanationexercise` (
 
 LOCK TABLES `exercises_explanationexercise` WRITE;
 /*!40000 ALTER TABLE `exercises_explanationexercise` DISABLE KEYS */;
-INSERT INTO `exercises_explanationexercise` VALUES (29,96,'W pierwszej lekcji dowiesz się jak pisać używając chińskich znaków.'),(30,97,'Na kolejnym slajdzie pojawi się słowo \'ja\'  do przetłumaczenia z języka polskiego na chiński. Puste pole przygotowane jest do wypełnienia chińskimi znakami. Dlatego gdy będziesz stawiał zwykłe znaki łacińskie przy pomocy klawiatury, pojawią się chińskie znaki odpowiadające twoim. Na koljenym slajdzie wprowadź trransliterację \'wo\' i wybierz pierwszą podpowiedź lub naciśnij \'1\'.'),(31,99,'Ten sposób zapisu nazywa się \"pinyin\". Jest to obecnie najpowszechniejsza metoda do zapisu chińskich znaków za pomocą liter łacińskich. Tutaj możesz z niego korzystać na każdej lekcji.'),(32,100,'Teraz czeka cię odwrotne zadanie. Przetłumacz chiński znak 我 na słowo polskie (to samo które tłumaczyłeś przed chwilą).'),(33,102,'Znasz już zasady działania - możesz zapoznać się z kolejnymi lekcjami!'),(34,103,'ja - 我'),(35,104,'ty - 你'),(36,107,'on - 他\nona - 她\n'),(39,121,'Liczba mnoga jest utworzona w prosty sposób - przez dodanie znaku 们 na końcu: 我们 - my\n你们 - wy \n他们 - oni \n她们 - one (o kobietach) \n它们 - one (o zwierzętach i rzeczach)'),(40,131,'Najprostsze przywitanie to 你好! (ni3hao5), czyli \"Cześć!\". Powstaje ono przez połączenie 你 (ty) i  好 (dobry). Jeżeli zwracasz się do wielu osób, powinieneś użyć jednej z form:<br>\n您好(nin2hao3) - cześć wam <br>\nlub<br>\n大家好  - cześć wszystkim\n\n'),(41,136,'Nieco bardziej formalnym zwrotem jest:<br>\n您好!(nin2hao3)<br>\nSłowo 您(nin2) oznacza również drugą osobę liczby pojedynczej - \"ty\" - ale jest używane zwrotach grzecznościowych.<br>\nNie ma zwrotu 您们好 - jeżeli zwracasz się w sposób grzecznościowy do grupy osób, możesz użyć również formy 您(nin2).'),(43,139,'Język mandaryński (podobnie jak inne odmiany chińskiego) jest językiem tonalnym. Oznacza to, że intonacja słów wyraża nie tylko emocje mówcy, ale także nadaje słowom znaczenie. Jedno słowo, wymówione na 4 sposoby, lecz za każdym razem na inną melodię, będzie nieodróżnialne dla niewprawnego słuchacza, ale może oznaczać 4 całkowicie różne rzeczy dla Chińczyka!<br>\nPrzykład:<br>\n妈 (ma1) - mama<br>\n马 (ma3) - koń<br>\n麻 - (ma2) - konopia<br>\n骂 (ma4) - nakrzyczeć na kogoś<br>'),(44,140,'Pierwszy ton jest płaski i wysoki. W pinyin oznacza się go płaską linią nad literą lub cyfrą 1, na przykład:<br>\n妈 (ma1)\n她 (ta1)\n发 (fa1)'),(45,185,'Zwrot 你好 nie jest tak potoczny jak polskie \"cześć\", możesz więc używać \r\ngo wobec obcych lub starszych od Ciebie osób.');
+INSERT INTO `exercises_explanationexercise` VALUES (29,96,'W pierwszej lekcji dowiesz się jak pisać używając chińskich znaków.',NULL),(30,97,'Na kolejnym slajdzie pojawi się słowo \'ja\'  do przetłumaczenia z języka polskiego na chiński. Puste pole przygotowane jest do wypełnienia chińskimi znakami. Dlatego gdy będziesz stawiał zwykłe znaki łacińskie przy pomocy klawiatury, pojawią się chińskie znaki odpowiadające twoim. Wprowadź transliterację \'wo\' i wybierz pierwszą podpowiedź lub naciśnij \'1\'.',NULL),(31,99,'Ten sposób zapisu nazywa się \"pinyin\". Jest to obecnie najpowszechniejsza metoda do zapisu chińskich znaków za pomocą liter łacińskich. Tutaj możesz z niego korzystać na każdej lekcji.',NULL),(32,100,'Teraz czeka cię odwrotne zadanie. Przetłumacz chiński znak 我 na słowo polskie (to samo które tłumaczyłeś przed chwilą).',NULL),(33,102,'Znasz już zasady działania - możesz zapoznać się z kolejnymi lekcjami!',NULL),(34,103,'ja - 我',NULL),(35,104,'ty - 你',NULL),(36,107,'on - 他\nona - 她\n',NULL),(39,121,'Liczba mnoga jest utworzona w prosty sposób - przez dodanie znaku 们 na końcu: 我们 - my\n你们 - wy \n他们 - oni \n她们 - one (o kobietach) \n它们 - one (o zwierzętach i rzeczach)',NULL),(40,131,'Najprostsze przywitanie to 你好! (ni3hao5), czyli \"Cześć!\". Powstaje ono przez połączenie 你 (ty) i  好 (dobry). Jeżeli zwracasz się do wielu osób, powinieneś użyć jednej z form:<br>\n您好(nin2hao3) - cześć wam <br>\nlub<br>\n大家好  - cześć wszystkim\n\n',NULL),(41,136,'Nieco bardziej formalnym zwrotem jest:<br>\n您好!(nin2hao3)<br>\nSłowo 您(nin2) oznacza również drugą osobę liczby pojedynczej - \"ty\" - ale jest używane zwrotach grzecznościowych.<br>\nNie ma zwrotu 您们好 - jeżeli zwracasz się w sposób grzecznościowy do grupy osób, możesz użyć również formy 您(nin2).',NULL),(43,139,'Język mandaryński (podobnie jak inne odmiany chińskiego) jest językiem tonalnym. Oznacza to, że intonacja słów wyraża nie tylko emocje mówcy, ale także nadaje słowom znaczenie. Jedno słowo, wymówione na 4 sposoby, lecz za każdym razem na inną melodię, będzie nieodróżnialne dla niewprawnego słuchacza, ale może oznaczać 4 całkowicie różne rzeczy dla Chińczyka!<br>\nPrzykład:<br>\n妈 (ma1) - mama<br>\n马 (ma3) - koń<br>\n麻 - (ma2) - konopia<br>\n骂 (ma4) - nakrzyczeć na kogoś<br>',NULL),(44,140,'Pierwszy ton jest płaski i wysoki. W pinyin oznacza się go płaską linią nad literą lub cyfrą 1, na przykład:<br>\n妈 (ma1)\n她 (ta1)\n发 (fa1)',NULL),(45,185,'Zwrot 你好 nie jest tak potoczny jak polskie \"cześć\", możesz więc używać \r\ngo wobec obcych lub starszych od Ciebie osób.',NULL),(46,196,'Jak się masz? - 你好吗？ dosłownie: ty dobrze?)\r\nZwrot 吗(ma5) na końcu sygnalizuje pytanie. Zwykle na takie pytanie można odpowiedzieć \"tak\" lub \"nie\".',''),(47,198,'我很好! - Dobrze! (dosłownie: ja bardzo dobrze). To typowa odpowiedź na pytanie.',''),(48,199,'Aby zadać to samo pytanie rozmówcy, skorzystaj z frazy:\r\n你呢？ - A ty? ',''),(49,200,'Zwrot 呢 dodany na końcu odwraca pytania na kogoś lub coś innego, jest więc odpowiednikiem polskiego zdania zaczynającego się od \"A ..\", np. A ty? A oni? A jutro?','');
 /*!40000 ALTER TABLE `exercises_explanationexercise` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `exercises_explanationimageexercise`
---
-
-DROP TABLE IF EXISTS `exercises_explanationimageexercise`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `exercises_explanationimageexercise` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `exercise_id` int(11) NOT NULL,
-  `text` longtext COLLATE utf8_bin NOT NULL,
-  `image` varchar(100) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `chinesetool_explanationimageexercise_c18e0af4` (`exercise_id`),
-  CONSTRAINT `exercise_id_refs_id_2b1196a3` FOREIGN KEY (`exercise_id`) REFERENCES `exercises_exercise` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `exercises_explanationimageexercise`
---
-
-LOCK TABLES `exercises_explanationimageexercise` WRITE;
-/*!40000 ALTER TABLE `exercises_explanationimageexercise` DISABLE KEYS */;
-/*!40000 ALTER TABLE `exercises_explanationimageexercise` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -374,7 +348,7 @@ CREATE TABLE `exercises_sentenceplexercise` (
   KEY `chinesetool_sentenceplexercise_9bad8f02` (`sentence_id`),
   CONSTRAINT `exercise_id_refs_id_e47a095f` FOREIGN KEY (`exercise_id`) REFERENCES `exercises_exercise` (`id`),
   CONSTRAINT `sentence_id_refs_id_22799b68` FOREIGN KEY (`sentence_id`) REFERENCES `translations_sentencepl` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -383,7 +357,7 @@ CREATE TABLE `exercises_sentenceplexercise` (
 
 LOCK TABLES `exercises_sentenceplexercise` WRITE;
 /*!40000 ALTER TABLE `exercises_sentenceplexercise` DISABLE KEYS */;
-INSERT INTO `exercises_sentenceplexercise` VALUES (1,133,6),(2,183,7);
+INSERT INTO `exercises_sentenceplexercise` VALUES (1,133,6),(2,183,7),(3,201,8);
 /*!40000 ALTER TABLE `exercises_sentenceplexercise` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -403,7 +377,7 @@ CREATE TABLE `exercises_sentencezhexercise` (
   KEY `chinesetool_sentencezhexercise_9bad8f02` (`sentence_id`),
   CONSTRAINT `exercise_id_refs_id_913ff349` FOREIGN KEY (`exercise_id`) REFERENCES `exercises_exercise` (`id`),
   CONSTRAINT `sentence_id_refs_id_5922332b` FOREIGN KEY (`sentence_id`) REFERENCES `translations_sentencezh` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -412,7 +386,7 @@ CREATE TABLE `exercises_sentencezhexercise` (
 
 LOCK TABLES `exercises_sentencezhexercise` WRITE;
 /*!40000 ALTER TABLE `exercises_sentencezhexercise` DISABLE KEYS */;
-INSERT INTO `exercises_sentencezhexercise` VALUES (1,134,8),(2,135,9);
+INSERT INTO `exercises_sentencezhexercise` VALUES (1,134,8),(2,135,9),(3,197,11),(4,202,12);
 /*!40000 ALTER TABLE `exercises_sentencezhexercise` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -492,7 +466,7 @@ CREATE TABLE `learn_exerciseaction` (
   KEY `chinesetool_exerciseaction_ff58a6f6` (`lesson_action_id`),
   CONSTRAINT `exercise_id_refs_id_d0ef0d56` FOREIGN KEY (`exercise_id`) REFERENCES `exercises_exercise` (`id`),
   CONSTRAINT `lesson_action_id_refs_id_e21c761f` FOREIGN KEY (`lesson_action_id`) REFERENCES `learn_lessonaction` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=446 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=474 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -501,7 +475,7 @@ CREATE TABLE `learn_exerciseaction` (
 
 LOCK TABLES `learn_exerciseaction` WRITE;
 /*!40000 ALTER TABLE `learn_exerciseaction` DISABLE KEYS */;
-INSERT INTO `learn_exerciseaction` VALUES (419,121,116,0,1),(420,117,116,0,2),(421,118,116,0,3),(422,119,116,0,4),(423,123,116,0,5),(424,127,116,0,6),(425,125,116,0,7),(426,129,116,0,8),(427,128,116,0,9),(428,130,116,0,10),(429,131,117,0,1),(430,139,119,0,1),(431,140,119,0,2),(439,96,123,0,1),(440,97,123,0,2),(441,98,123,0,3),(442,99,123,0,4),(443,100,123,0,5),(444,101,123,0,6),(445,102,123,0,7);
+INSERT INTO `learn_exerciseaction` VALUES (419,121,116,0,1),(420,117,116,0,2),(421,118,116,0,3),(422,119,116,0,4),(423,123,116,0,5),(424,127,116,0,6),(425,125,116,0,7),(426,129,116,0,8),(427,128,116,0,9),(428,130,116,0,10),(429,131,117,0,1),(430,139,119,0,1),(431,140,119,0,2),(439,96,123,0,1),(440,97,123,0,2),(441,98,123,0,3),(442,99,123,0,4),(443,100,123,0,5),(444,101,123,0,6),(445,102,123,0,7),(467,96,127,0,1),(468,97,127,0,2),(469,98,127,0,3),(470,99,127,0,4),(471,100,127,0,5),(472,101,127,0,6),(473,102,127,0,7);
 /*!40000 ALTER TABLE `learn_exerciseaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -525,7 +499,7 @@ CREATE TABLE `learn_lessonaction` (
   KEY `chinesetool_lessonaction_37003e55` (`lesson_id`),
   CONSTRAINT `lesson_id_refs_id_ea897e7e` FOREIGN KEY (`lesson_id`) REFERENCES `lessons_lesson` (`id`),
   CONSTRAINT `user_id_refs_id_6762f5c2` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -534,7 +508,7 @@ CREATE TABLE `learn_lessonaction` (
 
 LOCK TABLES `learn_lessonaction` WRITE;
 /*!40000 ALTER TABLE `learn_lessonaction` DISABLE KEYS */;
-INSERT INTO `learn_lessonaction` VALUES (91,1,1,0,1,16,'p'),(116,10,0,0,1,19,NULL),(117,1,1,0,1,20,NULL),(119,2,1,0,1,21,NULL),(123,7,7,0,1,16,'p');
+INSERT INTO `learn_lessonaction` VALUES (91,1,1,0,1,16,'p'),(116,10,0,0,1,19,NULL),(117,1,1,0,1,20,NULL),(119,2,1,0,1,21,NULL),(123,7,7,0,1,16,'p'),(127,7,7,1,1,16,'p');
 /*!40000 ALTER TABLE `learn_lessonaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -551,7 +525,7 @@ CREATE TABLE `lessons_lesson` (
   `exercises_number` int(11) NOT NULL,
   `requirement_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -560,7 +534,7 @@ CREATE TABLE `lessons_lesson` (
 
 LOCK TABLES `lessons_lesson` WRITE;
 /*!40000 ALTER TABLE `lessons_lesson` DISABLE KEYS */;
-INSERT INTO `lessons_lesson` VALUES (16,'Witaj!',7,NULL),(18,'Osoba - liczba pojedyncza',11,16),(19,'Osoba - liczba mnoga',10,18),(20,'Przywitanie',7,19),(21,'Tony',2,16);
+INSERT INTO `lessons_lesson` VALUES (16,'Witaj!',7,NULL),(18,'Osoba - liczba pojedyncza',11,16),(19,'Osoba - liczba mnoga',10,18),(20,'Przywitanie',7,19),(21,'Tony',2,16),(22,'Jak się masz?',7,18);
 /*!40000 ALTER TABLE `lessons_lesson` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -601,7 +575,7 @@ CREATE TABLE `translations_sentencepl` (
   `sentence` varchar(255) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sentence` (`sentence`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -610,7 +584,7 @@ CREATE TABLE `translations_sentencepl` (
 
 LOCK TABLES `translations_sentencepl` WRITE;
 /*!40000 ALTER TABLE `translations_sentencepl` DISABLE KEYS */;
-INSERT INTO `translations_sentencepl` VALUES (5,'Ala ma kota.'),(6,'Cześć!'),(7,'Cześć! (grzecznościowo, do dużej grupy ludzi)'),(2,'Gdzie jest nowa szkoła?'),(1,'Lubię uczyć się chińskiego.');
+INSERT INTO `translations_sentencepl` VALUES (5,'Ala ma kota.'),(6,'Cześć!'),(7,'Cześć! (grzecznościowo, do dużej grupy ludzi)'),(2,'Gdzie jest nowa szkoła?'),(1,'Lubię uczyć się chińskiego.'),(8,'Mam się dobrze.');
 /*!40000 ALTER TABLE `translations_sentencepl` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -656,7 +630,7 @@ CREATE TABLE `translations_sentencezh` (
   `sentence` varchar(255) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sentence` (`sentence`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -665,7 +639,7 @@ CREATE TABLE `translations_sentencezh` (
 
 LOCK TABLES `translations_sentencezh` WRITE;
 /*!40000 ALTER TABLE `translations_sentencezh` DISABLE KEYS */;
-INSERT INTO `translations_sentencezh` VALUES (6,'Ala有猫。'),(3,'ZXZX'),(8,'你们好！'),(7,'你好！'),(9,'大家好！'),(10,'您好!'),(1,'我喜欢学习中文。'),(2,'新的学校在哪里？'),(5,'歇'),(4,'生动');
+INSERT INTO `translations_sentencezh` VALUES (6,'Ala有猫。'),(3,'ZXZX'),(12,'他呢？'),(8,'你们好！'),(11,'你好吗？'),(7,'你好！'),(9,'大家好！'),(10,'您好!'),(1,'我喜欢学习中文。'),(2,'新的学校在哪里？'),(5,'歇'),(4,'生动');
 /*!40000 ALTER TABLE `translations_sentencezh` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -766,7 +740,7 @@ CREATE TABLE `users_subscription` (
   PRIMARY KEY (`id`),
   KEY `chinesetool_subscription_4da47e07` (`name_id`),
   CONSTRAINT `name_id_refs_id_e6e066ce` FOREIGN KEY (`name_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -775,6 +749,7 @@ CREATE TABLE `users_subscription` (
 
 LOCK TABLES `users_subscription` WRITE;
 /*!40000 ALTER TABLE `users_subscription` DISABLE KEYS */;
+INSERT INTO `users_subscription` VALUES (1,2,'2015-06-16 19:49:15','2015-06-16 19:49:15','2015-07-16 19:49:15'),(2,3,'2015-06-17 17:04:24','2015-06-17 17:04:24','2015-07-17 17:04:24');
 /*!40000 ALTER TABLE `users_subscription` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -819,4 +794,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-06-15 23:12:17
+-- Dump completed on 2015-06-23 20:01:27
