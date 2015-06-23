@@ -1,190 +1,52 @@
-var getSourceLanguage = function() {
-    return $("#source_language").val();
-};
-
-var updateTranslationsTable = function(translations) {
-    var translationsTable = $("#translations_table").find("tbody").empty();
-        for (var i = 0; i < translations.length; i++) {
-            translationsTable
-                .insertWordInputWithWord(translations[i]);
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
         }
-};
-
-
-var checkAndUpdateTranslationsForm = function(word_to_translate) {
-    if(typeof word_to_translate == "undefined") {
-        word_to_translate = $("#word_to_search").val();
     }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+
+$(document).on('click', '#update', function() {
+    var topic = $("#topic").val();
+    var exercises_number = $("#exercises_number").val();
+    var requirement = $("#requirement option:selected").val();
+
+    var url = $(this).attr("action");
+    var formData = {};
+    formData["topic"] = topic;
+    formData["exercises_number"] = exercises_number;
+    formData["requirement"] = requirement;
+
     $.ajax({
-        url: window.location.href,
-        type: 'POST',
-        dataType: "json",
-        data: {
-            word_to_translate : word_to_translate,
-            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
-        },
-        success: function(data) {
-            $("#translations_header").html('Word: '  + word_to_translate);
-            updateTranslationsTable(data.translations);
-            $('#add_translation_button').show();
-        },
-        error: function(xhr, errmsg, err) {
-            $('#error_box').html(xhr.status + ": " + xhr.responseText).show();
+        url : url,
+        type: "POST",
+        data : formData,
+        success: function() {
+            $("#updated").show();
+            $("#update").css("background-color", "green");
         }
     });
-};
-
-var saveTranslations = function() {
-    $("#save_message").html('Saving...');
-    var word_to_translate = $("#word_to_search").val();
-    var translations = [];
-    var isTranslationsChinese = (getSourceLanguage() == 'polish');
-    $("#translations_table tr").each(function() {
-        if (isTranslationsChinese) {
-            translations.push({word: $(this).find(":nth-child(2) > input").val(), pinyin: $(this).find(":nth-child(4) > input").val()});
-        } else {
-            translations.push({word: $(this).find(":nth-child(2) > input").val()});
-        }
-    });
-    $.ajax({
-        url: window.location.href,
-        type: 'POST',
-        dataType: "json",
-        data: {
-            word_to_translate : word_to_translate,
-            translations : JSON.stringify(translations),
-            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
-        },
-        success: function(data) {
-            $("#save_message").html('Saved!');
-        },
-        error: function(xhr, errmsg, err) {
-            $('#error_box').html(xhr.status + ": " + xhr.responseText).show();
-        }
-    });
-};
-
-
-$.fn.insertWordInputWithWord = function(translation) {
-    if (getSourceLanguage() == 'chinese') {
-        this
-        .append($('<tr>')
-            .append($('<td>')
-                .append('Translation: ')
-            )
-            .append($('<td>')
-                .append('<input name="translations" value="' + translation.word + '">')
-            )
-            .append($('<td>')
-                .append('<button id="remove">Remove</button>')
-            )
-        )
-    } else {
-        this
-        .append($('<tr>')
-            .append($('<td>')
-                .append('Translation: ')
-            )
-            .append($('<td>')
-                .append('<input name="translations" value="' + translation.word + '">')
-            )
-            .append($('<td>')
-                .append('Pinyin')
-            )
-            .append($('<td>')
-                .append('<input name="pinyin" value="' + translation.pinyin + '">')
-            )
-            .append($('<td>')
-                .append('<button id="remove">Remove</button>')
-            )
-        )
-    }
-    return this;
-};
-
-
-$.fn.insertWordInput = function() {
-    if (getSourceLanguage() == 'chinese') {
-        this
-        .append($('<tr>')
-            .append($('<td>')
-                .append('Translation: ')
-            )
-            .append($('<td>')
-                .append('<input name="translations"/>')
-            )
-            .append($('<td>')
-                .append('<button id="remove">Remove</button>')
-            )
-        )
-    } else {
-        this
-        .append($('<tr>')
-            .append($('<td>')
-                .append('Translation: ')
-            )
-            .append($('<td>')
-                .append('<input name="translations"/>')
-            )
-            .append($('<td>')
-                .append('Pinyin')
-            )
-            .append($('<td>')
-                .append('<input name="pinyin"/>')
-            )
-            .append($('<td>')
-                .append('<button id="remove">Remove</button>')
-            )
-        )
-    }
-    return this;
-};
-
-$(document).ready(function() {
-
-    $(document).on("click", "#add_translation_button", function() {
-        $("#translations_table").find("tbody")
-        .insertWordInput();
-    });
-
-    $('#edit').click(function() {
-        checkAndUpdateTranslationsForm();
-    });
-
-    $("#word_to_search").keypress(function(e) {
-        if (e.which == 13) {
-            checkAndUpdateTranslationsForm();
-        }
-    });
-
-    $(document).on("click", "#remove", function() {
-        ($(this)).parent().parent().remove();
-    });
-
-    $("#word_to_search" ).autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: window.location.href,
-                type: 'POST',
-                dataType: "json",
-                data: {
-                    word_to_search : request.term,
-                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
-                },
-                success: function(data) {
-                    response(data['matching_words']);
-                },
-                error: function(xhr, errmsg, err) {
-                    $('#error_box').html(xhr.status + ": " + xhr.responseText).show();
-                }
-            });
-        },
-        select: function(event, ui) {
-            checkAndUpdateTranslationsForm(ui.item.value);
-        }
-    });
-
-    $("#save_button").click(function() {
-        saveTranslations();
-    })
 });
