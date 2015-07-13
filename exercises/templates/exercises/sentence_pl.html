@@ -9,7 +9,7 @@
 <div>Lekcja: {{ lesson.topic }}</div>
 Exercise - Polish sentence:
 {% if exercise_details %}
-    <form action="{% url 'exercises:modify_exercise_sentence_pl' exercise_id=exercise_details.exercise.id %}" method="post">
+    <form action="{% url 'exercises:modify_exercise_sentence_pl' exercise_id=exercise.id %}" method="post">
 {% else %}
     <form action="{% url 'exercises:add_exercise_sentence_pl' lesson_id=lesson.id %}" method="post">
 {% endif %}

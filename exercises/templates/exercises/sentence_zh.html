@@ -9,13 +9,13 @@
 <div>Lekcja: {{ lesson.topic }}</div>
 Exercise - Chinese sentence:
 {% if exercise_details %}
-    <form action="{% url 'exercises:modify_exercise_sentence_zh' exercise_id=exercise_details.exercise.id %}" method="post">
+    <form action="{% url 'exercises:modify_exercise_sentence_zh' exercise_id=exercise.id %}" method="post">
 {% else %}
     <form action="{% url 'exercises:add_exercise_sentence_zh' lesson_id=lesson.id %}" method="post">
 {% endif %}
     {% csrf_token %}
     <label>Zdanie chińskie</label>
-    <input class="sentence_to_search" name="sentence_zh" value="{{ exercise_details.exercise.sentence }}">
+    <input class="sentence_to_search" name="sentence_zh" value="{{ exercise.sentence }}">
     <div>Tłumaczenia:</div>
     <div id="translations-container">
         <table id="translations_table">

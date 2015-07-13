@@ -9,11 +9,11 @@ class LessonAdmin(admin.ModelAdmin):
 
 
 class ExerciseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'lesson', 'type', 'number')
+    list_display = ('id', 'lesson', 'number')
 
 
 class WordPLExerciseDetailsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'exercise', 'word')
+    list_display = ('id', 'word')
 
 
 admin.site.register(Exercise, ExerciseAdmin)

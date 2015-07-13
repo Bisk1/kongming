@@ -1,4 +1,6 @@
 import abc
+from django.contrib.contenttypes.generic import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 from django.db import models
 from enum import Enum
@@ -15,41 +17,15 @@ SENTENCE_PL = 'd'
 SENTENCE_ZH = 'e'
 EXPLANATION = 'f'
 
-LANGUAGE_CHOICES = {
-    (NONE, 'none'),
-    (WORD_PL, 'word_pl'),
-    (WORD_ZH, 'word_zh'),
-    (SENTENCE_PL, 'sentence_pl'),
-    (SENTENCE_ZH, 'sentence_zh'),
-    (EXPLANATION, 'explanation')
-}
-
-
 class Exercise(models.Model):
     lesson = models.ForeignKey(Lesson)
-    type = models.CharField(max_length=1, choices=LANGUAGE_CHOICES)
     number = models.IntegerField(null=True)
-
-    @property
-    def pretty_type_name(self):
-        if self.type == WORD_PL:
-            return 'Word PL'
-        elif self.type == WORD_ZH:
-            return 'Word ZH'
-        elif self.type == SENTENCE_PL:
-            return 'Sentence PL'
-        elif self.type == SENTENCE_ZH:
-            return 'Sentence ZH'
-        elif self.type == EXPLANATION:
-            return 'Explanation'
-        raise Exception("Unknown type name: " + self.type)
-
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    spec = GenericForeignKey('content_type', 'object_id')
 
     def __unicode__(self):
-        return unicode(self.lesson) + ' ' + unicode(self.id)
-
-    def type_name(self):
-        return exercise_type_to_name_map[self.type]
+        return unicode(self.spec)
 
 
 class ExerciseResultState(Enum):
@@ -143,41 +119,12 @@ class ExplanationExercise(AbstractExercise):
         return unicode(self.text)
 
 
-
-exercise_type_to_name_map = {
-    WORD_PL: 'word_pl',
-    WORD_ZH: 'word_zh',
-    SENTENCE_PL: 'sentence_pl',
-    SENTENCE_ZH: 'sentence_zh',
-    EXPLANATION: 'explanation',
-}
-
-exercise_type_to_model_map = {
-    WORD_PL: WordPLExercise,
-    WORD_ZH: WordZHExercise,
-    SENTENCE_PL: SentencePLExercise,
-    SENTENCE_ZH: SentenceZHExercise,
-    EXPLANATION: ExplanationExercise,
-}
-
-exercise_model_to_type_map = {
-    WordPLExercise: WORD_PL,
-    WordZHExercise: WORD_ZH,
-    SentencePLExercise: SENTENCE_PL,
-    SentenceZHExercise: SENTENCE_ZH,
-    ExplanationExercise: EXPLANATION,
+exercise_model_to_name_map = {
+    WordPLExercise: 'word_pl',
+    WordZHExercise: 'word_zh',
+    SentencePLExercise: 'sentence_pl',
+    SentenceZHExercise: 'sentence_zh',
+    ExplanationExercise: 'explanation',
 }
 
 
-def exercise_type_to_model(exercise_name):
-    try:
-        return exercise_type_to_model_map[exercise_name]
-    except KeyError:
-        raise Exception("Unknown exercise type: " + exercise_name)
-
-
-def exercise_model_to_type(model):
-    try:
-        return exercise_model_to_type_map[model]
-    except KeyError:
-        raise Exception("Unknown exercise model: " + model)

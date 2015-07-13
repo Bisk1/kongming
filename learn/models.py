@@ -3,12 +3,11 @@ import random
 from django.contrib.auth.models import User
 from django.db import models
 
-from exercises.models import Exercise, ExerciseResultState, exercise_type_to_model
+from exercises.models import Exercise, ExerciseResultState
 from lessons.models import Lesson
 
 PASS = 'p'
 FAIL = 'f'
-
 
 
 class LessonAction(models.Model):
@@ -93,7 +92,7 @@ class ExerciseAction(models.Model):
     number = models.IntegerField()
 
     def check(self, proposition):
-        response = self.get_description().check(proposition)
+        response = self.exercise.spec.check(proposition)
         if response['success']:
             self.result = ExerciseResultState.SUCCESS
         else:
@@ -101,13 +100,8 @@ class ExerciseAction(models.Model):
         return response
 
     def prepare(self):
-        response = self.get_description().prepare()
-        response['exercise_type'] = self.exercise.type_name()
+        response = self.exercise.spec.prepare()
+        response['exercise_type'] = self.exercise.content_type.name
         return response
 
-    def get_description(self):
-        return self.get_description_model().objects.get(exercise=self.exercise)
-
-    def get_description_model(self):
-        return exercise_type_to_model(self.exercise.type)
 

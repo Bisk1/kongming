@@ -6,7 +6,7 @@
 <div>Lekcja: {{ lesson.topic }}</div>
 Exercise - explanation:
 {% if exercise_details %}
-    <form enctype="multipart/form-data" action="{% url 'exercises:modify_exercise_explanation' exercise_id=exercise_details.exercise.id %}" method="post">
+    <form enctype="multipart/form-data" action="{% url 'exercises:modify_exercise_explanation' exercise_id=exercise.id %}" method="post">
 {% else %}
     <form enctype="multipart/form-data" action="{% url 'exercises:add_exercise_explanation' lesson_id=lesson.id %}" method="post">
 {% endif %}

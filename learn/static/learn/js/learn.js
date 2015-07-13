@@ -27,15 +27,15 @@ function updateResultsIcons(success) {
  */
 function showExerciseContent(exercise_type, json) {
     switch (exercise_type) {
-        case('word_zh'):
-        case('word_pl'):
+        case('word zh exercise'):
+        case('word pl exercise'):
             $('#word_or_sentence').html(json.word);
             break;
-        case('sentence_zh'):
-        case('sentence_pl'):
+        case('sentence zh exercise'):
+        case('sentence pl exercise'):
             $('#word_or_sentence').html(json.sentence);
             break;
-        case('explanation'):
+        case('explanation exercise'):
             $('#explanation_text').html(json.text);
             break;
     }
@@ -49,13 +49,13 @@ function showDivForExerciseType(exercise_type) {
     $('#explanation_exercise').hide();
     $('#word_or_sentence_exercise').hide();
     switch (exercise_type) {
-        case('word_zh'):
-        case('word_pl'):
-        case('sentence_zh'):
-        case('sentence_pl'):
+        case('word zh exercise'):
+        case('word pl exercise'):
+        case('sentence zh exercise'):
+        case('sentence pl exercise'):
             $('#word_or_sentence_exercise').show();
             break;
-        case('explanation'):
+        case('explanation exercise'):
             $('#explanation_exercise').show();
             break;
     }
@@ -153,7 +153,7 @@ $(document).ready(function() {
                     exercise_type = json.exercise_type;
                     showExerciseContent(exercise_type, json);
                     showDivForExerciseType(exercise_type);
-                    if (exercise_type == 'explanation') {
+                    if (exercise_type == 'explanation exercise') {
                         // explanation exercise is not checked - user goes to next exercise after reading
                         $('#check').hide();
                         $('#next').html("Continue").show();
@@ -163,12 +163,12 @@ $(document).ready(function() {
                         $('#check').html("Check").show();
                     }
                     switch (exercise_type) {
-                        case('word_pl'):
-                        case('sentence_pl'):
+                        case('word pl exercise'):
+                        case('sentence pl exercise'):
                             toggleChineseInput(true);
                             break;
-                        case('word_zh'):
-                        case('sentence_zh'):
+                        case('word zh exercise'):
+                        case('sentence zh exercise'):
                             toggleChineseInput(false);
                             break;
                     }

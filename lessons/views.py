@@ -67,29 +67,12 @@ def modify_lesson(request, lesson_id):
             exercise_to_remove = Exercise.objects.get(pk=request.POST.get('exercise_to_remove'))
             exercise_to_remove.delete()
     other_lessons = Lesson.objects.all().order_by('-topic')
-    exercise_details_list = get_exercises_details(lesson)
+    exercises = Exercise.objects.filter(lesson=lesson).order_by('number')
 
     return render(request, 'lessons/modify_lesson.html', {'lesson': lesson,
-                                                          'exercise_details_list': exercise_details_list,
+                                                          'exercises': exercises,
                                                           'other_lessons':other_lessons,
                                                           })
-
-
-def get_exercises_details(lesson):
-    exercises = Exercise.objects.filter(lesson=lesson)
-    word_zh_exercises = WordZHExercise.objects.filter(exercise__in=exercises)
-    word_pl_exercises = WordPLExercise.objects.filter(exercise__in=exercises)
-    sentence_zh_exercises = SentenceZHExercise.objects.filter(exercise__in=exercises)
-    sentence_pl_exercises = SentencePLExercise.objects.filter(exercise__in=exercises)
-    explanation_exercises = ExplanationExercise.objects.filter(exercise__in=exercises)
-    exercise_details_list = list(chain(word_zh_exercises,
-                                 word_pl_exercises,
-                                 sentence_zh_exercises,
-                                 sentence_pl_exercises,
-                                 explanation_exercises))
-
-    return sorted(exercise_details_list,
-                  key=lambda instance: instance.exercise.number)
 
 
 def delete_lesson(request, lesson_id):

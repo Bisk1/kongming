@@ -8,7 +8,7 @@
 <div>Lekcja: {{ lesson.topic }}</div>
 Exercise - Chinese word:
 {% if exercise_details %}
-    <form action="{% url 'exercises:modify_exercise_word_zh' exercise_id=exercise_details.exercise.id %}" method="post">
+    <form action="{% url 'exercises:modify_exercise_word_zh' exercise_id=exercise.id %}" method="post">
 {% else %}
     <form action="{% url 'exercises:add_exercise_word_zh' lesson_id=lesson.id %}" method="post">
 {% endif %}
