@@ -6,7 +6,7 @@
 <div id="source_language" style="visibility: hidden">polish</div>
 
 <div>Lekcja: {{ lesson.topic }}</div>
-Exercise - Polish word:
+Ćwiczenie - słowo polskie:
 {% if exercise %}
     <form action="{% url 'exercises:modify_word-pl' lesson_id=lesson.id exercise_id=exercise.id %}" method="post">
 {% else %}
@@ -16,16 +16,28 @@ Exercise - Polish word:
     <label>Słowo polskie</label>
     <input name="word_pl" value="{{ exercise.spec.word }}">
     <div>Tłumaczenia:</div>
-    {% for translation in exercise.spec.word.wordzh_set.all %}
-        <div>
-            <label>Słowo chińskie</label>
-            <input name="translations_zh_word" value="{{ translation.word }}">
-            <label>Pinyin</label>
-            <input name="translations_zh_pinyin" value="{{ translation.pinyin }}">
-        </div>
-    {% endfor %}
+    <div id="translations-container">
+        <table id="translations_table">
+            <tbody>
+            {% for translation in exercise.spec.word.wordzh_set.all %}
+                <tr>
+                    <td>
+                        <label>Tłumaczenie: </label>
+                        <input name="translations" value="{{ translation.word }}">
+                        <label>Pinyin: </label>
+                        <input name="pinyins" value="{{ translation.pinyin }}">
+                    </td>
+                    <td>
+                        <button id="remove" class="btn btn-default">Remove</button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    <button type="button" id="add_translation_button" class="btn btn-default">Dodaj</button>
+    </div>
+    <input type="submit" id="save" class="btn btn-default" value="Zapisz"></button>
 </form>
-<button id="save">Save</button>
 
 {% endblock %}
 {% block footer %}

@@ -108,7 +108,7 @@ class ExplanationExercise(AbstractExercise):
         return {'text': self.text}
 
     def __unicode__(self):
-        return self.text.decode('utf8')
+        return unicode(self.text)
 
 
 class ExerciseType(models.Model):
@@ -117,4 +117,4 @@ class ExerciseType(models.Model):
     model = models.ForeignKey(ContentType)
 
     def __unicode__(self):
-        return self.name.decode('utf8') + ' (' + self.slug.decode('utf8') +') - ' + self.model.name
+        return unicode(self.name + ' (' + self.slug +') - ' + self.model.name)

@@ -25,9 +25,8 @@ def modify_exercise(request, lesson_id, exercise_id):
     exercise_type_slug = exercise_type.slug
     return redirect('exercises:modify_' + exercise_type_slug, lesson_id=lesson_id, exercise_id=exercise_id)
 
+
 def get_exercise_type(content_type):
-    return content_type.get_object_for_this_type()
-    return ExerciseType.objects.get(model=content_type.model_class())
     for exercise_type in ExerciseType.objects.all():
         if exercise_type.model.name == content_type.name:
             return exercise_type
@@ -73,10 +72,10 @@ def modify_word_zh_exercise(request, lesson_id, exercise_id):
         for translation_pl in request.POST.getlist('translations'):
             word_pl = WordPL.objects.get_or_create(word=translation_pl)[0]
             WordTranslation.objects.get_or_create(word_zh=word_zh, word_pl=word_pl)
-        return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
         word_zh_exercise_spec = exercise.spec
         word_zh_exercise_spec.word = word_zh
         word_zh_exercise_spec.save()
+        return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
     else:
         return render(request, 'exercises/word_zh.html', {'lesson': lesson, 'exercise': exercise})
 
@@ -108,8 +107,10 @@ def modify_word_pl_exercise(request, lesson_id, exercise_id):
     lesson = Lesson.objects.get(id=lesson_id)
     if request.method == 'POST':
         word_pl = WordPL.objects.get_or_create(word=request.POST.get('word_pl'))[0]
-        for translation_zh in request.POST.getlist('translations'):
-            word_zh = WordZH.objects.get_or_create(word=translation_zh)[0]
+        for translation in WordTranslation.objects.filter(word_pl=word_pl):
+            translation.delete()
+        for translation_zh, pinyin in zip(request.POST.getlist('translations'), request.POST.getlist('pinyins')):
+            word_zh = WordZH.objects.get_or_create(word=translation_zh, pinyin=pinyin)[0]
             WordTranslation.objects.get_or_create(word_zh=word_zh, word_pl=word_pl)
         word_pl_exercise_spec = exercise.spec
         word_pl_exercise_spec.word = word_pl
@@ -146,9 +147,9 @@ def modify_sentence_zh_exercise(request, lesson_id, exercise_id):
     exercise = Exercise.objects.get(id=exercise_id)
     lesson = Lesson.objects.get(id=lesson_id)
     if request.method == 'POST':
-        sentence_zh = SentenceZH.objects.get_or_create(word=request.POST.get('sentence_zh'))[0]
+        sentence_zh = SentenceZH.objects.get_or_create(sentence=request.POST.get('sentence_zh'))[0]
         for translation_zh in request.POST.getlist('translations'):
-            sentence_pl = SentencePL.objects.get_or_create(word=translation_zh)[0]
+            sentence_pl = SentencePL.objects.get_or_create(sentence=translation_zh)[0]
             SentenceTranslation.objects.get_or_create(sentence_zh=sentence_zh, sentence_pl=sentence_pl)
         sentence_zh_exercise_spec = exercise.spec
         sentence_zh_exercise_spec.word = sentence_zh
@@ -185,10 +186,9 @@ def modify_sentence_pl_exercise(request, lesson_id, exercise_id):
     exercise = Exercise.objects.get(id=exercise_id)
     lesson = Lesson.objects.get(id=lesson_id)
     if request.method == 'POST':
-        sentence_pl_exercise_spec = exercise.spec
-        sentence_pl = SentencePL.objects.get_or_create(word=request.POST.get('sentence_pl'))[0]
+        sentence_pl = SentencePL.objects.get_or_create(sentence=request.POST.get('sentence_pl'))[0]
         for translation_zh in request.POST.getlist('translations'):
-            sentence_zh = SentenceZH.objects.get_or_create(word=translation_zh)[0]
+            sentence_zh = SentenceZH.objects.get_or_create(sentence=translation_zh)[0]
             SentenceTranslation.objects.get_or_create(sentence_zh=sentence_zh, sentence_pl=sentence_pl)
         sentence_pl_exercise_spec = exercise.spec
         sentence_pl_exercise_spec.word = sentence_pl
@@ -237,12 +237,12 @@ def modify_explanation_exercise(request, lesson_id, exercise_id):
         return render(request, 'exercises/explanation.html', {'lesson': lesson, 'exercise': exercise})
 
 
-def save_image_for_exercise(file):
+def save_image_for_exercise(file_to_save):
     """
     Generates an unique name for image and saves it in MEDIA_ROOT directory.
     :param file: file to save
     :return: name of the new saved file
     """
-    name = unicode(uuid.uuid4()) + "." + file.name.split(".")[-1]
-    default_storage.save(name, ContentFile(file.read()))
+    name = unicode(uuid.uuid4()) + "." + file_to_save.name.split(".")[-1]
+    default_storage.save(name, ContentFile(file_to_save.read()))
     return name

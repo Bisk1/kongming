@@ -11,7 +11,7 @@ class WordPL(models.Model):
     word = models.CharField(max_length=100, unique=True)
 
     def __unicode__(self):
-        return self.word.decode('utf8')
+        return unicode(self.word)
 
     def get_translations(self):
 
@@ -46,7 +46,7 @@ class WordZH(models.Model):
         unique_together = ["word", "pinyin"]
 
     def __unicode__(self):
-        return unicode(self.word.decode('utf8') + ' [' + self.pinyin.decode('utf8') + ']')
+        return unicode(self.word + ' [' + self.pinyin + ']')
 
     def get_translations(self):
         """
@@ -92,7 +92,7 @@ class SentencePL(models.Model):
     sentence = models.CharField(max_length=255, unique=True)
 
     def __unicode__(self):
-        return self.sentence.decode('utf8')
+        return unicode(self.sentence)
 
     def get_translations(self):
         """
@@ -121,7 +121,7 @@ class SentenceZH(models.Model):
     sentencepl_set = models.ManyToManyField(SentencePL, through='SentenceTranslation')
 
     def __unicode__(self):
-        return self.sentence.decode('utf8')
+        return unicode(self.sentence)
 
     def get_translations(self):
         """

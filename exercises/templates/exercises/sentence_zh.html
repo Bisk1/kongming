@@ -7,7 +7,7 @@
 <div id="translate_sentence_url" style="visibility: hidden">{% url 'translations:sentences_translations' source_language='chinese' %}</div>
 
 <div>Lekcja: {{ lesson.topic }}</div>
-Exercise - Chinese sentence:
+Ćwiczenie - zdanie chińskie:
 {% if exercise %}
     <form action="{% url 'exercises:modify_sentence-zh' lesson_id=lesson.id exercise_id=exercise.id %}" method="post">
 {% else %}
@@ -23,8 +23,11 @@ Exercise - Chinese sentence:
             {% for translation in exercise.spec.sentence.sentencepl_set.all %}
                 <tr>
                     <td>
-                        <label>Zdanie polskie</label>
+                        <label>Tłumaczenie: </label>
                         <input name="translations" value="{{ translation.sentence }}">
+                    </td>
+                    <td>
+                        <button id="remove" class="btn btn-default">Remove</button>
                     </td>
                 </tr>
             {% endfor %}

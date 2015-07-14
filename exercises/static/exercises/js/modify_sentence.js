@@ -39,13 +39,13 @@ $.fn.insertSentenceInputWithSentence = function(translation) {
     this
     .append($('<tr>')
         .append($('<td>')
-            .append('Translation: ')
-        )
-        .append($('<td>')
+            .append($('<label>')
+                .append('Zdanie: ')
+            )
             .append('<input name="translations" value="' + translation.sentence + '">')
         )
         .append($('<td>')
-            .append('<button id="remove">Remove</button>')
+            .append('<button id="remove" class="btn btn-default">Remove</button>')
         )
     );
     return this;
@@ -56,13 +56,14 @@ $.fn.insertSentenceInput = function() {
     this
     .append($('<tr>')
         .append($('<td>')
-            .append('Translation: ')
+            .append($('<label>')
+                .append('Tłumaczenie: ')
+            )
+            .append('\n<input name="translations"/>')
+
         )
         .append($('<td>')
-            .append('<input name="translations"/>')
-        )
-        .append($('<td>')
-            .append('<button id="remove">Remove</button>')
+            .append('<button id="remove" class="btn btn-default">Remove</button>')
         )
     );
     return this;

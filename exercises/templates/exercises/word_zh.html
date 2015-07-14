@@ -6,7 +6,7 @@
 <div id="source_language" style="visibility: hidden">chinese</div>
 
 <div>Lekcja: {{ lesson.topic }}</div>
-Exercise - Chinese word:
+Ćwiczenie - słowo chińskie:
 {% if exercise %}
     <form action="{% url 'exercises:modify_word-zh' lesson_id=lesson.id exercise_id=exercise.id %}" method="post">
 {% else %}
@@ -24,8 +24,11 @@ Exercise - Chinese word:
             {% for translation in exercise.spec.word.wordpl_set.all %}
                 <tr>
                     <td>
-                        <label>Słowo polskie</label>
+                        <label>Tłumaczenie: </label>
                         <input name="translations" value="{{ translation.word }}">
+                    </td>
+                    <td>
+                        <button id="remove" class="btn btn-default">Remove</button>
                     </td>
                 </tr>
             {% endfor %}
