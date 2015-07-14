@@ -9,8 +9,8 @@
                    {% if exercise.number %}value="{{ exercise.number }}" {% endif %}
                    size="1">
                 </td>
+                <td>{{ exercise.content_type | capfirst }}</td>
                 <td>{{ exercise }}</td>
-                <td>{{ exercise.pretty_type_name }}</td>
                 <td>
                     <a class="modify btn btn-default" href="{% url 'exercises:modify_exercise' exercise_id=exercise.id %}">Edytuj</a>
                 </td>

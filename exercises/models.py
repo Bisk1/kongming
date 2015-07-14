@@ -9,14 +9,6 @@ from lessons.models import Lesson
 from translations.models import WordPL, WordZH, SentencePL, SentenceZH
 
 
-
-NONE = 'a'
-WORD_PL = 'b'
-WORD_ZH = 'c'
-SENTENCE_PL = 'd'
-SENTENCE_ZH = 'e'
-EXPLANATION = 'f'
-
 class Exercise(models.Model):
     lesson = models.ForeignKey(Lesson)
     number = models.IntegerField(null=True)
@@ -116,15 +108,4 @@ class ExplanationExercise(AbstractExercise):
         return {'text': self.text}
 
     def __unicode__(self):
-        return unicode(self.text)
-
-
-exercise_model_to_name_map = {
-    WordPLExercise: 'word_pl',
-    WordZHExercise: 'word_zh',
-    SentencePLExercise: 'sentence_pl',
-    SentenceZHExercise: 'sentence_zh',
-    ExplanationExercise: 'explanation',
-}
-
-
+        return self.text.decode('utf8')

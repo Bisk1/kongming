@@ -8,19 +8,19 @@
 
 <div>Lekcja: {{ lesson.topic }}</div>
 Exercise - Polish sentence:
-{% if exercise_details %}
-    <form action="{% url 'exercises:modify_exercise_sentence_pl' exercise_id=exercise.id %}" method="post">
+{% if exercise %}
+    <form action="{% url 'exercises:modify_sentence-pl-exercise' exercise_id=exercise.id %}" method="post">
 {% else %}
-    <form action="{% url 'exercises:add_exercise_sentence_pl' lesson_id=lesson.id %}" method="post">
+    <form action="{% url 'exercises:add_sentence-pl-exercise' lesson_id=lesson.id %}" method="post">
 {% endif %}
     {% csrf_token %}
     <label>Zdanie polskie</label>
-    <input class="sentence_to_search" name="sentence_pl" value="{{ exercise_details.sentence }}">
+    <input class="sentence_to_search" name="sentence_pl" value="{{ exercise.spec.sentence }}">
     <div>Tłumaczenia:</div>
     <div id="translations-container">
         <table id="translations_table">
             <tbody>
-            {% for translation in exercise_details.sentence.sentencezh_set.all %}
+            {% for translation in exercise.spec.sentence.sentencezh_set.all %}
                 <tr>
                     <td>
                         <label>Zdanie chińskie</label>

@@ -1,5 +1,4 @@
 import logging
-from itertools import chain
 
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
@@ -7,8 +6,7 @@ from django.http import *
 from django.template import loader, RequestContext
 
 from models import Lesson
-from exercises.models import Exercise, SentenceZHExercise, SentencePLExercise, WordZHExercise, \
-    WordPLExercise, ExplanationExercise
+from exercises.models import Exercise
 
 
 logger = logging.getLogger(__name__)
@@ -71,7 +69,7 @@ def modify_lesson(request, lesson_id):
 
     return render(request, 'lessons/modify_lesson.html', {'lesson': lesson,
                                                           'exercises': exercises,
-                                                          'other_lessons':other_lessons,
+                                                          'other_lessons': other_lessons,
                                                           })
 
 
