@@ -17,20 +17,21 @@ logger = logging.getLogger(__name__)
 
 def add_exercise(request, lesson_id):
     exercise_type = request.POST.get('exercise_type')
-    return redirect('exercises:add_' + exercise_type, lesson_id=lesson_id)
+    return redirect('exercises:add_' + str(exercise_type), lesson_id=lesson_id)
 
 
-def modify_exercise(request, exercise_id):
+def modify_exercise(request, lesson_id, exercise_id):
     exercise = Exercise.objects.get(id=exercise_id)
     exercise_type_slug = slugify(unicode(exercise.content_type.name))
-    return redirect('exercises:modify_' + exercise_type_slug, exercise_id=exercise_id)
+    return redirect('exercises:modify_' + exercise_type_slug, lesson_id=lesson_id, exercise_id=exercise_id)
 
 
 def delete_exercise(request, exercise_id):
     exercise = Exercise.objects.get(id=exercise_id)
     lesson_id = exercise.lesson.id
+    exercise.spec.delete()
     exercise.delete()
-    return redirect('lessons:modify_lesson', lesson_id=lesson_id)
+    return redirect('lessons:delete_exercise', lesson_id=lesson_id)
 
 
 def add_word_zh_exercise_(request, lesson_id):
@@ -49,7 +50,7 @@ def add_word_zh_exercise_(request, lesson_id):
         return render(request, 'exercises/word_zh.html', {'lesson': lesson})
 
 
-def modify_word_zh_exercise(request, exercise_id):
+def modify_word_zh_exercise(request, lesson_id, exercise_id):
     """
     Modify exercise - Chinese word - for a lesson
     :param request: HTTP request
@@ -58,6 +59,7 @@ def modify_word_zh_exercise(request, exercise_id):
     :return: HTTP response
     """
     exercise = Exercise.objects.get(id=exercise_id)
+    lesson = Lesson.objects.get(id=lesson_id)
     if request.method == 'POST':
         word_zh = WordZH.objects.get_or_create(word=request.POST.get('word_zh'), pinyin=request.POST.get('pinyin'))[0]
         for translation_pl in request.POST.getlist('translations'):
@@ -68,7 +70,7 @@ def modify_word_zh_exercise(request, exercise_id):
         word_zh_exercise_spec.word = word_zh
         word_zh_exercise_spec.save()
     else:
-        return render(request, 'exercises/word_zh.html', {'exercise': exercise})
+        return render(request, 'exercises/word_zh.html', {'lesson': lesson, 'exercise': exercise})
 
 
 def add_word_pl_exercise(request, lesson_id):
@@ -86,7 +88,7 @@ def add_word_pl_exercise(request, lesson_id):
     return render(request, 'exercises/word_pl.html', {'lesson': lesson})
 
 
-def modify_word_pl_exercise(request, exercise_id):
+def modify_word_pl_exercise(request, lesson_id, exercise_id):
     """
     Modify exercise - Polish word - for a lesson
     :param request: HTTP request
@@ -95,6 +97,7 @@ def modify_word_pl_exercise(request, exercise_id):
     :return: HTTP response
     """
     exercise = Exercise.objects.get(id=exercise_id)
+    lesson = Lesson.objects.get(id=lesson_id)
     if request.method == 'POST':
         word_pl = WordPL.objects.get_or_create(word=request.POST.get('word_pl'))[0]
         for translation_zh in request.POST.getlist('translations'):
@@ -105,7 +108,7 @@ def modify_word_pl_exercise(request, exercise_id):
         word_pl_exercise_spec.save()
         return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
     else:
-        return render(request, 'exercises/word_pl.html', {'exercise': exercise})
+        return render(request, 'exercises/word_pl.html', {'lesson': lesson, 'exercise': exercise})
 
 
 def add_sentence_zh_exercise(request, lesson_id):
@@ -124,7 +127,7 @@ def add_sentence_zh_exercise(request, lesson_id):
         return render(request, 'exercises/sentence_zh.html', {'lesson': lesson})
 
 
-def modify_sentence_zh_exercise(request, exercise_id):
+def modify_sentence_zh_exercise(request, lesson_id, exercise_id):
     """
     Modify exercise - Chinese sentence - for a lesson
     :param request: HTTP request
@@ -133,6 +136,7 @@ def modify_sentence_zh_exercise(request, exercise_id):
     :return: HTTP response
     """
     exercise = Exercise.objects.get(id=exercise_id)
+    lesson = Lesson.objects.get(id=lesson_id)
     if request.method == 'POST':
         sentence_zh = SentenceZH.objects.get_or_create(word=request.POST.get('sentence_zh'))[0]
         for translation_zh in request.POST.getlist('translations'):
@@ -143,7 +147,7 @@ def modify_sentence_zh_exercise(request, exercise_id):
         sentence_zh_exercise_spec.save()
         return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
     else:
-        return render(request, 'exercises/sentence_zh.html', {'exercise': exercise})
+        return render(request, 'exercises/sentence_zh.html', {'lesson': lesson, 'exercise': exercise})
 
 
 def add_sentence_pl_exercise(request, lesson_id):
@@ -162,7 +166,7 @@ def add_sentence_pl_exercise(request, lesson_id):
         return render(request, 'exercises/sentence_pl.html', {'lesson': lesson})
 
 
-def modify_sentence_pl_exercise(request, exercise_id):
+def modify_sentence_pl_exercise(request, lesson_id, exercise_id):
     """
     Modify exercise - Polish sentence - for a lesson
     :param request: HTTP request
@@ -171,6 +175,7 @@ def modify_sentence_pl_exercise(request, exercise_id):
     :return: HTTP response
     """
     exercise = Exercise.objects.get(id=exercise_id)
+    lesson = Lesson.objects.get(id=lesson_id)
     if request.method == 'POST':
         sentence_pl_exercise_spec = exercise.spec
         sentence_pl = SentencePL.objects.get_or_create(word=request.POST.get('sentence_pl'))[0]
@@ -182,7 +187,7 @@ def modify_sentence_pl_exercise(request, exercise_id):
         sentence_pl_exercise_spec.save()
         return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
     else:
-        return render(request, 'exercises/sentence_pl.html', {'exercise': exercise})
+        return render(request, 'exercises/sentence_pl.html', {'lesson': lesson, 'exercise': exercise})
 
 
 def add_explanation_exercise(request, lesson_id):
@@ -201,7 +206,7 @@ def add_explanation_exercise(request, lesson_id):
         return render(request, 'exercises/explanation.html', {'lesson': lesson})
 
 
-def modify_explanation_exercise(request, exercise_id):
+def modify_explanation_exercise(request, lesson_id, exercise_id):
     """
     Modify exercise - explanation - for a lesson
     :param request: HTTP request
@@ -210,6 +215,7 @@ def modify_explanation_exercise(request, exercise_id):
     :return: HTTP response
     """
     exercise = Exercise.objects.get(id=exercise_id)
+    lesson = Lesson.objects.get(id=lesson_id)
     if request.method == 'POST':
         explanation_exercise_spec = exercise.spec
         explanation_exercise_spec.text = request.POST.get('text')
@@ -220,7 +226,7 @@ def modify_explanation_exercise(request, exercise_id):
         explanation_exercise_spec.save()
         return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
     else:
-        return render(request, 'exercises/explanation.html', {'exercise': exercise})
+        return render(request, 'exercises/explanation.html', {'lesson': lesson, 'exercise': exercise})
 
 
 def save_image_for_exercise(file):

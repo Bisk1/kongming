@@ -4,7 +4,7 @@
 
 <div id="new_lesson">
     {% trans "Add new lesson" %}
-    <form action="{% url 'lessons:lessons_management'  %}" method="post">
+    <form action="{% url 'lessons:lessons'  %}" method="post">
     Lesson topic:
         {% csrf_token %}
         <input type="hidden" name="create" id="create" value="true"/>

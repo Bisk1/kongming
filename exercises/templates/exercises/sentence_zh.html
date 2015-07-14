@@ -9,7 +9,7 @@
 <div>Lekcja: {{ lesson.topic }}</div>
 Exercise - Chinese sentence:
 {% if exercise %}
-    <form action="{% url 'exercises:modify_sentence-zh-exercise' exercise_id=exercise.id %}" method="post">
+    <form action="{% url 'exercises:modify_sentence-zh-exercise' lesson_id=lesson.id exercise_id=exercise.id %}" method="post">
 {% else %}
     <form action="{% url 'exercises:add_sentence-zh-exercise' lesson_id=lesson.id %}" method="post">
 {% endif %}

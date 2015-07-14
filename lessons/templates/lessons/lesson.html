@@ -27,7 +27,7 @@
         {% endfor %}
     </select>
 </div>
-<button id="update" class="btn btn-default" action="{% url 'lessons:modify_lesson' lesson.id %}">Aktualizuj</button>
+<button id="update" class="btn btn-default" action="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}">Aktualizuj</button>
 <div id="updated" hidden>Zaktualizowano</div>
 
 

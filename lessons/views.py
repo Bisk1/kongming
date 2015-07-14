@@ -12,7 +12,7 @@ from exercises.models import Exercise
 logger = logging.getLogger(__name__)
 
 
-def lessons_management(request):
+def lessons(request):
     """
     Displays available lessons for modifying and adding new lessons
     :param request: HTTP request
@@ -27,7 +27,7 @@ def lessons_management(request):
             lesson = Lesson.objects.get(id=request.POST.get('lesson_id'))
             lesson.delete()
     lessons = Lesson.objects.all()
-    template = loader.get_template('lessons/lessons_management.html')
+    template = loader.get_template('lessons/lessons.html')
     context = RequestContext(request, {'lessons': lessons})
     return HttpResponse(template.render(context))
 
@@ -67,7 +67,7 @@ def modify_lesson(request, lesson_id):
     other_lessons = Lesson.objects.all().order_by('-topic')
     exercises = Exercise.objects.filter(lesson=lesson).order_by('number')
 
-    return render(request, 'lessons/modify_lesson.html', {'lesson': lesson,
+    return render(request, 'lessons/lesson.html', {'lesson': lesson,
                                                           'exercises': exercises,
                                                           'other_lessons': other_lessons,
                                                           })
@@ -80,4 +80,4 @@ def delete_lesson(request, lesson_id):
     :return: HTTP response
     """
     Lesson.objects.get(id=lesson_id).delete()
-    return redirect('lessons:lessons_management')
+    return redirect('lessons:lessons')

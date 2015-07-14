@@ -12,10 +12,10 @@
                 <td>{{ exercise.content_type | capfirst }}</td>
                 <td>{{ exercise }}</td>
                 <td>
-                    <a class="modify btn btn-default" href="{% url 'exercises:modify_exercise' exercise_id=exercise.id %}">Edytuj</a>
+                    <a class="modify btn btn-default" href="{% url 'exercises:modify_exercise' lesson_id=lesson.id exercise_id=exercise.id %}">Edytuj</a>
                 </td>
                 <td>
-                    <a class="delete btn btn-default" href="{% url 'exercises:delete_exercise' exercise_id=exercise.id %}">Usuń</a>
+                    <a class="delete btn btn-default" href="{% url 'exercises:delete_exercise' lesson_id=lesson.id exercise_id=exercise.id %}">Usuń</a>
                 </td>
             </tr>
         {% endfor %}

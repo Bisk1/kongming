@@ -4,7 +4,7 @@ from selenium_tests.core.window import Window
 
 class MainWindow(Window):
     navbar_header_css = "div.navbar-header"
-    lesson_management_css = 'a[href="/lessons/lessons_management/"]'
+    lesson_management_css = 'a[href="/lessons/lessons/"]'
 
     def __init__(self, driver):
         super(MainWindow, self).__init__(driver=driver)
