@@ -8,9 +8,9 @@
 <div>Lekcja: {{ lesson.topic }}</div>
 Exercise - Polish word:
 {% if exercise %}
-    <form action="{% url 'exercises:modify_word-pl-exercise' lesson_id=lesson.id exercise_id=exercise.id %}" method="post">
+    <form action="{% url 'exercises:modify_word-pl' lesson_id=lesson.id exercise_id=exercise.id %}" method="post">
 {% else %}
-    <form action="{% url 'exercises:add_word-pl-exercise' lesson_id=lesson.id %}" method="post">
+    <form action="{% url 'exercises:add_word-pl' lesson_id=lesson.id %}" method="post">
 {% endif %}
     {% csrf_token %}
     <label>Słowo polskie</label>

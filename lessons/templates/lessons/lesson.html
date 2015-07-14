@@ -40,11 +40,9 @@
     <form action="{% url 'exercises:add_exercise' lesson_id=lesson.id %}" method="post">
     {% csrf_token %}
         <select id="exercise_type" name="exercise_type">
-            <option value='word_zh'>Chinese word</option>
-            <option value='word_pl'>Polish word</option>
-            <option value='sentence_zh'>Chinese sentence</option>
-            <option value='sentence_pl'>Polish sentence</option>
-            <option value='explanation'>Explanation</option>
+            {% for exercise_type in exercises_types %}
+            <option value="{{ exercise_type.slug }}">{{ exercise_type.name }}</option>
+            {% endfor %}
         </select>
         <input type="submit" value="Dodaj" class="btn btn-default">
     </form>

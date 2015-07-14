@@ -109,3 +109,12 @@ class ExplanationExercise(AbstractExercise):
 
     def __unicode__(self):
         return self.text.decode('utf8')
+
+
+class ExerciseType(models.Model):
+    name = models.CharField(max_length=20)
+    slug = models.CharField(max_length=20)
+    model = models.ForeignKey(ContentType)
+
+    def __unicode__(self):
+        return self.name.decode('utf8') + ' (' + self.slug.decode('utf8') +') - ' + self.model.name

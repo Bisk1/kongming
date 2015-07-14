@@ -4,11 +4,10 @@ import uuid
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.shortcuts import render, redirect
-from django.utils.text import slugify
 
 from models import WordZH, WordPL, Lesson, \
     WordZHExercise, Exercise, WordPLExercise, SentenceZHExercise, SentencePLExercise, ExplanationExercise, \
-    SentencePL, SentenceZH
+    SentencePL, SentenceZH, ExerciseType
 from translations.models import SentenceTranslation, WordTranslation
 
 
@@ -22,8 +21,17 @@ def add_exercise(request, lesson_id):
 
 def modify_exercise(request, lesson_id, exercise_id):
     exercise = Exercise.objects.get(id=exercise_id)
-    exercise_type_slug = slugify(unicode(exercise.content_type.name))
+    exercise_type = get_exercise_type(exercise.content_type)
+    exercise_type_slug = exercise_type.slug
     return redirect('exercises:modify_' + exercise_type_slug, lesson_id=lesson_id, exercise_id=exercise_id)
+
+def get_exercise_type(content_type):
+    return content_type.get_object_for_this_type()
+    return ExerciseType.objects.get(model=content_type.model_class())
+    for exercise_type in ExerciseType.objects.all():
+        if exercise_type.model.name == content_type.name:
+            return exercise_type
+    raise Exception("Could not find exercise type for model: " + content_type.name)
 
 
 def delete_exercise(request, exercise_id):

@@ -6,7 +6,7 @@ from django.http import *
 from django.template import loader, RequestContext
 
 from models import Lesson
-from exercises.models import Exercise
+from exercises.models import Exercise, ExerciseType
 
 
 logger = logging.getLogger(__name__)
@@ -27,9 +27,7 @@ def lessons(request):
             lesson = Lesson.objects.get(id=request.POST.get('lesson_id'))
             lesson.delete()
     lessons = Lesson.objects.all()
-    template = loader.get_template('lessons/lessons.html')
-    context = RequestContext(request, {'lessons': lessons})
-    return HttpResponse(template.render(context))
+    return render(request, 'lessons/lessons.html', {'lessons': lessons})
 
 
 def modify_lesson(request, lesson_id):
@@ -66,10 +64,12 @@ def modify_lesson(request, lesson_id):
             exercise_to_remove.delete()
     other_lessons = Lesson.objects.all().order_by('-topic')
     exercises = Exercise.objects.filter(lesson=lesson).order_by('number')
+    exercises_types = ExerciseType.objects.all()
 
     return render(request, 'lessons/lesson.html', {'lesson': lesson,
                                                           'exercises': exercises,
                                                           'other_lessons': other_lessons,
+                                                          'exercises_types': exercises_types
                                                           })
 
 
