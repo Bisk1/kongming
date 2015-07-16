@@ -1,49 +1,49 @@
 {% extends "base.html"%}
-{% load i18n %}
 {% block content %}
 {% load staticfiles %}
-<script type="text/javascript" src='{% static "lessons/js/modify_lesson.js" %}'></script>
 
-<div class="form-group">
-    <label for="topic">Temat lekcji:</label>
-    <input type="text" class="form-control" id="topic" name="topic" value="{{ lesson.topic }}"/>
-</div>
-<div class="form-group">
-    <label class="control-label" for="exercises_number">Liczba ćwiczeń:</label>
-    <input type="number" class="form-control" id="exercises_number" name="exercises_number" value="{{ lesson.exercises_number }}"/>
-</div>
-<div class="form-group">
-    <label for="requirement">Wymaganie:</label>
-    <select  class="form-control" id="requirement">
-        <option value="None">Brak</option>
-
-    {% for other_lesson in other_lessons %}
-        {% if lesson.requirement.topic == other_lesson.topic %}
-            <option value="{{ other_lesson.id }}" selected>{{ other_lesson.topic }}</option>
-        {% endif %}
-        {% if lesson.requirement.topic != other_lesson.topic %}
-            <option value="{{ other_lesson.id }}">{{ other_lesson.topic }}</option>
-        {% endif %}
-        {% endfor %}
-    </select>
-</div>
-<button id="update" class="btn btn-default" action="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}">Aktualizuj</button>
-<div id="updated" hidden>Zaktualizowano</div>
-
-
-<div>
-    Ćwiczenia:
-    <div id="exercises">
-    {% include "lessons/exercises.html" %}
+<form action="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}" method="post">
+    <div class="form-group">
+        <label for="topic">Temat lekcji:</label>
+        <input type="text" class="form-control" id="topic" name="topic" value="{{ lesson.topic }}"/>
     </div>
+    <div class="form-group">
+        <label class="control-label" for="exercises_number">Liczba ćwiczeń:</label>
+        <input type="number" class="form-control" id="exercises_number" name="exercises_number" value="{{ lesson.exercises_number }}"/>
+    </div>
+    <div class="form-group">
+        <label for="requirement">Wymaganie:</label>
+        <select  class="form-control" id="requirement" name="requirement">
+            <option value="None">Brak</option>
+        {% for other_lesson in other_lessons %}
+            {% if lesson.requirement.topic == other_lesson.topic %}
+                <option value="{{ other_lesson.id }}" selected>{{ other_lesson.topic }}</option>
+            {% endif %}
+            {% if lesson.requirement.topic != other_lesson.topic %}
+                <option value="{{ other_lesson.id }}">{{ other_lesson.topic }}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        Ćwiczenia:
+        <div id="exercises">
+        {% include "lessons/exercises.html" %}
+        </div>
+    </div>
+</form>
+<div>
     Dodaj ćwiczenie:
     <form action="{% url 'exercises:add_exercise' lesson_id=lesson.id %}" method="post">
     {% csrf_token %}
-        <select id="exercise_type" name="exercise_type">
+    <div class="form-group">
+        <label class="control-label" for="exercise_type">Rodzaj:</label>
+        <select class="form-control" id="exercise_type" name="exercise_type">
             {% for exercise_type in exercises_types %}
             <option value="{{ exercise_type.slug }}">{{ exercise_type.name }}</option>
             {% endfor %}
         </select>
+    </div>
         <input type="submit" value="Dodaj" class="btn btn-default">
     </form>
 </div>

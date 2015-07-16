@@ -13,5 +13,4 @@ urlpatterns = patterns('',
     url(r'^lessons/', include('lessons.urls', namespace='lessons')),
     url(r'^exercises/', include('exercises.urls', namespace='exercises')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^i18n/', include('django.conf.urls.i18n')),
 )

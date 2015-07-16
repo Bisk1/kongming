@@ -6,7 +6,6 @@ from django.db import models
 from enum import Enum
 
 from lessons.models import Lesson
-from translations.models import WordPL, WordZH, SentencePL, SentenceZH
 
 
 class Exercise(models.Model):
@@ -27,8 +26,6 @@ class ExerciseResultState(Enum):
 
 
 class AbstractExercise(models.Model):
-    exercise = models.ForeignKey(Exercise)
-
     @abc.abstractmethod
     def check(self, proposition):
         pass
@@ -41,68 +38,32 @@ class AbstractExercise(models.Model):
         abstract = True
 
 
-class WordZHExercise(AbstractExercise):
-    word = models.ForeignKey(WordZH)
+class Typing(AbstractExercise):
+    # Can refer to Polish or Chinese text only
+    limit = models.Q(app_label='translations', model='TextZH') | \
+            models.Q(app_label='translations', model='TextPL')
+
+    content_type = models.ForeignKey(ContentType, limit_choices_to=limit)
+    object_id = models.PositiveIntegerField()
+    text = GenericForeignKey('content_type', 'object_id')
 
     def check(self, proposition):
-        return {'success': self.word.check_translation(proposition),
-                'correct_word': self.word.wordpl_set.all()[0].word}
+        return {'success': self.text.check_translation(proposition),
+                'correct_translation': self.text.get_translations()[0]}
 
     def prepare(self):
-        return {'word': self.word.word}
+        return {'text': self.text.text}
 
     def __unicode__(self):
-        return unicode(self.word)
+        return unicode(self.text)
 
 
-class WordPLExercise(AbstractExercise):
-    word = models.ForeignKey(WordPL)
-
-    def check(self, proposition):
-        return {'success': self.word.check_translation(proposition),
-                'correct_word': self.word.wordzh_set.all()[0].word}
-
-    def prepare(self):
-        return {'word': self.word.word}
-
-    def __unicode__(self):
-        return unicode(self.word)
-
-
-class SentenceZHExercise(AbstractExercise):
-    sentence = models.ForeignKey(SentenceZH)
-
-    def check(self, proposition):
-        return {'success': self.sentence.check_translation(proposition),
-                'correct_sentence': self.sentence.sentencepl_set.all()[0].sentence}
-
-    def prepare(self):
-        return {'sentence': self.sentence.sentence}
-
-    def __unicode__(self):
-        return unicode(self.sentence)
-
-
-class SentencePLExercise(AbstractExercise):
-    sentence = models.ForeignKey(SentencePL)
-
-    def check(self, proposition):
-        return {'success': self.sentence.check_translation(proposition),
-                'correct_sentence': self.sentence.sentencezh_set.all()[0].sentence}
-
-    def prepare(self):
-        return {'sentence': self.sentence.sentence}
-
-    def __unicode__(self):
-        return unicode(self.sentence)
-
-
-class ExplanationExercise(AbstractExercise):
+class Explanation(AbstractExercise):
     text = models.TextField()
     image = models.FileField(upload_to="image/", null=True)
 
     def check(self, proposition):
-        raise Exception("ExplanationExerciseDetails has no check method")
+        raise Exception("Explanation has no check method")
 
     def prepare(self):
         return {'text': self.text}
@@ -117,4 +78,4 @@ class ExerciseType(models.Model):
     model = models.ForeignKey(ContentType)
 
     def __unicode__(self):
-        return unicode(self.name + ' (' + self.slug +') - ' + self.model.name)
+        return unicode(self.name + ' (' + self.slug + ') - ' + self.model.name)

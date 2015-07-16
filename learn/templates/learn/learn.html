@@ -1,5 +1,4 @@
 {% extends "base.html"%}
-{% load i18n %}
 {% block content %}
 {% load staticfiles %}
 <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
@@ -46,7 +45,7 @@
     </div>
 
     <div id="explanation_exercise">
-        <div id="explanation_text"></div>
+        <pre><div id="explanation_text"></div></pre>
     </div>
 
 
@@ -56,10 +55,10 @@
 <div id="result-container" style="height: 40px">
     <div id="result">
         <div id="positive_result" style="display: none; color:green">
-            Correct answer!
+            Poprawna odpowiedź!
         </div>
         <div id="negative_result" style="display: none; color:red">
-            Wrong answer!
+            Zła odpowiedź!
         </div>
     </div>
 
@@ -72,7 +71,7 @@
 <a class="btn btn-default" id="to-lesson-map" style="display: none" href="{% url 'learn:lessons_map' %}" id="to-lesson-map">To lesson map</a>
 
 <h1 id="final" hidden>
-    You finished the lesson!
+    Ukończyłeś lekcję!
 </h1>
 
 {% endblock %}

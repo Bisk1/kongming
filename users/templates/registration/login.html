@@ -1,4 +1,3 @@
-{% load i18n %}
           <!--<form method="post" action=".">{% csrf_token %}-->
     <!--<div style="text-align:left";>{{ form.as_p }}</div>-->
     <!--<input type="hidden" name="next" value="/" />-->
@@ -43,7 +42,7 @@
             <div class="widget worange">
               <!-- Widget head -->
               <div class="widget-head">
-                <i class="icon-lock"></i>{% trans "Logging into ChineseTool application" %}
+                <i class="icon-lock"></i>Zaloguj się do aplikacji ChineseTool
               </div>
 
               <div class="widget-content">
@@ -78,8 +77,8 @@
 					</div>
                         <div class="col-lg-9 col-lg-offset-3">
 							<input type="hidden" name="next" value="/" />
-                            <button type="submit" class="btn btn-danger">{% trans 'Log in' %}</button>
-							<button type="reset" class="btn btn-default">{% trans 'Empty form' %}</button>
+                            <button type="submit" class="btn btn-danger">Zaloguj się</button>
+							<button type="reset" class="btn btn-default">Pusty formularz</button>
 						</div>
                     <br />
                   </form>

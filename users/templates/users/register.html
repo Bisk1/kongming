@@ -1,15 +1,14 @@
 {% block content %}
-{% load i18n %}
 <center>
-<h2>{% trans "Register in ChineseTool" %}</h2>
-{% trans "Registration is required if you want to learn!" %}
+<h2>Zarejestruj się w aplikacji ChineseTool</h2>
+Rejestracja jest wymaagana do nauki!
 <p>
 <div style="margin-left:35%;margin-right:35%;">
 <fieldset>
-  <legend> {% trans "All fields except for cell phone have to be filled " %} </legend>
+  <legend>Wszystkie pola oprócz numeru tlefonu są obowiązkowe</legend>
     <form method="post" action=".">{% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="{% trans 'Register' %}">    <input type="reset" value="{% trans 'Empty form' %}">
+    <input type="submit" value="Zarejestruj się">    <input type="reset" value="Pusty formularz">
   </form>
 </fieldset>
 </div>
@@ -17,7 +16,7 @@
 {% endblock %}
 {% block footer %}
 <p>
-<div style="text-align:center;"><a href="{% url 'menu:index' %}">{% trans "Main page" %}</a></div>
+<div style="text-align:center;"><a href="{% url 'menu:index' %}">Strona główna</a></div>
 
 {% url 'users:login' as login_url %}
 </p>

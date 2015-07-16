@@ -90,7 +90,7 @@ LOCALE_PATHS = (
 
 TIME_ZONE = 'Poland'
 
-USE_I18N = True
+USE_I18N = False
 
 USE_L10N = True
 

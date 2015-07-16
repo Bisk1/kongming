@@ -1,6 +1,5 @@
-{% load i18n %}
-{% block title %} - {% trans "Registration was successful" %}{% endblock %}
-{% block header %}<h2><center>{% trans "You have been registered, your login is" %}: {{username}}</center></h2>{% endblock %}
+{% block title %} - Rejestracja powiodła się!{% endblock %}
+{% block header %}<h2><center>Zostałeś zarejestrowany, twoja nazwa to: {{username}}</center></h2>{% endblock %}
 {% block content%}
 {% url 'users:login' as login_url %}
 {% url 'users:index' as index_url %}

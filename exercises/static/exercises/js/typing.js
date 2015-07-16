@@ -1,30 +1,30 @@
- var getAjaxTranslateSentenceUrl = function() {
-     return $("#translate_sentence_url").text();
+ var getAjaxTranslateTextUrl = function() {
+     return $("#translate_text_url").text();
  };
 
 var updateTranslationsTable = function(translations) {
     var translationsTable = $("#translations_table").find("tbody").empty();
         for (var i = 0; i < translations.length; i++) {
             translationsTable
-                .insertSentenceInputWithSentence(translations[i]);
+                .insertPopulatedTextInput(translations[i]);
         }
 };
 
 
-var checkAndUpdateTranslationsForm = function(sentence_to_translate) {
-    if(typeof sentence_to_translate == "undefined") {
-        sentence_to_translate = $(".sentence_to_search").val();
+var checkAndUpdateTranslationsForm = function(text_to_translate) {
+    if(typeof text_to_translate == "undefined") {
+        text_to_translate = $(".text_to_search").val();
     }
     $.ajax({
-        url: getAjaxTranslateSentenceUrl(),
+        url: getAjaxTranslateTextUrl(),
         type: 'POST',
         dataType: "json",
         data: {
-            sentence_to_translate : sentence_to_translate,
+            text_to_translate : text_to_translate,
             csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
         },
         success: function(data) {
-            $("#translations_header").html('Sentence: '  + sentence_to_translate);
+            $("#translations_header").html('Tekst: '  + text_to_translate);
             updateTranslationsTable(data.translations);
             $('#add_translation_button').show();
         },
@@ -35,14 +35,14 @@ var checkAndUpdateTranslationsForm = function(sentence_to_translate) {
 };
 
 
-$.fn.insertSentenceInputWithSentence = function(translation) {
+$.fn.insertPopulatedTextInput = function(translation) {
     this
     .append($('<tr>')
         .append($('<td>')
             .append($('<label>')
                 .append('Zdanie: ')
             )
-            .append('<input name="translations" value="' + translation.sentence + '">')
+            .append('<input name="translations" value="' + translation.text + '">')
         )
         .append($('<td>')
             .append('<button id="remove" class="btn btn-default">Remove</button>')
@@ -52,7 +52,7 @@ $.fn.insertSentenceInputWithSentence = function(translation) {
 };
 
 
-$.fn.insertSentenceInput = function() {
+$.fn.insertEmptyTextInput = function() {
     this
     .append($('<tr>')
         .append($('<td>')
@@ -73,14 +73,14 @@ $(document).ready(function() {
 
     $(document).on("click", "#add_translation_button", function() {
         $("#translations_table").find("tbody")
-        .insertSentenceInput();
+        .insertEmptyTextInput();
     });
 
     $('#edit').click(function() {
         checkAndUpdateTranslationsForm();
     });
 
-    $(".sentence_to_search").keypress(function(e) {
+    $(".text_to_search").keypress(function(e) {
         if (e.which == 13) {
             checkAndUpdateTranslationsForm();
         }
@@ -90,18 +90,18 @@ $(document).ready(function() {
         ($(this)).parent().parent().remove();
     });
 
-    $(".sentence_to_search" ).autocomplete({
+    $(".text_to_search" ).autocomplete({
         source: function(request, response) {
             $.ajax({
-                url: getAjaxTranslateSentenceUrl(),
+                url: getAjaxTranslateTextUrl(),
                 type: 'POST',
                 dataType: "json",
                 data: {
-                    sentence_to_search : request.term,
+                    text_to_search : request.term,
                     csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
                 },
                 success: function(data) {
-                    response(data['matching_sentences']);
+                    response(data['matching_texts']);
                 },
                 error: function(xhr, errmsg, err) {
                     $('#error_box').html(xhr.status + ": " + xhr.responseText).show();

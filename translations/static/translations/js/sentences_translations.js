@@ -6,7 +6,7 @@ var updateTranslationsTable = function(translations) {
     var translationsTable = $("#translations_table").find("tbody").empty();
         for (var i = 0; i < translations.length; i++) {
             translationsTable
-                .insertSentenceInputWithSentence(translations[i]);
+                .insertPopulatedTextInput(translations[i]);
         }
 };
 
@@ -65,7 +65,7 @@ var saveTranslations = function() {
 };
 
 
-$.fn.insertSentenceInputWithSentence = function(translation) {
+$.fn.insertPopulatedTextInput = function(translation) {
     this
     .append($('<tr>')
         .append($('<td>')
@@ -82,7 +82,7 @@ $.fn.insertSentenceInputWithSentence = function(translation) {
 };
 
 
-$.fn.insertSentenceInput = function() {
+$.fn.insertEmptyTextInput = function() {
     this
     .append($('<tr>')
         .append($('<td>')
@@ -102,7 +102,7 @@ $(document).ready(function() {
 
     $(document).on("click", "#add_translation_button", function() {
         $("#translations_table").find("tbody")
-        .insertSentenceInput();
+        .insertEmptyTextInput();
     });
 
     $('#edit').click(function() {

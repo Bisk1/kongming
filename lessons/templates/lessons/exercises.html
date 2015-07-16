@@ -1,24 +1,28 @@
 {% load staticfiles %}
 
-<form action="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}" method="post">
-    {% csrf_token %}
-    <table>
-        {% for exercise in exercises %}
-            <tr>
-                <td><input name="exercise{{exercise.id }}"
-                   {% if exercise.number %}value="{{ exercise.number }}" {% endif %}
-                   size="1">
-                </td>
-                <td>{{ exercise.content_type | capfirst }}</td>
-                <td>{{ exercise }}</td>
-                <td>
-                    <a class="modify btn btn-default" href="{% url 'exercises:modify_exercise' lesson_id=lesson.id exercise_id=exercise.id %}">Edytuj</a>
-                </td>
-                <td>
-                    <a class="delete btn btn-default" href="{% url 'exercises:delete_exercise' lesson_id=lesson.id exercise_id=exercise.id %}">Usuń</a>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    <input type="submit" id="save" class="btn btn-primary" value="Zapisz"></button>
-</form>
+{% csrf_token %}
+<table>
+    {% for exercise in exercises %}
+        <tr>
+            <td>
+                <input name="exercise{{exercise.id }}" value="{{ exercise.number|default:"" }}" size="1">
+
+            </td>
+            <td>{{ exercise.content_type | capfirst }}</td>
+            <td>
+                {% if exercise.content_type.name == "typing" %}
+                    {{ exercise.spec.text }} -
+                    {{ exercise.spec.text.get_translations.all.all|join:", " }}
+                {% else %}
+                    {{ exercise | linebreaks }}</td>
+                {% endif %}
+            <td>
+                <a class="modify btn btn-default" href="{% url 'exercises:modify_exercise' lesson_id=lesson.id exercise_id=exercise.id %}">Edytuj</a>
+            </td>
+            <td>
+                <a class="delete btn btn-default" href="{% url 'exercises:delete_exercise' lesson_id=lesson.id exercise_id=exercise.id %}">Usuń</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+<input type="submit" id="save" class="btn btn-default" value="Zapisz"></button>

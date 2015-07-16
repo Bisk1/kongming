@@ -1,5 +1,4 @@
 {% extends "base.html"%}
-{% load i18n %}
 {% block content %}
 <form action="{% url 'menu:set_language' %}" method="post">
     {% csrf_token %}
@@ -12,6 +11,6 @@
                 </option>
             {% endfor %}
         </select>
-    <input type="submit" value="{% trans 'Save' %}" />
+    <input type="submit" value="Zapisz" />
 </form>
 {% endblock %}

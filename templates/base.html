@@ -2,7 +2,6 @@
 <html>
     <head>
     {% block header %}
-        {% load i18n %}
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
@@ -96,7 +95,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="#"><i class="icon-user"></i> Profile</a></li>
                         <li><a href="#"><i class="icon-cogs"></i> Settings</a></li>
-                        <li><a href="{% url 'users:logout' %}"><i class="icon-off">{% trans "Log out" %}</i> </a></li>
+                        <li><a href="{% url 'users:logout' %}"><i class="icon-off">Wyloguj</i> </a></li>
                     </ul>
                 </li>
             </ul>
@@ -125,11 +124,11 @@
                 <li class="norange"><a href="{% url 'learn:lessons_map' %}"><i class="icon-sitemap"></i>Ucz się!</a></li>
 
                 <li class="ngreen"><a href="charts.html"><i class="icon-bar-chart"></i>Statystyki</a></li>
-                <li class="nviolet"><a href="{% url 'lessons:lessons' %}"><i class="icon-cog"></i>Lessons management</a></li>
+                <li class="nviolet"><a href="{% url 'lessons:lessons' %}"><i class="icon-cog"></i>Lekcje</a></li>
                 <li class="has_submenu nlightblue">
                     <a href="#">
                         <!-- Menu name with icon -->
-                        <i class="icon-book"></i>Words
+                        <i class="icon-book"></i>Słowa
                         <!-- Icon for dropdown -->
                         <span class="pull-right"><i class="icon-angle-right"></i></span>
                     </a>
@@ -142,14 +141,14 @@
                 <li class="has_submenu nlightblue">
                     <a href="#">
                         <!-- Menu name with icon -->
-                        <i class="icon-book"></i>Sentences
+                        <i class="icon-book"></i>Teksty
                         <!-- Icon for dropdown -->
                         <span class="pull-right"><i class="icon-angle-right"></i></span>
                     </a>
 
                     <ul>
-                        <li><a href="{% url 'translations:sentences_translations' source_language='polish' %}">Polsko - chiński</a></li>
-                        <li><a href="{% url 'translations:sentences_translations' source_language='chinese' %}">Chińsko - polski</a></li>
+                        <li><a href="{% url 'translations:texts_translations' source_language='polish' %}">Polsko - chiński</a></li>
+                        <li><a href="{% url 'translations:texts_translations' source_language='chinese' %}">Chińsko - polski</a></li>
                     </ul>
                 </li>
 
@@ -188,7 +187,8 @@
         </div>
      </div>
     {% else %}
-      <a href="{% url 'menu:login' %}">{% trans "Log in" %}</a>    <a href="{% url 'users:register' %}">{% trans "Register" %}</a>
+        <a href="{% url 'menu:login' %}">Zaloguj się</a>
+        <a href="{% url 'users:register' %}">Zarejestruj się</a>
 
     {% endif %}
 

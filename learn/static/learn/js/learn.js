@@ -35,7 +35,7 @@ function showExerciseContent(exercise_type, json) {
         case('sentence pl exercise'):
             $('#word_or_sentence').html(json.sentence);
             break;
-        case('explanation exercise'):
+        case('explanation'):
             $('#explanation_text').html(json.text);
             break;
     }
@@ -55,7 +55,7 @@ function showDivForExerciseType(exercise_type) {
         case('sentence pl exercise'):
             $('#word_or_sentence_exercise').show();
             break;
-        case('explanation exercise'):
+        case('explanation'):
             $('#explanation_exercise').show();
             break;
     }

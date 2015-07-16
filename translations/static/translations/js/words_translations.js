@@ -24,7 +24,7 @@ var checkAndUpdateTranslationsForm = function(word_to_translate) {
             csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
         },
         success: function(data) {
-            $("#translations_header").html('Word: '  + word_to_translate);
+            $("#translations_header").html('Słowo: '  + word_to_translate);
             updateTranslationsTable(data.translations);
             $('#add_translation_button').show();
         },
@@ -35,7 +35,7 @@ var checkAndUpdateTranslationsForm = function(word_to_translate) {
 };
 
 var saveTranslations = function() {
-    $("#save_message").html('Saving...');
+    $("#save_message").html('Zapisywanie...');
     var word_to_translate = $("#word_to_search").val();
     var translations = [];
     var isTranslationsChinese = (getSourceLanguage() == 'polish');

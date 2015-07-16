@@ -6,7 +6,7 @@ from django.http import *
 from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 
-from models import WordZH, WordPL, WordTranslation, SentencePL, SentenceZH, SentenceTranslation
+from models import WordZH, WordPL, WordTranslation, TextPL, TextZH, TextTranslation
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,6 @@ def words_translations(request, source_language):
     :return: HTTP response
     """
     if request.is_ajax() and request.method == 'POST':
-        print request.POST
         source_word_model = language_name_to_word_model(source_language)
         if 'translations' in request.POST:
             delete_translations(request.POST['word_to_translate'], source_word_model)
@@ -33,7 +32,6 @@ def words_translations(request, source_language):
             return HttpResponse(json.dumps({'matching_words': list(matching_words)}), content_type='application/javascript')
         elif 'word_to_translate' in request.POST:
             translations = get_translations_if_word_exists(request.POST['word_to_translate'], source_word_model)
-            print 'tr'
             print translations
             return HttpResponse(json.dumps({'translations': translations}), content_type='application/javascript')
         else:
@@ -66,10 +64,8 @@ def get_translations_if_word_exists(word_to_search, word_model):
 
 
 def delete_translations(word_to_translate, source_word_model):
-    if source_word_model == WordPL:
-        WordPL.objects.get(word=word_to_translate).wordzh_set.clear()
-    else:
-        WordZH.objects.get(word=word_to_translate).wordpl_set.clear()
+    for word_to_translate in source_word_model.objects.filter(word=word_to_translate):
+        word_to_translate.get_translations().clear()
 
 
 def add_translations(word_to_translate, source_word_model, translations):
@@ -85,74 +81,75 @@ def add_translations(word_to_translate, source_word_model, translations):
             WordTranslation.objects.get_or_create(word_zh=new_word_zh, word_pl=word_to_translate)
 
 
-def sentences_translations(request, source_language):
+def texts_translations(request, source_language):
     """
-    Manage sentences translations. Allow selecting sentences to edit.
+    Manage texts translations. Allow selecting texts to edit.
     If exist display available translations.
     :param request: HTTP request
-    :param source_language: language to translate sentences from
+    :param source_language: language to translate texts from
     :return: HTTP response
     """
     if request.is_ajax() and request.method == 'POST':
-        source_sentence_model = language_name_to_sentence_model(source_language)
+        source_text_model = language_name_to_text_model(source_language)
         if 'translations' in request.POST:
-            delete_sentence_translations(request.POST['sentence_to_translate'], source_sentence_model)
+            delete_text_translations(request.POST['text_to_translate'], source_text_model)
 
-            add_sentence_translations(request.POST['sentence_to_translate'],
-                             source_sentence_model,
+            add_text_translations(request.POST['text_to_translate'],
+                             source_text_model,
                              json.loads(request.POST['translations']))
             return HttpResponse('{}', content_type='application/javascript')
-        elif 'sentence_to_search' in request.POST:
-            matching_sentences = source_sentence_model.objects.filter(sentence__startswith=request.POST['sentence_to_search'])[:5].values_list('sentence', flat=True)
-            return HttpResponse(json.dumps({'matching_sentences': list(matching_sentences)}), content_type='application/javascript')
-        elif 'sentence_to_translate' in request.POST:
-            translations = get_translations_if_sentence_exists(request.POST['sentence_to_translate'], source_sentence_model)
+        elif 'text_to_search' in request.POST:
+            print source_text_model
+            matching_texts = source_text_model.objects.filter(text__startswith=request.POST['text_to_search'])[:5].values_list('text', flat=True)
+            return HttpResponse(json.dumps({'matching_texts': list(matching_texts)}), content_type='application/javascript')
+        elif 'text_to_translate' in request.POST:
+            translations = get_translations_if_text_exists(request.POST['text_to_translate'], source_text_model)
             return HttpResponse(json.dumps({'translations': translations}), content_type='application/javascript')
         else:
             return HttpResponse('Unrecognized AJAX request', content_type='application/javascript')
-    template = loader.get_template('translations/sentences_translations.html')
+    template = loader.get_template('translations/texts_translations.html')
     context = RequestContext(request, {'source_language': source_language})
     return HttpResponse(template.render(context))
 
 
-def language_name_to_sentence_model(language_name):
+def language_name_to_text_model(language_name):
     if language_name == "polish":
-        return SentencePL
+        return TextPL
     elif language_name == "chinese":
-        return SentenceZH
+        return TextZH
     else:
         raise Exception("Unknown language: " + language_name)
 
 
-def get_translations_if_sentence_exists(sentence_to_search, sentence_model):
+def get_translations_if_text_exists(text_to_search, text_model):
     try:
-        if sentence_model == SentencePL:
-            return list(SentencePL.objects.get(sentence=sentence_to_search).sentencezh_set.values('sentence'))
-        elif sentence_model == SentenceZH:
-            return list(SentenceZH.objects.get(sentence=sentence_to_search).sentencepl_set.values('sentence'))
+        if text_model == TextPL:
+            return list(TextPL.objects.get(text=text_to_search).TextZH_set.values('text'))
+        elif text_model == TextZH:
+            return list(TextZH.objects.get(text=text_to_search).TextPL_set.values('text'))
         else:
-            logger.error("Unknown sentence model: " + sentence_model)
+            logger.error("Unknown text model: " + text_model)
             return list()
     except ObjectDoesNotExist:
         return list()
 
 
-def delete_sentence_translations(sentence_to_translate, source_sentence_model):
-    if source_sentence_model == SentencePL:
-        SentencePL.objects.get(sentence=sentence_to_translate).sentencezh_set.clear()
+def delete_text_translations(text_to_translate, source_text_model):
+    if source_text_model == TextPL:
+        TextPL.objects.get(text=text_to_translate).TextZH_set.clear()
     else:
-        SentenceZH.objects.get(sentence=sentence_to_translate).sentencepl_set.clear()
+        TextZH.objects.get(text=text_to_translate).TextPL_set.clear()
 
 
-def add_sentence_translations(sentence_to_translate, source_sentence_model, translations):
-    if source_sentence_model == SentencePL:
-        sentence_to_translate = SentencePL.objects.get_or_create(sentence=sentence_to_translate)[0]
+def add_text_translations(text_to_translate, source_text_model, translations):
+    if source_text_model == TextPL:
+        text_to_translate = TextPL.objects.get_or_create(text=text_to_translate)[0]
         for translation in translations:
-            new_sentence_zh = SentenceZH.objects.get_or_create(sentence=translation['sentence'])[0]
-            SentenceTranslation.objects.get_or_create(sentence_zh=new_sentence_zh, sentence_pl=sentence_to_translate)
+            new_text_zh = TextZH.objects.get_or_create(text=translation['text'])[0]
+            TextTranslation.objects.get_or_create(text_zh=new_text_zh, text_pl=text_to_translate)
     else:
-        sentence_to_translate = SentenceZH.objects.get_or_create(sentence=sentence_to_translate)[0]
+        text_to_translate = TextZH.objects.get_or_create(text=text_to_translate)[0]
         for translation in translations:
-            new_sentence_pl = SentencePL.objects.get_or_create(sentence=translation['sentence'])[0]
-            SentenceTranslation.objects.get_or_create(sentence_zh=sentence_to_translate, sentence_pl=new_sentence_pl)
+            new_text_pl = TextPL.objects.get_or_create(text=translation['text'])[0]
+            TextTranslation.objects.get_or_create(text_zh=text_to_translate, text_pl=new_text_pl)
 

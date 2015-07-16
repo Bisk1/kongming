@@ -1,10 +1,9 @@
 {% extends "base.html"%}
-{% load i18n %}
 {% block content %}
 {% load staticfiles %}
 
 <div>Lekcja: {{ lesson.topic }}</div>
-Exercise - explanation:
+Ćwiczenie - wyjaśnienie:
 {% if exercise %}
     <form enctype="multipart/form-data" action="{% url 'exercises:modify_explanation' lesson_id=lesson.id exercise_id=exercise.id %}" method="post">
 {% else %}

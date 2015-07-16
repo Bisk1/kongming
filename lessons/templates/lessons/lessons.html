@@ -1,28 +1,27 @@
 {% extends "base.html"%}
-{% load i18n %}
 {% block content %}
 
 <div id="new_lesson">
-    {% trans "Add new lesson" %}
+    <div>Dodaj nową lekcję:</div>
     <form action="{% url 'lessons:lessons'  %}" method="post">
-    Lesson topic:
+    <label for="text_pl">Temat lekcji:</label>
         {% csrf_token %}
         <input type="hidden" name="create" id="create" value="true"/>
         <input type="text" class="form-control" name="topic" id="topic"/>
-        <input type="submit" value="Add">
+        <input class="btn btn-default" type="submit" value="Dodaj">
     </form>
 </div>
 
 
-{% trans "Available lessons" %}
+<div>Dostępne lekcje:</div>
 {% if lessons %}
     <table>
         <tr>
             <th>
-                {% trans "Topic" %}
+                Temat
             </th>
             <th>
-                {% trans "Requirement" %}
+                Wymaganie
             </th>
             <th>
             </th>
@@ -41,15 +40,15 @@
                         </div>
                     {% else %}
                         <div>
-                            None
+                            -
                         </div>
                     {% endif %}
                 </td>
                 <td>
-                    <a class="btn btn-default" href="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}">{% trans "Modify" %}</a>
+                    <a class="btn btn-default" href="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}">Edytuj</a>
                 </td>
                 <td>
-                    <a class="btn btn-default" href="{% url 'lessons:delete_lesson' lesson_id=lesson.id %}">{% trans "Delete" %}</a>
+                    <a class="btn btn-default" href="{% url 'lessons:delete_lesson' lesson_id=lesson.id %}">Usuń</a>
                 </td>
             </tr>
         {% endfor %}

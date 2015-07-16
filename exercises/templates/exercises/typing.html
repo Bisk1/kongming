@@ -1,0 +1,15 @@
+{% extends "base.html"%}
+{% block content %}
+{% load staticfiles %}
+
+<div id="translate_sentence_url" style="visibility: hidden">{% url 'translations:texts_translations' source_language='polish' %}</div>
+
+<div>Lekcja: {{ lesson.topic }}</div>
+<div>Ćwiczenie - pisanie:</div>
+Język źródłowy:
+    <a class="btn btn-default" href="{% url 'exercises:add_typing_zh' lesson_id=lesson.id %}">Chiński</a>
+    <a class="btn btn-default" href="{% url 'exercises:add_typing_pl' lesson_id=lesson.id %}">Polski</a>
+
+{% endblock %}
+{% block footer %}
+{% endblock %}

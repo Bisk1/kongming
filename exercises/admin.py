@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from models import Exercise, WordZHExercise, WordPLExercise, \
-    SentenceZHExercise, SentencePLExercise, ExplanationExercise, ExerciseType
+from models import Exercise, Typing, Explanation, ExerciseType
 
 
 
@@ -14,14 +13,7 @@ class ExerciseAdmin(admin.ModelAdmin):
     list_display = ('id', 'lesson', 'number')
 
 
-class WordPLExerciseDetailsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'word')
-
-
 admin.site.register(Exercise, ExerciseAdmin)
-admin.site.register(WordZHExercise)
-admin.site.register(WordPLExercise, WordPLExerciseDetailsAdmin)
-admin.site.register(SentenceZHExercise)
-admin.site.register(SentencePLExercise)
-admin.site.register(ExplanationExercise)
+admin.site.register(Typing)
+admin.site.register(Explanation)
 admin.site.register(ExerciseType)
