@@ -1,4 +1,4 @@
-def word_difference(word1, word2):
+def words_difference(word1, word2):
     """
     Determine how different are two words in the same language
     :param word1: first word to compare
@@ -31,12 +31,12 @@ def word_difference(word1, word2):
             return 1000
 
 
-def sentence_difference(sentence1, sentence2):
+def texts_difference(text1, text2):
     """
-    Determine how different are two sentences in the same language
-    :param word1: first sentence to compare
-    :param word2: second sentence to compare
+    Determine how different are two texts in the same language
+    :param text1: first text to compare
+    :param text2: second text to compare
     :return: number of different characters or 1000 if more than 2
     """
-    #TODO: improve sentence comparison algorithm
-    return word_difference(sentence1, sentence2)
+    #TODO: improve text comparison algorithm
+    return words_difference(text1, text2)

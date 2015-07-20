@@ -49,10 +49,11 @@ class Typing(AbstractExercise):
 
     def check(self, proposition):
         return {'success': self.text.check_translation(proposition),
-                'correct_translation': self.text.get_translations()[0]}
+                'correct_translation': self.text.get_translations().first().text}
 
     def prepare(self):
-        return {'text': self.text.text}
+        return {'text': self.text.text,
+                'language': self.text.get_language()}
 
     def __unicode__(self):
         return unicode(self.text)

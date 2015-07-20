@@ -1,4 +1,5 @@
 var exercise_type;
+var language;
 
 // Handles the result of user action
 function handleResult(success) {
@@ -27,13 +28,8 @@ function updateResultsIcons(success) {
  */
 function showExerciseContent(exercise_type, json) {
     switch (exercise_type) {
-        case('word zh exercise'):
-        case('word pl exercise'):
-            $('#word_or_sentence').html(json.word);
-            break;
-        case('sentence zh exercise'):
-        case('sentence pl exercise'):
-            $('#word_or_sentence').html(json.sentence);
+        case('typing'):
+            $('#typing_text').html(json.text);
             break;
         case('explanation'):
             $('#explanation_text').html(json.text);
@@ -47,13 +43,10 @@ function showExerciseContent(exercise_type, json) {
  */
 function showDivForExerciseType(exercise_type) {
     $('#explanation_exercise').hide();
-    $('#word_or_sentence_exercise').hide();
+    $('#typing_exercise').hide();
     switch (exercise_type) {
-        case('word zh exercise'):
-        case('word pl exercise'):
-        case('sentence zh exercise'):
-        case('sentence pl exercise'):
-            $('#word_or_sentence_exercise').show();
+        case('typing'):
+            $('#typing_exercise').show();
             break;
         case('explanation'):
             $('#explanation_exercise').show();
@@ -107,13 +100,9 @@ $(document).ready(function() {
                 $('#result').show();
                 handleResult(json.success);
                 switch (exercise_type) {
-                    case('word_zh'):
-                    case('word_pl'):
-                        $('#correct').html(json.correct_word).show();
-                        break;
-                    case('sentence_zh'):
-                    case('sentence_pl'):
-                        $('#correct').html(json.correct_sentence).show();
+                    case('text_zh'):
+                    case('text_pl'):
+                        $('#correct').html(json.correct_text).show();
                         break;
                 }
                 $('#current_exercise_number').html(json.current_exercise_number);
@@ -151,9 +140,10 @@ $(document).ready(function() {
                 else {
                     $('#current_exercise_number').html(json.current_exercise_number).show();
                     exercise_type = json.exercise_type;
+                    language = json.language;
                     showExerciseContent(exercise_type, json);
                     showDivForExerciseType(exercise_type);
-                    if (exercise_type == 'explanation exercise') {
+                    if (exercise_type == 'explanation') {
                         // explanation exercise is not checked - user goes to next exercise after reading
                         $('#check').hide();
                         $('#next').html("Continue").show();
@@ -161,16 +151,14 @@ $(document).ready(function() {
                         $('#next').hide();
                         $('#proposition').val('').show();
                         $('#check').html("Check").show();
-                    }
-                    switch (exercise_type) {
-                        case('word pl exercise'):
-                        case('sentence pl exercise'):
-                            toggleChineseInput(true);
-                            break;
-                        case('word zh exercise'):
-                        case('sentence zh exercise'):
-                            toggleChineseInput(false);
-                            break;
+                        switch (language) {
+                            case('pl'):
+                                toggleChineseInput(true);
+                                break;
+                            case('zh'):
+                                toggleChineseInput(false);
+                                break;
+                        }
                     }
                 }
                 updateProgressbar(json.current_exercise_number);

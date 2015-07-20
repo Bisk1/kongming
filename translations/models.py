@@ -2,6 +2,9 @@ from django.db import models
 
 from . import comparators
 
+POLISH = "pl"
+CHINESE = "zh"
+
 
 class WordPL(models.Model):
     """
@@ -28,9 +31,13 @@ class WordPL(models.Model):
         :return: true if this translation is acceptable
         """
         for chinese_translation in self.get_translations().all():
-            if comparators.word_difference(chinese_translation.word, word_zh_proposition) == 0:
+            if comparators.words_difference(chinese_translation.word, word_zh_proposition) == 0:
                 return True
         return False
+
+    @staticmethod
+    def get_language():
+        return POLISH
 
 
 class WordZH(models.Model):
@@ -62,9 +69,13 @@ class WordZH(models.Model):
         :return: true if this translation is acceptable
         """
         for polish_translation in self.get_translations().all():
-            if comparators.word_difference(polish_translation.word, word_pl_proposition) < 2:
+            if comparators.words_difference(polish_translation.word, word_pl_proposition) < 2:
                 return True
         return False
+
+    @staticmethod
+    def get_language():
+        return CHINESE
 
 
 class WordTranslation(models.Model):
@@ -108,9 +119,13 @@ class TextPL(models.Model):
         :return: true if this translation is acceptable
         """
         for chinese_translation in self.get_translations().all():
-            if comparators.words_difference(chinese_translation.text, text_zh_proposition) < 2:
+            if comparators.texts_difference(chinese_translation.text, text_zh_proposition) == 0:
                 return True
         return False
+
+    @staticmethod
+    def get_language():
+        return POLISH
 
 
 class TextZH(models.Model):
@@ -137,10 +152,13 @@ class TextZH(models.Model):
         :return: true if this translation is acceptable
         """
         for polish_translation in self.get_translations().all():
-            if comparators.word_difference(polish_translation.text, text_pl_proposition) < 2:
+            if comparators.texts_difference(polish_translation.text, text_pl_proposition) == 0:
                 return True
         return False
 
+    @staticmethod
+    def get_language():
+        return CHINESE
 
 class TextTranslation(models.Model):
     """
