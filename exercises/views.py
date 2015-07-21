@@ -5,9 +5,7 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.shortcuts import render, redirect
 
-from models import Lesson, \
-    Exercise, Explanation, \
-    ExerciseType, Typing
+from models import Lesson, Exercise, Explanation, ExerciseType, Typing
 from translations.models import TextTranslation, TextZH, TextPL
 
 
@@ -32,39 +30,30 @@ def delete_exercise(request, lesson_id, exercise_id):
     exercise.delete()
     return redirect('lessons:modify_lesson', lesson_id=lesson_id)
 
+# TYPING
+
 
 def add_typing(request, lesson_id):
     lesson = Lesson.objects.get(id=lesson_id)
-    return render(request, 'exercises/typing.html', {'lesson': lesson})
+    if request.method == 'POST':
+        if request.POST.get('language') == "pl":
+            return handle_add_typing(request=request, lesson=lesson, source_model=TextPL, target_model=TextZH)
+        else:
+            return handle_add_typing(request=request, lesson=lesson, source_model=TextZH, target_model=TextPL)
+    else:
+        return render(request, 'exercises/typing.html', {'lesson': lesson})
+
+
+def handle_add_typing(request, lesson, source_model, target_model):
+    typing_spec = Typing()
+    exercise = Exercise(lesson=lesson, number=request.POST.get('number'), spec=typing_spec)
+    exercise.save()
+    return handle_typing_spec(request, lesson, source_model, target_model, typing_spec)
 
 
 def modify_typing(request, lesson_id, exercise_id):
-    exercise = Exercise.objects.get(id=exercise_id)
-    if exercise.spec.content_type.model_class() == TextZH:
-        return redirect('exercises:modify_typing_zh', lesson_id=lesson_id, exercise_id=exercise_id)
-    else:
-        return redirect('exercises:modify_typing_pl', lesson_id=lesson_id, exercise_id=exercise_id)
-
-
-def add_typing_zh_exercise(request, lesson_id):
-    lesson = Lesson.objects.get(id=lesson_id)
-    if request.method == 'POST':
-        text_zh = TextZH.objects.get_or_create(text=request.POST.get('text_zh'))[0]
-        for translation_pl in request.POST.getlist('translations'):
-            text_pl = TextPL.objects.get_or_create(text=translation_pl)[0]
-            TextTranslation.objects.get_or_create(text_zh=text_zh, text_pl=text_pl)
-        text_zh_exercise_spec = Typing(text=text_zh)
-        text_zh_exercise_spec.save()
-        exercise = Exercise(lesson=lesson, number=request.POST.get('number'), spec=text_zh_exercise_spec)
-        exercise.save()
-        return redirect('lessons:modify_lesson', lesson_id=lesson_id)
-    else:
-        return render(request, 'exercises/typing_zh.html', {'lesson': lesson})
-
-
-def modify_typing_zh_exercise(request, lesson_id, exercise_id):
     """
-    Modify exercise - Chinese text - for a lesson
+    Modify typing exercise
     :param request: HTTP request
     :param lesson_id: id of lesson that exercise belongs to
     :param exercise_id: id of the exercise
@@ -73,63 +62,39 @@ def modify_typing_zh_exercise(request, lesson_id, exercise_id):
     exercise = Exercise.objects.get(id=exercise_id)
     lesson = Lesson.objects.get(id=lesson_id)
     if request.method == 'POST':
-        text_zh = TextZH.objects.get_or_create(text=request.POST.get('text_zh'))[0]
-        for translation_pl in request.POST.getlist('translations'):
-            text_pl = TextPL.objects.get_or_create(text=translation_pl)[0]
-            TextTranslation.objects.get_or_create(text_zh=text_zh, text_pl=text_pl)
-        text_zh_exercise_spec = exercise.spec
-        text_zh_exercise_spec.text = text_zh
-        text_zh_exercise_spec.save()
-        return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
+        print request.POST
+        if request.POST.get('language') == "pl":
+            return handle_modify_typing(request=request, lesson=lesson, exercise=exercise, source_model=TextPL, target_model=TextZH)
+        else:
+            return handle_modify_typing(request=request, lesson=lesson, exercise=exercise, source_model=TextZH, target_model=TextPL)
     else:
-        return render(request, 'exercises/typing_zh.html', {'lesson': lesson, 'exercise': exercise})
+        return render(request, 'exercises/typing.html', {'lesson': lesson, 'exercise': exercise})
 
 
-def add_typing_pl_exercise(request, lesson_id):
-    lesson = Lesson.objects.get(id=lesson_id)
-    if request.method == 'POST':
-        text_pl = TextPL.objects.get_or_create(text=request.POST.get('text_pl'))[0]
-        for translation_zh in request.POST.getlist('translations'):
-            text_zh = TextZH.objects.get_or_create(text=translation_zh)[0]
-            TextTranslation.objects.get_or_create(text_zh=text_zh, text_pl=text_pl)
-        text_pl_exercise_spec = Typing(text=text_pl)
-        text_pl_exercise_spec.save()
-        exercise = Exercise(lesson=lesson, number=request.POST.get('number'), spec=text_pl_exercise_spec)
-        exercise.save()
-        return redirect('lessons:modify_lesson', lesson_id=lesson_id)
-    else:
-        return render(request, 'exercises/typing_pl.html', {'lesson': lesson})
+def handle_modify_typing(request, lesson, exercise, source_model, target_model):
+    return handle_typing_spec(request, lesson, source_model, target_model, exercise.spec)
 
 
-def modify_typing_pl_exercise(request, lesson_id, exercise_id):
-    """
-    Modify exercise - Polish text - for a lesson
-    :param request: HTTP request
-    :param lesson_id: id of lesson that exercise belongs to
-    :param exercise_id: id of the exercise
-    :return: HTTP response
-    """
-    exercise = Exercise.objects.get(id=exercise_id)
-    lesson = Lesson.objects.get(id=lesson_id)
-    if request.method == 'POST':
-        text_pl = TextPL.objects.get_or_create(text=request.POST.get('text_pl'))[0]
-        for translation_zh in request.POST.getlist('translations'):
-            text_zh = TextZH.objects.get_or_create(text=translation_zh)[0]
-            TextTranslation.objects.get_or_create(text_zh=text_zh, text_pl=text_pl)
-        text_pl_exercise_spec = exercise.spec
-        text_pl_exercise_spec.word = text_pl
-        text_pl_exercise_spec.save()
-        return redirect('lessons:modify_lesson', lesson_id=exercise.lesson.id)
-    else:
-        return render(request, 'exercises/typing_pl.html', {'lesson': lesson, 'exercise': exercise})
+def handle_typing_spec(request, lesson, source_model, target_model, typing_spec):
+    text_to_translate = source_model.objects.get_or_create(text=request.POST.get('text_to_translate'))[0]
+    text_to_translate.get_translations().clear()
+    for translation in request.POST.getlist('translations'):
+        translated_text = target_model.objects.get_or_create(text=translation)[0]
+        text_to_translate.add_translation(translated_text)
+    typing_spec.text = text_to_translate
+    typing_spec.save()
+    return redirect('lessons:modify_lesson', lesson_id=lesson.id)
+
+
+# EXPLANATION
 
 
 def add_explanation_exercise(request, lesson_id):
     lesson = Lesson.objects.get(id=lesson_id)
     exercise = Exercise()
-    explanation_exercise_spec = Explanation()
+    explanation_spec = Explanation()
     if request.method == 'POST':
-        return handle_explanation_spec(request, lesson, exercise, explanation_exercise_spec)
+        return handle_explanation_spec(request, lesson, exercise, explanation_spec)
     else:
         return render(request, 'exercises/explanation.html', {'lesson': lesson})
 
@@ -144,22 +109,22 @@ def modify_explanation_exercise(request, lesson_id, exercise_id):
     """
     lesson = Lesson.objects.get(id=lesson_id)
     exercise = Exercise.objects.get(id=exercise_id)
-    explanation_exercise_spec = exercise.spec
+    explanation_spec = exercise.spec
     if request.method == 'POST':
-        return handle_explanation_spec(request, lesson, exercise, explanation_exercise_spec)
+        return handle_explanation_spec(request, lesson, exercise, explanation_spec)
     else:
         return render(request, 'exercises/explanation.html', {'lesson': lesson, 'exercise': exercise})
 
 
-def handle_explanation_spec(request, lesson, exercise, explanation_exercise_spec):
-    explanation_exercise_spec.text = request.POST.get('text')
+def handle_explanation_spec(request, lesson, exercise, explanation_spec):
+    explanation_spec.text = request.POST.get('text')
     if 'file' in request.FILES:
         image_file = request.FILES['file']
         image_file.name = save_image_for_exercise(image_file)
-        explanation_exercise_spec.image = image_file
-    explanation_exercise_spec.save()
+        explanation_spec.image = image_file
+    explanation_spec.save()
     exercise.lesson = lesson
-    exercise.spec = explanation_exercise_spec
+    exercise.spec = explanation_spec
     exercise.save()
     return redirect('lessons:modify_lesson', lesson_id=lesson.id)
 

@@ -72,8 +72,10 @@ $.fn.insertEmptyTextInput = function() {
 $(document).ready(function() {
 
     $(document).on("click", "#add_translation_button", function() {
-        $("#translations_table").find("tbody")
-        .insertEmptyTextInput();
+        var lastTranslationGroup = $(".translation-group").last();
+        var newTranslationGroup = lastTranslationGroup.clone().insertAfter(lastTranslationGroup);
+        newTranslationGroup.find("input").val('');
+        newTranslationGroup.find(".delete-button").show();
     });
 
     $('#edit').click(function() {
@@ -86,8 +88,8 @@ $(document).ready(function() {
         }
     });
 
-    $(document).on("click", "#remove", function() {
-        ($(this)).parent().parent().remove();
+    $(document).on("click", ".delete-button", function() {
+        ($(this)).parent().remove();
     });
 
     $(".text_to_search" ).autocomplete({

@@ -2,13 +2,80 @@
 {% block content %}
 {% load staticfiles %}
 
-<div id="translate_sentence_url" style="visibility: hidden">{% url 'translations:texts_translations' source_language='polish' %}</div>
+<script type="text/javascript" src="{% static "exercises/js/typing.js" %}"></script>
+<div id="translate_text_url" style="visibility: hidden">{% url 'translations:texts_translations' source_language='polish' %}</div>
 
-<div>Lekcja: {{ lesson.topic }}</div>
-<div>Ćwiczenie - pisanie:</div>
-Język źródłowy:
-    <a class="btn btn-default" href="{% url 'exercises:add_typing_zh' lesson_id=lesson.id %}">Chiński</a>
-    <a class="btn btn-default" href="{% url 'exercises:add_typing_pl' lesson_id=lesson.id %}">Polski</a>
+    <div class="col-md-12">
+        <div class="widget wblue">
+            <div class="widget-head">
+            <div class="pull-left">Lekcja: {{ lesson.topic }}</div>
+            <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="widget-content">
+            <div class="padd">
+                <h6>Ćwiczenie - pisanie</h6>
+                <hr>
+            {% if exercise %}
+                <form class="form-horizontal" role="form" action="{% url 'exercises:modify_typing' lesson_id=lesson.id exercise_id=exercise.id %}" method="post">
+            {% else %}
+                <form class="form-horizontal" role="form" action="{% url 'exercises:add_typing' lesson_id=lesson.id %}" method="post">
+            {% endif %}
+                {% csrf_token %}
+                    {# Source language choice #}
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">Język źródłowy:</label>
+                        <div class="col-lg-8">
+                        {% if exercise %}
+                            {% if exercise.spec.content_type.name == "text zh" %}
+                                Chiński
+                                <input type="hidden" name="language" value="zh"/>
+                            {% else %}
+                                Polski
+                                <input type="hidden" name="language" value="pl"/>
+                            {% endif %}
+                        {% else %}
+                            <div class="radio">
+                                <label><input type="radio" name="language" value="zh">Chiński</label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="language" value="pl">Polski</label>
+                            </div>
+                        {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label" for="text_to_search">Tekst oryginalny:</label>
+                        <div class="col-lg-8">
+                            <input type="text" placeholder="Tekst oryginalny" class="form-control" id="text_to_translate" name="text_to_translate" value="{{ exercise.spec.text }}">
+                        </div>
+                    </div>
+                    {# Show all translations, first one does not have visible delete button #}
+                    {% for translation in exercise.spec.text.get_translations.all %}
+                    <div class="form-group translation-group">
+                        <label class="col-lg-4 control-label"">Tłumaczenie:</label>
+                        <div class="col-lg-8">
+                            <input type="text" placeholder="Tłumaczenie" class="form-control" name="translations" value="{{ translation.text }}">
+                        </div>
+                        <button type="button" {% if forloop.first %}style="display: none;"{% endif %} class="btn btn-default delete-button">Usuń</button>
+                    </div>
+                    {% endfor %}
+                    {# If there is not even one translation, first empty field should appear #}
+                    {% if not exercise.spec.text.get_translations.all %}
+                    <div class="form-group translation-group">
+                        <label class="col-lg-4 control-label"">Tłumaczenie:</label>
+                        <div class="col-lg-8">
+                            <input type="text" placeholder="Tłumaczenie" class="form-control" name="translations" value="{{ translation.text }}">
+                        </div>
+                        <button type="button" style="display: none;" class="btn btn-default delete-button">Usuń</button>
+                    </div>
+                    {% endif %}
+                    <button type="button" id="add_translation_button" class="btn btn-default">Dodaj tłumaczenie</button>
+                    <button type="submit" id="save" class="btn btn-default">Zapisz</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 {% block footer %}

@@ -123,6 +123,9 @@ class TextPL(models.Model):
                 return True
         return False
 
+    def add_translation(self, translation_text):
+        TextTranslation(text_zh=translation_text, text_pl=self).save()
+
     @staticmethod
     def get_language():
         return POLISH
@@ -155,6 +158,9 @@ class TextZH(models.Model):
             if comparators.texts_difference(polish_translation.text, text_pl_proposition) == 0:
                 return True
         return False
+
+    def add_translation(self, translation_text):
+        TextTranslation(text_zh=self, text_pl=translation_text).save()
 
     @staticmethod
     def get_language():
