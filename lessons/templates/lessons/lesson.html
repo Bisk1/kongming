@@ -34,7 +34,7 @@
 </form>
 <div>
     Dodaj ćwiczenie:
-    <form action="{% url 'exercises:add_exercise' lesson_id=lesson.id %}" method="post">
+    <form action="{% url 'lessons:exercises:add_exercise' lesson_id=lesson.id %}" method="post">
     {% csrf_token %}
     <div class="form-group">
         <label class="control-label" for="exercise_type">Rodzaj:</label>

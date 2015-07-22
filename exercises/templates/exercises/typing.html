@@ -17,9 +17,9 @@
                 <h6>Ćwiczenie - pisanie</h6>
                 <hr>
             {% if exercise %}
-                <form class="form-horizontal" role="form" action="{% url 'exercises:modify_typing' lesson_id=lesson.id exercise_id=exercise.id %}" method="post">
+                <form class="form-horizontal" role="form" action="{% url 'lessons:exercises:modify_typing' lesson_id=lesson.id exercise_id=exercise.id %}" method="post">
             {% else %}
-                <form class="form-horizontal" role="form" action="{% url 'exercises:add_typing' lesson_id=lesson.id %}" method="post">
+                <form class="form-horizontal" role="form" action="{% url 'lessons:exercises:add_typing' lesson_id=lesson.id %}" method="post">
             {% endif %}
                 {% csrf_token %}
                     {# Source language choice #}

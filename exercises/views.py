@@ -14,14 +14,14 @@ logger = logging.getLogger(__name__)
 
 def add_exercise(request, lesson_id):
     exercise_type = request.POST.get('exercise_type')
-    return redirect('exercises:add_' + str(exercise_type), lesson_id=lesson_id)
+    return redirect('lessons:exercises:add_' + str(exercise_type), lesson_id=lesson_id)
 
 
 def modify_exercise(request, lesson_id, exercise_id):
     exercise = Exercise.objects.get(id=exercise_id)
     exercise_type = ExerciseType.objects.get(model=exercise.content_type)
     exercise_type_slug = exercise_type.slug
-    return redirect('exercises:modify_' + exercise_type_slug, lesson_id=lesson_id, exercise_id=exercise_id)
+    return redirect('lessons:exercises:modify_' + exercise_type_slug, lesson_id=lesson_id, exercise_id=exercise_id)
 
 
 def delete_exercise(request, lesson_id, exercise_id):
