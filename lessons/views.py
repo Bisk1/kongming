@@ -41,9 +41,9 @@ def modify_lesson(request, lesson_id):
     """
     lesson = Lesson.objects.get(pk=lesson_id)
     if request.method == 'POST':
-        return handle_lesson(lesson)
+        return handle_lesson(request, lesson)
     else:
-        other_lessons = Lesson.objects.all().order_by('-topic')
+        other_lessons = Lesson.objects.all().exclude(id=lesson_id).order_by('-topic')
         exercises = Exercise.objects.filter(lesson=lesson).order_by('number')
         exercises_types = ExerciseType.objects.all()
         return render(request, 'lessons/lesson.html', {'lesson': lesson,
@@ -51,7 +51,6 @@ def modify_lesson(request, lesson_id):
                                                        'other_lessons': other_lessons,
                                                        'exercises_types': exercises_types
                                                        })
-
 
 def handle_lesson(request, lesson):
     if request.POST.get('topic', False):
