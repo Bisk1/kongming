@@ -1,6 +1,5 @@
 {% load staticfiles %}
 
-{% csrf_token %}
 <table>
     {% for exercise in exercises %}
         <tr>
@@ -25,4 +24,3 @@
         </tr>
     {% endfor %}
 </table>
-<input type="submit" id="save" class="btn btn-default" value="Zapisz"></button>

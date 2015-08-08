@@ -2,18 +2,31 @@
      return $("#translate_text_url").text();
  };
 
+ var emptyTranslationGroup;
+
 var updateTranslationsTable = function(translations) {
-    var translationsTable = $("#translations_table").find("tbody").empty();
-        for (var i = 0; i < translations.length; i++) {
-            translationsTable
-                .insertPopulatedTextInput(translations[i]);
-        }
+    var newTranslationGroup = ($(".translation-group")).first().cloneAndEmptyInputs;
+    $(".translation-group").remove();
+    for (var i = 0; i < translations.length; i++) {
+        translationsTable
+            .insertPopulatedTextInput(translations[i]);
+    }
 };
 
+ $.fn.cloneAndEmptyInputs = function() {
+    var newTranslationGroup = this.clone();
+    newTranslationGroup.find("input").val('');
+    return newTranslationGroup;
+ };
+
+$.fn.showDeleteButton = function() {
+    this.find(".delete-button").show();
+    return this;
+};
 
 var checkAndUpdateTranslationsForm = function(text_to_translate) {
     if(typeof text_to_translate == "undefined") {
-        text_to_translate = $(".text_to_search").val();
+        text_to_translate = $(".text_to_translate").val();
     }
     $.ajax({
         url: getAjaxTranslateTextUrl(),
@@ -52,37 +65,19 @@ $.fn.insertPopulatedTextInput = function(translation) {
 };
 
 
-$.fn.insertEmptyTextInput = function() {
-    this
-    .append($('<tr>')
-        .append($('<td>')
-            .append($('<label>')
-                .append('Tłumaczenie: ')
-            )
-            .append('\n<input name="translations"/>')
-
-        )
-        .append($('<td>')
-            .append('<button id="remove" class="btn btn-default">Remove</button>')
-        )
-    );
-    return this;
-};
-
 $(document).ready(function() {
+
 
     $(document).on("click", "#add_translation_button", function() {
         var lastTranslationGroup = $(".translation-group").last();
-        var newTranslationGroup = lastTranslationGroup.clone().insertAfter(lastTranslationGroup);
-        newTranslationGroup.find("input").val('');
-        newTranslationGroup.find(".delete-button").show();
+        lastTranslationGroup.cloneAndEmptyInputs().showDeleteButton().insertAfter(lastTranslationGroup);
     });
 
     $('#edit').click(function() {
         checkAndUpdateTranslationsForm();
     });
 
-    $(".text_to_search").keypress(function(e) {
+    $(".text_to_translate").keypress(function(e) {
         if (e.which == 13) {
             checkAndUpdateTranslationsForm();
         }
@@ -92,14 +87,14 @@ $(document).ready(function() {
         ($(this)).parent().remove();
     });
 
-    $(".text_to_search" ).autocomplete({
+    $(".text_to_translate" ).autocomplete({
         source: function(request, response) {
             $.ajax({
                 url: getAjaxTranslateTextUrl(),
                 type: 'POST',
                 dataType: "json",
                 data: {
-                    text_to_search : request.term,
+                    text_to_translate : request.term,
                     csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
                 },
                 success: function(data) {

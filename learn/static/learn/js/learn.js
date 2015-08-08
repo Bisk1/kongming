@@ -96,7 +96,7 @@ $(document).ready(function() {
             success : function(json) {
                 $('#proposition').hide();
                 $('#check').hide();
-                $('#next').html("Continue").show();
+                $('#next').html("Dalej").show();
                 $('#result').show();
                 handleResult(json.success);
                 switch (exercise_type) {

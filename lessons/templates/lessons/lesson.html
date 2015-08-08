@@ -2,37 +2,70 @@
 {% block content %}
 {% load staticfiles %}
 
-<form action="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}" method="post">
-    <div class="form-group">
-        <label for="topic">Temat lekcji:</label>
-        <input type="text" class="form-control" id="topic" name="topic" value="{{ lesson.topic }}"/>
-    </div>
-    <div class="form-group">
-        <label class="control-label" for="exercises_number">Liczba ćwiczeń:</label>
-        <input type="number" class="form-control" id="exercises_number" name="exercises_number" value="{{ lesson.exercises_number }}"/>
-    </div>
-    <div class="form-group">
-        <label for="requirement">Wymaganie:</label>
-        <select  class="form-control" id="requirement" name="requirement">
-            <option value="None">Brak</option>
-        {% for other_lesson in other_lessons %}
-            {% if lesson.requirement.topic == other_lesson.topic %}
-                <option value="{{ other_lesson.id }}" selected>{{ other_lesson.topic }}</option>
-            {% endif %}
-            {% if lesson.requirement.topic != other_lesson.topic %}
-                <option value="{{ other_lesson.id }}">{{ other_lesson.topic }}</option>
-            {% endif %}
-            {% endfor %}
-        </select>
-    </div>
-    <div>
-        Ćwiczenia:
-        <div id="exercises">
-        {% include "lessons/exercises.html" %}
+<div class="col-md-12">
+    <div class="widget wblue">
+        <div class="widget-head">
+        <div class="pull-left">Lekcja: {{ lesson.topic }}</div>
+        <div class="clearfix"></div>
         </div>
     </div>
-</form>
+    <div class="widget-content">
+        <div class="padd">
+        {% if lesson %}
+            <form class="form-horizontal" role="form" action="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}" method="post">
+        {% else %}
+            <form class="form-horizontal" role="form" action="{% url 'lessons:add_lesson' %}" method="post">
+        {% endif %}
+            {% csrf_token %}
+                <div class="form-group">
+                    <label class="col-lg-4 control-label" for="topic">Temat:</label>
+                    <div class="col-lg-8">
+                        <input type="text" placeholder="Temat" class="form-control" id="topic" name="topic" value="{{ lesson.topic }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label" for="exercises_number">Liczba ćwiczeń:</label>
+                    <div class="col-lg-8">
+                        <input type="number" placeholder="Liczba ćwiczeń" class="form-control" id="exercises_number" name="exercises_number" value="{{ lesson.exercises_number }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label" for="requirement">Wymaganie:</label>
+                    <div class="col-lg-8">
+                        <select  class="form-control" id="requirement" name="requirement">
+                            <option value="None">Brak</option>
+                        {% for other_lesson in other_lessons %}
+                            {% if lesson.requirement.topic == other_lesson.topic %}
+                                <option value="{{ other_lesson.id }}" selected>{{ other_lesson.topic }}</option>
+                            {% endif %}
+                            {% if lesson.requirement.topic != other_lesson.topic %}
+                                <option value="{{ other_lesson.id }}">{{ other_lesson.topic }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                {% if lesson %}
+                    <div>
+                        Ćwiczenia:
+                        <div id="exercises">
+                        {% include "lessons/exercises.html" %}
+                        </div>
+                    </div>
+                 {% else %}
+                    Zapisz lekcję, aby dodać ćwiczenia.
+                {% endif %}
+                </div>
+                <button type="submit" id="save" class="btn btn-default">Zapisz</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <div>
+{% if lesson %}
     Dodaj ćwiczenie:
     <form action="{% url 'lessons:exercises:add_exercise' lesson_id=lesson.id %}" method="post">
     {% csrf_token %}
@@ -46,6 +79,7 @@
     </div>
         <input type="submit" value="Dodaj" class="btn btn-default">
     </form>
+{% endif %}
 </div>
 
 

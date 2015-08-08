@@ -1,59 +1,60 @@
 {% extends "base.html"%}
 {% block content %}
 
-<div id="new_lesson">
-    <div>Dodaj nową lekcję:</div>
-    <form action="{% url 'lessons:lessons'  %}" method="post">
-    <label for="text_pl">Temat lekcji:</label>
-        {% csrf_token %}
-        <input type="hidden" name="create" id="create" value="true"/>
-        <input type="text" class="form-control" name="topic" id="topic"/>
-        <input class="btn btn-default" type="submit" value="Dodaj">
-    </form>
+<div class="col-md-12">
+    {% if lessons %}
+    <div class="widget wred">
+        <div class="widget-head">
+            <div class="pull-left">Dostępne lekcje</div>
+            <div class="widget-icons pull-right">
+                <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a>
+                <a href="#" class="wclose"><i class="icon-remove"></i></a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="widget-content medias">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>Temat</th>
+                        <th>Wymaganie</th>
+                        <th>Control</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for lesson in lessons %}
+                    <tr>
+                        <td>
+                            {{ lesson.topic }}
+                        </td>
+                        <td>
+                            {% if lesson.requirement %}
+                                <div>
+                                    {{ lesson.requirement.topic }}
+                                </div>
+                            {% else %}
+                                <div>
+                                    -
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-info" href="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}"><i class="icon-pencil"></i></a>
+                            <a class="btn btn-sm btn-danger" href="{% url 'lessons:delete_lesson' lesson_id=lesson.id %}"><i class="icon-remove"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+        No lessons available
+    {% endif %}
+
+    <a class="btn btn-default" href="{% url 'lessons:add_lesson' %}">Dodaj lekcję</a>
+
+
 </div>
 
-
-<div>Dostępne lekcje:</div>
-{% if lessons %}
-    <table>
-        <tr>
-            <th>
-                Temat
-            </th>
-            <th>
-                Wymaganie
-            </th>
-            <th>
-            </th>
-            <th>
-            </th>
-        </tr>
-        {% for lesson in lessons %}
-            <tr>
-                <td>
-                    {{ lesson.topic }}
-                </td>
-                <td>
-                    {% if lesson.requirement %}
-                        <div>
-                            {{ lesson.requirement.topic }}
-                        </div>
-                    {% else %}
-                        <div>
-                            -
-                        </div>
-                    {% endif %}
-                </td>
-                <td>
-                    <a class="btn btn-default" href="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}">Edytuj</a>
-                </td>
-                <td>
-                    <a class="btn btn-default" href="{% url 'lessons:delete_lesson' lesson_id=lesson.id %}">Usuń</a>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-{% else %}
-    No lessons available
-{% endif %}
 {% endblock %}
