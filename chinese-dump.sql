@@ -127,7 +127,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$WUg3rwD15oKt$M8BRDtLilFwnmA18Q/tTfRoVFpJBC9sA+MHDVyX/G4M=','2015-07-18 14:09:05',1,'admin','','','',1,1,'2015-07-18 14:08:46');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$WUg3rwD15oKt$M8BRDtLilFwnmA18Q/tTfRoVFpJBC9sA+MHDVyX/G4M=','2015-08-08 14:35:49',1,'admin','','','',1,1,'2015-07-18 14:08:46');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -210,7 +210,7 @@ CREATE TABLE `django_admin_log` (
   KEY `django_admin_log_37ef4eb4` (`content_type_id`),
   CONSTRAINT `content_type_id_refs_id_93d2d1f8` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `user_id_refs_id_c0d12874` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -219,7 +219,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2015-07-18 14:09:30',1,13,'1','Typing (typing) - typing',1,''),(2,'2015-07-18 14:09:42',1,13,'2','Explanation (explanation) - explanation',1,''),(3,'2015-07-19 10:27:53',1,20,'2','sdfsdfsdf',3,''),(4,'2015-07-19 10:27:53',1,20,'1','sdfs',3,'');
+INSERT INTO `django_admin_log` VALUES (1,'2015-07-18 14:09:30',1,13,'1','Typing (typing) - typing',1,''),(2,'2015-07-18 14:09:42',1,13,'2','Explanation (explanation) - explanation',1,''),(3,'2015-07-19 10:27:53',1,20,'2','sdfsdfsdf',3,''),(4,'2015-07-19 10:27:53',1,20,'1','sdfs',3,''),(5,'2015-07-20 17:00:21',1,8,'62','ExerciseAction object',3,''),(6,'2015-07-20 17:00:21',1,8,'61','ExerciseAction object',3,''),(7,'2015-07-20 17:00:21',1,8,'60','ExerciseAction object',3,''),(8,'2015-07-20 17:00:21',1,8,'59','ExerciseAction object',3,''),(9,'2015-07-20 17:00:21',1,8,'58','ExerciseAction object',3,''),(10,'2015-07-20 17:00:21',1,8,'57','ExerciseAction object',3,''),(11,'2015-07-20 17:00:21',1,8,'56','ExerciseAction object',3,''),(12,'2015-07-20 17:00:21',1,8,'55','ExerciseAction object',3,''),(13,'2015-07-20 17:00:21',1,8,'54','ExerciseAction object',3,''),(14,'2015-07-20 17:00:21',1,8,'53','ExerciseAction object',3,''),(15,'2015-07-20 17:00:21',1,8,'52','ExerciseAction object',3,''),(16,'2015-07-20 17:00:21',1,8,'7','ExerciseAction object',3,''),(17,'2015-07-20 17:00:42',1,7,'14','LessonAction object',3,''),(18,'2015-07-20 17:00:42',1,7,'9','LessonAction object',3,''),(19,'2015-07-20 17:00:42',1,7,'2','LessonAction object',3,''),(20,'2015-07-20 17:00:42',1,7,'1','LessonAction object',3,'');
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -272,7 +272,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('j8un6sdjttwr87sg5zet9a0qpnw5yjr7','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-08-01 14:09:05');
+INSERT INTO `django_session` VALUES ('j8un6sdjttwr87sg5zet9a0qpnw5yjr7','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-08-01 14:09:05'),('l5afnu7ihi3bxg18ykm3agzf48mbxbqh','NDgwZGY5NjZhNjc2M2Q1NDE3N2Q5ZjNlZWE0ZTlmODBkMzU5MTZkMDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoicGwiLCJfYXV0aF91c2VyX2lkIjoxfQ==','2015-08-22 14:35:49');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -405,7 +405,7 @@ CREATE TABLE `learn_exerciseaction` (
   KEY `learn_exerciseaction_ff58a6f6` (`lesson_action_id`),
   CONSTRAINT `exercise_id_refs_id_89ff9a05` FOREIGN KEY (`exercise_id`) REFERENCES `exercises_exercise` (`id`),
   CONSTRAINT `lesson_action_id_refs_id_65a41530` FOREIGN KEY (`lesson_action_id`) REFERENCES `learn_lessonaction` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=483 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -414,7 +414,7 @@ CREATE TABLE `learn_exerciseaction` (
 
 LOCK TABLES `learn_exerciseaction` WRITE;
 /*!40000 ALTER TABLE `learn_exerciseaction` DISABLE KEYS */;
-INSERT INTO `learn_exerciseaction` VALUES (7,25,9,0,1),(52,15,14,0,1),(53,16,14,0,2),(54,17,14,0,3),(55,18,14,0,4),(56,19,14,0,5),(57,20,14,0,6),(58,21,14,0,7),(59,22,14,0,8),(60,24,14,0,9),(61,23,14,0,10),(62,20,14,0,11);
+INSERT INTO `learn_exerciseaction` VALUES (74,8,16,0,1),(75,9,16,0,2),(76,10,16,0,3),(77,11,16,0,4),(78,12,16,0,5),(79,13,16,0,6),(80,14,16,0,7),(81,25,17,0,1),(82,37,17,0,2),(83,36,17,0,3),(84,35,17,0,4),(85,34,17,0,5),(86,33,17,0,6),(87,32,17,0,7),(88,31,17,0,8),(89,30,17,0,9),(90,38,17,0,10),(465,15,52,0,1),(466,16,52,0,2),(467,17,52,0,3),(468,18,52,0,4),(469,19,52,0,5),(470,20,52,0,6),(471,21,52,0,7),(472,22,52,0,8),(473,24,52,0,9),(474,23,52,0,10),(475,23,52,0,11),(476,39,53,0,1),(477,40,53,0,2),(478,41,53,0,3),(479,43,53,0,4),(480,47,53,0,5),(481,44,53,0,6),(482,45,53,0,7);
 /*!40000 ALTER TABLE `learn_exerciseaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -438,7 +438,7 @@ CREATE TABLE `learn_lessonaction` (
   KEY `learn_lessonaction_37003e55` (`lesson_id`),
   CONSTRAINT `lesson_id_refs_id_620aeb9f` FOREIGN KEY (`lesson_id`) REFERENCES `lessons_lesson` (`id`),
   CONSTRAINT `user_id_refs_id_52d756df` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -447,7 +447,7 @@ CREATE TABLE `learn_lessonaction` (
 
 LOCK TABLES `learn_lessonaction` WRITE;
 /*!40000 ALTER TABLE `learn_lessonaction` DISABLE KEYS */;
-INSERT INTO `learn_lessonaction` VALUES (1,5,0,0,1,1,NULL),(2,0,0,0,1,3,'p'),(9,1,1,0,1,3,NULL),(14,11,3,0,1,2,NULL);
+INSERT INTO `learn_lessonaction` VALUES (16,7,0,0,1,1,NULL),(17,10,0,0,1,3,NULL),(52,11,8,5,1,2,NULL),(53,7,3,0,1,4,NULL);
 /*!40000 ALTER TABLE `learn_lessonaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -466,7 +466,7 @@ CREATE TABLE `lessons_lesson` (
   PRIMARY KEY (`id`),
   KEY `lessons_lesson_19c1813d` (`requirement_id`),
   CONSTRAINT `requirement_id_refs_id_7179d31e` FOREIGN KEY (`requirement_id`) REFERENCES `lessons_lesson` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -521,7 +521,7 @@ CREATE TABLE `translations_texttranslation` (
   KEY `translations_texttranslation_00218c61` (`text_pl_id`),
   CONSTRAINT `text_pl_id_refs_id_7889d818` FOREIGN KEY (`text_pl_id`) REFERENCES `translations_textpl` (`id`),
   CONSTRAINT `text_zh_id_refs_id_d5e3d032` FOREIGN KEY (`text_zh_id`) REFERENCES `translations_textzh` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -530,7 +530,7 @@ CREATE TABLE `translations_texttranslation` (
 
 LOCK TABLES `translations_texttranslation` WRITE;
 /*!40000 ALTER TABLE `translations_texttranslation` DISABLE KEYS */;
-INSERT INTO `translations_texttranslation` VALUES (7,3,3),(9,4,6),(8,5,4),(3,6,8),(5,7,13),(4,8,12),(2,9,9),(1,10,7),(6,11,13),(10,12,5),(12,13,10),(13,13,14),(16,14,10),(17,14,15),(11,15,10),(15,16,10),(14,16,11),(18,17,1),(19,18,16),(20,19,17);
+INSERT INTO `translations_texttranslation` VALUES (26,3,3),(9,4,6),(8,5,4),(3,6,8),(5,7,13),(4,8,12),(2,9,9),(1,10,7),(6,11,13),(10,12,5),(12,13,10),(13,13,14),(16,14,10),(17,14,15),(11,15,10),(15,16,10),(14,16,11),(18,17,1),(19,18,16),(20,19,17);
 /*!40000 ALTER TABLE `translations_texttranslation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -546,7 +546,7 @@ CREATE TABLE `translations_textzh` (
   `text` varchar(255) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `text` (`text`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -555,7 +555,7 @@ CREATE TABLE `translations_textzh` (
 
 LOCK TABLES `translations_textzh` WRITE;
 /*!40000 ALTER TABLE `translations_textzh` DISABLE KEYS */;
-INSERT INTO `translations_textzh` VALUES (8,'one'),(4,'他'),(9,'他们'),(19,'他呢？'),(5,'你'),(6,'你们'),(14,'你们好！'),(17,'你好吗？'),(15,'你好！'),(13,'大家好!'),(12,'她'),(7,'她们'),(11,'它们'),(16,'您好！'),(3,'我'),(10,'我们'),(18,'我很好。');
+INSERT INTO `translations_textzh` VALUES (20,'asd'),(8,'one'),(21,'sasd'),(4,'他'),(9,'他们'),(19,'他呢？'),(5,'你'),(6,'你们'),(14,'你们好！'),(17,'你好吗？'),(15,'你好！'),(13,'大家好!'),(12,'她'),(7,'她们'),(11,'它们'),(16,'您好！'),(3,'我'),(10,'我们'),(18,'我很好。');
 /*!40000 ALTER TABLE `translations_textzh` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -706,4 +706,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-07-20 18:57:41
+-- Dump completed on 2015-08-08 17:02:32

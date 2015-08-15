@@ -4,7 +4,8 @@
     {% for exercise in exercises %}
         <tr>
             <td>
-                <input name="exercise{{exercise.id }}" value="{{ exercise.number|default:"" }}" size="1">
+                <input type="hidden" name="exercises_ids" value="{{ exercise.id }}"/>
+                <input type="input" name="exercise_{{ exercise.id }}" value="{{ exercise.number|default:"" }}" size="1">
 
             </td>
             <td>{{ exercise.content_type | capfirst }}</td>

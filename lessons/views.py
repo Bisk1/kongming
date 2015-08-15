@@ -1,11 +1,8 @@
 import logging
 
 from django.shortcuts import render, redirect
-from django.core.urlresolvers import reverse
-from django.http import *
-from django.template import loader, RequestContext
-from lessons.forms import LessonForm
 
+from lessons.forms import LessonForm
 from models import Lesson
 from exercises.models import Exercise, ExerciseType
 
@@ -25,12 +22,10 @@ def lessons(request):
 
 def add_lesson(request):
     if request.method == 'POST':
-        lesson = Lesson()
-        handle_lesson(request, lesson)
-        return redirect('lessons:lessons')
+        return handle_lesson(request)
     else:
-        other_lessons = Lesson.objects.all().order_by('-topic')
-        return render(request, 'lessons/lesson.html', {'other_lessons': other_lessons})
+        form = LessonForm()
+        return render(request, 'lessons/lesson.html', {'form': form})
 
 
 def modify_lesson(request, lesson_id):
@@ -43,40 +38,29 @@ def modify_lesson(request, lesson_id):
     if request.method == 'POST':
         return handle_lesson(request, lesson)
     else:
-        other_lessons = Lesson.objects.all().exclude(id=lesson_id).order_by('-topic')
+        form = LessonForm(instance=lesson)
         exercises = Exercise.objects.filter(lesson=lesson).order_by('number')
         exercises_types = ExerciseType.objects.all()
         return render(request, 'lessons/lesson.html', {'lesson': lesson,
                                                        'exercises': exercises,
-                                                       'other_lessons': other_lessons,
-                                                       'exercises_types': exercises_types
+                                                       'exercises_types': exercises_types,
+                                                       'form': form,
                                                        })
 
-def handle_lesson(request, lesson):
-    if request.POST.get('topic', False):
-        lesson.topic = request.POST.get('topic')
-        lesson.save()
-    if request.POST.get('exercises_number', False):
-        lesson.exercises_number = request.POST.get('exercises_number')
-        lesson.save()
-    if request.POST.get('requirement', False):
-        requirement_id = request.POST.get('requirement')
-        if requirement_id != "None":
-            requirement = Lesson.objects.get(pk=requirement_id)
-            lesson.requirement = requirement
-        else:
-            lesson.requirement = None
-        lesson.save()
-    exercises = Exercise.objects.filter(lesson=lesson)
-    for exercise in exercises:
-        name_of_exercise_number_in_form = 'exercise' + str(exercise.id)
-        if request.POST.get(name_of_exercise_number_in_form, False):
-            exercise.number = request.POST.get(name_of_exercise_number_in_form)
+
+def handle_lesson(request, lesson=None):
+    exercises_ids=request.POST.getlist('exercises_ids')
+    form = LessonForm(request.POST, instance=lesson, exercises_ids=exercises_ids)
+    if form.is_valid():
+        form.save()
+
+        for exercise_id in exercises_ids:
+            exercise = Exercise.objects.get(pk=exercise_id)
+            exercise.number = form.cleaned_data['exercise_%s' % exercise_id]
             exercise.save()
-    if request.POST.get('exercise_to_remove', False):
-        exercise_to_remove = Exercise.objects.get(pk=request.POST.get('exercise_to_remove'))
-        exercise_to_remove.delete()
-    lesson.save()
+        return redirect('lessons:lessons')
+    else:
+        return render(request, 'lessons/lesson.html', {'form': form})
 
 
 def delete_lesson(request, lesson_id):
@@ -85,5 +69,5 @@ def delete_lesson(request, lesson_id):
     :param request: HTTP request
     :return: HTTP response
     """
-    Lesson.objects.get(id=lesson_id).delete()
+    Lesson.objects.get(pk=lesson_id).delete()
     return redirect('lessons:lessons')

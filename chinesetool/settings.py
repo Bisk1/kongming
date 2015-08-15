@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'exercises',
     'users',
     'translations',
+    'tags',
     'django_pdb'
 )
 
