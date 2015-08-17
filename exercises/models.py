@@ -61,7 +61,7 @@ class Typing(AbstractExercise):
 
 class Explanation(AbstractExercise):
     text = models.TextField()
-    image = models.FileField(upload_to="image/", null=True)
+    image = models.FileField(upload_to="image/", blank=True)
 
     def check(self, proposition):
         raise Exception("Explanation has no check method")

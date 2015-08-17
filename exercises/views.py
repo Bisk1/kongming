@@ -1,8 +1,5 @@
 import logging
-import uuid
 
-from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage
 from django.shortcuts import render, redirect
 
 from models import Lesson, Exercise, ExerciseType, Typing
@@ -63,11 +60,12 @@ def modify_typing(request, lesson_id, exercise_id):
     exercise = Exercise.objects.get(id=exercise_id)
     lesson = Lesson.objects.get(id=lesson_id)
     if request.method == 'POST':
-        print request.POST
         if request.POST.get('language') == "pl":
-            return handle_modify_typing(request=request, lesson=lesson, exercise=exercise, source_model=TextPL, target_model=TextZH)
+            return handle_modify_typing(request=request, lesson=lesson, exercise=exercise,
+                                        source_model=TextPL, target_model=TextZH)
         else:
-            return handle_modify_typing(request=request, lesson=lesson, exercise=exercise, source_model=TextZH, target_model=TextPL)
+            return handle_modify_typing(request=request, lesson=lesson, exercise=exercise,
+                                        source_model=TextZH, target_model=TextPL)
     else:
         return render(request, 'exercises/typing.html', {'lesson': lesson, 'exercise': exercise})
 
@@ -128,4 +126,3 @@ def handle_explanation_spec(request, lesson, exercise, explanation_spec=None):
         return redirect('lessons:modify_lesson', lesson_id=lesson.id)
     else:
         return render(request, 'exercises/explanation.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
-

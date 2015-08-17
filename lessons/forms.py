@@ -24,4 +24,4 @@ class LessonForm(forms.ModelForm):
             super(LessonForm, self).__init__(*args, **kwargs)
 
             for exercise_id in exercises_ids:
-                self.fields['exercise_%s' % exercise_id] = forms.IntegerField()
+                self.fields['exercise_%s' % exercise_id] = forms.IntegerField(required=False)
