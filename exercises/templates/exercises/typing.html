@@ -53,7 +53,7 @@
                     {# Show all translations, first one does not have visible delete button #}
                     {% for translation in exercise.spec.text.get_translations.all %}
                     <div class="form-group translation-group">
-                        <label class="col-lg-4 control-label"">Tłumaczenie:</label>
+                        <label class="col-lg-4 control-label">Tłumaczenie:</label>
                         <div class="col-lg-8">
                             <input type="text" placeholder="Tłumaczenie" class="form-control" name="translations" value="{{ translation.text }}">
                         </div>
@@ -63,7 +63,7 @@
                     {# If there is not even one translation, first empty field should appear #}
                     {% if not exercise.spec.text.get_translations.all %}
                     <div class="form-group translation-group">
-                        <label class="col-lg-4 control-label"">Tłumaczenie:</label>
+                        <label class="col-lg-4 control-label">Tłumaczenie:</label>
                         <div class="col-lg-8">
                             <input type="text" placeholder="Tłumaczenie" class="form-control" name="translations" value="{{ translation.text }}">
                         </div>
