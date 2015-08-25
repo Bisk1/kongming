@@ -7,10 +7,12 @@ from django.http import *
 from django.template import RequestContext
 
 from lessons.models import Lesson
-from models import LessonAction, PASS, FAIL
+from learn.models import LessonAction
+from learn.models import Status
 
 
 logger = logging.getLogger(__name__)
+
 
 @login_required
 def lessons_map(request):
@@ -43,7 +45,7 @@ def determine_lessons_levels(user):
     :return: list of lessons levels
     """
     levels = list()
-    current_level = Lesson.objects.filter(requirement=None).order_by('pk') # first level - no requirements
+    current_level = Lesson.objects.filter(requirement=None).order_by('pk')  # first level - no requirements
     while current_level:
         levels.append(simple_lesson_level_dicts(current_level, user))
         # Each level requires lessons from previous level.
@@ -72,11 +74,11 @@ def simple_lesson_level_dicts(lessons_query_set, user):
 
 
 def determine_lesson_status_for_user(lesson, user):
-    lesson_actions = LessonAction.objects.filter(lesson=lesson,user=user)
+    lesson_actions = LessonAction.objects.filter(lesson=lesson, user=user)
     if lesson_actions.filter(status='p').count() > 0:
-        return PASS
+        return Status.success
     elif lesson_actions.filter(status='f').count() > 0:
-        return FAIL
+        return Status.failure
     else:
         return None
 
@@ -94,7 +96,7 @@ def learn(request, lesson_id):
         lesson_action = LessonAction.objects.get(pk=request.POST.get('lesson_action_id'))
         proposition = request.POST.get('proposition')
         if proposition is not None:
-            response = lesson_action.check(proposition)
+            response = lesson_action.check_answer(proposition)
         else:
             if lesson_action.has_next():
                 lesson_action.next_exercise()

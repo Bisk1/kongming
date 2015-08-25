@@ -31,6 +31,7 @@
             {% endif %}
             </div>
             <button type="submit" id="save" class="btn btn-default">Zapisz</button>
+            <a href="{% url 'lessons:lessons' %}" class="btn btn-default">Powrót</a>
         </form>
 {% include "form_body_end.html" %}
 
@@ -38,18 +39,10 @@
 <div>
 {% if lesson %}
     Dodaj ćwiczenie:
-    <form action="{% url 'lessons:exercises:add_exercise' lesson_id=lesson.id %}" method="post">
-    {% csrf_token %}
-    <div class="form-group">
-        <label class="control-label" for="exercise_type">Rodzaj:</label>
-        <select class="form-control" id="exercise_type" name="exercise_type">
-            {% for exercise_type in exercises_types %}
-            <option value="{{ exercise_type.slug }}">{{ exercise_type.name }}</option>
-            {% endfor %}
-        </select>
+    <div>
+        <a href="{% url 'lessons:exercises:add_typing' lesson_id=lesson.id %}" class="btn btn-default">Pisanie</a>
+        <a href="{% url 'lessons:exercises:add_explanation' lesson_id=lesson.id %}" class="btn btn-default">Objaśnienie</a>
     </div>
-        <input type="submit" value="Dodaj" class="btn btn-default">
-    </form>
 {% endif %}
 </div>
 

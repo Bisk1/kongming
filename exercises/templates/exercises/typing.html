@@ -27,7 +27,7 @@
                         <label class="col-lg-4 control-label">Język źródłowy:</label>
                         <div class="col-lg-8">
                         {% if exercise %}
-                            {% if exercise.spec.content_type.name == "text zh" %}
+                            {% if exercise.spec.language == "zh" %}
                                 Chiński
                                 <input type="hidden" name="language" value="zh"/>
                             {% else %}
@@ -47,11 +47,11 @@
                     <div class="form-group">
                         <label class="col-lg-4 control-label" for="text_to_search">Tekst oryginalny:</label>
                         <div class="col-lg-8">
-                            <input type="text" placeholder="Tekst oryginalny" class="form-control" id="text_to_translate" name="text_to_translate" value="{{ exercise.spec.text }}">
+                            <input type="text" placeholder="Tekst oryginalny" class="form-control" id="text_to_translate" name="text_to_translate" value="{{ exercise.spec.text_to_translate.text }}">
                         </div>
                     </div>
                     {# Show all translations, first one does not have visible delete button #}
-                    {% for translation in exercise.spec.text.get_translations.all %}
+                    {% for translation in exercise.spec.text_to_translate.translations.all %}
                     <div class="form-group translation-group">
                         <label class="col-lg-4 control-label">Tłumaczenie:</label>
                         <div class="col-lg-8">
@@ -61,7 +61,7 @@
                     </div>
                     {% endfor %}
                     {# If there is not even one translation, first empty field should appear #}
-                    {% if not exercise.spec.text.get_translations.all %}
+                    {% if not exercise.spec.text.translations.all %}
                     <div class="form-group translation-group">
                         <label class="col-lg-4 control-label">Tłumaczenie:</label>
                         <div class="col-lg-8">

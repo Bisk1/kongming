@@ -3,11 +3,16 @@ import random
 from django.contrib.auth.models import User
 from django.db import models
 
-from exercises.models import Exercise, ExerciseResultState
+from exercises.models import Exercise
 from lessons.models import Lesson
 
-PASS = 'p'
-FAIL = 'f'
+from enum import Enum
+
+
+class Status(Enum):
+    not_done = 'u'
+    success = 's'
+    failure = 'f'
 
 
 class LessonAction(models.Model):
@@ -25,9 +30,10 @@ class LessonAction(models.Model):
                                 fails=0, user=user, lesson=lesson)
         new_lesson_action.save()
 
-        fixed_choice_exercises_count = exercises.filter(number__isnull=False).count()
-        random_choice_exercises_count = lesson.exercises_number - fixed_choice_exercises_count
-        random_exercises = random.sample(exercises.all(), random_choice_exercises_count)
+        fixed_exercises_count = exercises.filter(number__isnull=False).count()
+        random_exercises_count = lesson.exercises_number - fixed_exercises_count
+        random_exercises = exercises.filter(number__isnull=True).order_by('?')[:random_exercises_count]
+        #random_exercises = random.sample(random_exercises_candidates, random_choice_exercises_count)
         j = 0
         for i in range(1, lesson.exercises_number + 1):
             try:
@@ -42,19 +48,21 @@ class LessonAction(models.Model):
     def has_next(self):
         """
         Check if lesson has next exercise
-        :return: true if lesson has next exercise
         """
         return self.current_exercise_number < self.total_exercises_number
 
     def next_exercise(self):
+        """
+        Get next lesson exercise
+        """
         self.current_exercise_number += 1
         self.save()
 
     def get_exercise_action(self):
         return ExerciseAction.objects.get(lesson_action=self, number=self.current_exercise_number)
 
-    def check(self, proposition):
-        response = self.get_exercise_action().check(proposition)
+    def check_answer(self, proposition):
+        response = self.get_exercise_action().check_answer(proposition)
         if not response['success']:
             self.fails += 1
             self.save()
@@ -76,27 +84,27 @@ class LessonAction(models.Model):
         return response
 
     def mark_status_as_failed(self):
-        self.status = FAIL
+        self.status = Status.failure
         self.save()
 
     def mark_status_as_success_if_not_failed(self):
-        if self.status != FAIL:
-            self.status = PASS
+        if self.status != Status.failure:
+            self.status = Status.success
             self.save()
 
 
 class ExerciseAction(models.Model):
     exercise = models.ForeignKey(Exercise)
     lesson_action = models.ForeignKey(LessonAction)
-    result = models.IntegerField(default=ExerciseResultState.NOT_DONE)
+    result = models.CharField(default=Status.not_done.value, max_length=1)
     number = models.IntegerField()
 
-    def check(self, proposition):
-        response = self.exercise.spec.check(proposition)
+    def check_answer(self, proposition):
+        response = self.exercise.spec.check_answer(proposition)
         if response['success']:
-            self.result = ExerciseResultState.SUCCESS
+            self.result = Status.success
         else:
-            self.result = ExerciseResultState.FAILURE
+            self.result = Status.failure
         return response
 
     def prepare(self):

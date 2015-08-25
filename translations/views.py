@@ -6,7 +6,8 @@ from django.http import *
 from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 
-from models import WordZH, WordPL, WordTranslation, TextPL, TextZH, TextTranslation
+from translations.models import WordZH, WordPL, WordTranslation, BusinessText
+from translations.utils import Languages
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,7 @@ def words_translations(request, source_language):
     :param source_language: language to translate words from
     :return: HTTP response
     """
-    if request.is_ajax() and request.method == 'POST':
+    if request.is_ajax():
         source_word_model = language_name_to_word_model(source_language)
         if 'translations' in request.POST:
             delete_translations(request.POST['word_to_translate'], source_word_model)
@@ -32,7 +33,6 @@ def words_translations(request, source_language):
             return HttpResponse(json.dumps({'matching_words': list(matching_words)}), content_type='application/javascript')
         elif 'word_to_translate' in request.POST:
             translations = get_translations_if_word_exists(request.POST['word_to_translate'], source_word_model)
-            print translations
             return HttpResponse(json.dumps({'translations': translations}), content_type='application/javascript')
         else:
             return HttpResponse('Unrecognized AJAX request', content_type='application/javascript')
@@ -89,67 +89,62 @@ def texts_translations(request, source_language):
     :param source_language: language to translate texts from
     :return: HTTP response
     """
-    if request.is_ajax() and request.method == 'POST':
-        source_text_model = language_name_to_text_model(source_language)
-        if 'translations' in request.POST:
-            delete_text_translations(request.POST['text_to_translate'], source_text_model)
-
-            add_text_translations(request.POST['text_to_translate'],
-                             source_text_model,
-                             json.loads(request.POST['translations']))
-            return HttpResponse('{}', content_type='application/javascript')
-        elif 'text_to_search' in request.POST:
-            print source_text_model
-            matching_texts = source_text_model.objects.filter(text__startswith=request.POST['text_to_search'])[:5].values_list('text', flat=True)
-            return HttpResponse(json.dumps({'matching_texts': list(matching_texts)}), content_type='application/javascript')
-        elif 'text_to_translate' in request.POST:
-            translations = get_translations_if_text_exists(request.POST['text_to_translate'], source_text_model)
-            return HttpResponse(json.dumps({'translations': translations}), content_type='application/javascript')
-        else:
-            return HttpResponse('Unrecognized AJAX request', content_type='application/javascript')
+    if request.is_ajax():
+        source_text = request.POST['source_text']
+        with request.POST['operation'] as operation:
+            if operation == 'set_translations':
+                return set_text_translations(source_text, source_language,
+                                             translations=json.loads(request.POST['translations']))
+            elif operation == 'get_matches':
+                return get_text_matches(source_text, source_language)
+            elif operation == 'get_translations':
+                return get_text_translations(source_text, source_language)
+            else:
+                return HttpResponse('Unrecognized AJAX request', content_type='application/javascript')
     template = loader.get_template('translations/texts_translations.html')
     context = RequestContext(request, {'source_language': source_language})
     return HttpResponse(template.render(context))
 
 
-def language_name_to_text_model(language_name):
-    if language_name == "polish":
-        return TextPL
-    elif language_name == "chinese":
-        return TextZH
-    else:
-        raise Exception("Unknown language: " + language_name)
+def set_text_translations(source_text, source_language, translations):
+    """
+    Set translations of the source text in source language to the specified translations
+    :param source_text: text to translate
+    :param source_language: language of text to translate
+    :param translations: translations of the text to translate
+    :return:
+    """
+    business_text_to_translate, _ = BusinessText.objects.get_or_create(text=source_text, language=source_language)
+    business_text_to_translate.translations.clear()
+    for translation in translations:
+        translation_language = Languages.chinese if source_language==Languages.polish else Languages.polish
+        business_translation, _ = BusinessText.objects.get_or_create(text=translation, language=translation_language)
+        business_text_to_translate.translations.add(business_translation)
+    return HttpResponse('{}', content_type='application/javascript')
 
 
-def get_translations_if_text_exists(text_to_search, text_model):
-    try:
-        if text_model == TextPL:
-            return list(TextPL.objects.get(text=text_to_search).TextZH_set.values('text'))
-        elif text_model == TextZH:
-            return list(TextZH.objects.get(text=text_to_search).TextPL_set.values('text'))
-        else:
-            logger.error("Unknown text model: " + text_model)
-            return list()
-    except ObjectDoesNotExist:
-        return list()
+def get_text_matches(source_text, source_language):
+    """
+    Get texts that start with the specified source text in specified language
+    :param source_text: text that matches should start with
+    :param source_language: languages of the matches
+    :return:
+    """
+    matching_business_texts = BusinessText.objects.filter(text__startswith=source_text, language=source_language)
+    matching_texts = matching_business_texts[:5].values_list('text', flat=True)
+    return HttpResponse(json.dumps({'matches': list(matching_texts)}), content_type='application/javascript')
 
 
-def delete_text_translations(text_to_translate, source_text_model):
-    if source_text_model == TextPL:
-        TextPL.objects.get(text=text_to_translate).TextZH_set.clear()
-    else:
-        TextZH.objects.get(text=text_to_translate).TextPL_set.clear()
+def get_text_translations(source_text, source_language):
+    """
+    Get translations of the specified text in specified language
+    :param source_text: text to translate
+    :param source_language: language of the text to translate
+    :return:
+    """
+    business_text_to_translate = BusinessText.objects.get(text=source_text, languages=source_language)
+    translations = list(business_text_to_translate.translations.values('text'))
+    return HttpResponse(json.dumps({'translations': translations}), content_type='application/javascript')
 
 
-def add_text_translations(text_to_translate, source_text_model, translations):
-    if source_text_model == TextPL:
-        text_to_translate = TextPL.objects.get_or_create(text=text_to_translate)[0]
-        for translation in translations:
-            new_text_zh = TextZH.objects.get_or_create(text=translation['text'])[0]
-            TextTranslation.objects.get_or_create(text_zh=new_text_zh, text_pl=text_to_translate)
-    else:
-        text_to_translate = TextZH.objects.get_or_create(text=text_to_translate)[0]
-        for translation in translations:
-            new_text_pl = TextPL.objects.get_or_create(text=translation['text'])[0]
-            TextTranslation.objects.get_or_create(text_zh=text_to_translate, text_pl=new_text_pl)
 

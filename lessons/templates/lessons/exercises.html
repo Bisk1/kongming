@@ -6,16 +6,10 @@
             <td>
                 <input type="hidden" name="exercises_ids" value="{{ exercise.id }}"/>
                 <input type="input" name="exercise_{{ exercise.id }}" value="{{ exercise.number|default:"" }}" size="1">
-
             </td>
             <td>{{ exercise.content_type | capfirst }}</td>
             <td>
-                {% if exercise.content_type.name == "typing" %}
-                    {{ exercise.spec.text }} -
-                    {{ exercise.spec.text.get_translations.all.all|join:", " }}
-                {% else %}
-                    {{ exercise | linebreaks }}</td>
-                {% endif %}
+                {{ exercise | linebreaks }}</td>
             <td>
                 <a class="modify btn btn-default" href="{% url 'lessons:exercises:modify_exercise' lesson_id=lesson.id exercise_id=exercise.id %}">Edytuj</a>
             </td>

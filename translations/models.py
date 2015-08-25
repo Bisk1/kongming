@@ -1,9 +1,7 @@
 from django.db import models
 
 from . import comparators
-
-POLISH = "pl"
-CHINESE = "zh"
+from translations.utils import Languages, other_language
 
 
 class WordPL(models.Model):
@@ -13,8 +11,8 @@ class WordPL(models.Model):
     """
     word = models.CharField(max_length=100, unique=True)
 
-    def __unicode__(self):
-        return unicode(self.word)
+    def __str__(self):
+        return self.word
 
     def get_translations(self):
 
@@ -37,7 +35,7 @@ class WordPL(models.Model):
 
     @staticmethod
     def get_language():
-        return POLISH
+        return Languages.polish
 
 
 class WordZH(models.Model):
@@ -52,8 +50,8 @@ class WordZH(models.Model):
     class Meta:
         unique_together = ["word", "pinyin"]
 
-    def __unicode__(self):
-        return unicode(self.word + ' [' + self.pinyin + ']')
+    def __str__(self):
+        return self.word + ' [' + self.pinyin + ']'
 
     def get_translations(self):
         """
@@ -75,7 +73,7 @@ class WordZH(models.Model):
 
     @staticmethod
     def get_language():
-        return CHINESE
+        return Languages.chinese
 
 
 class WordTranslation(models.Model):
@@ -92,89 +90,40 @@ class WordTranslation(models.Model):
     class Meta:
         unique_together = ["word_zh", "word_pl"]
 
-    def __unicode__(self):
-        return unicode(self.word_zh) + " - " + unicode(self.word_pl)
+    def __str__(self):
+        return self.word_zh + " - " + self.word_pl
 
 
-class TextPL(models.Model):
+class BusinessText(models.Model):
     """
-    Polish text
+    Text with specified language and translations
     """
-    text = models.CharField(max_length=255, unique=True)
-
-    def __unicode__(self):
-        return unicode(self.text)
-
-    def get_translations(self):
-        """
-        Gets all translations of this word
-        :return: array of Chinese texts
-        """
-        return self.textzh_set
-
-    def check_translation(self, text_zh_proposition):
-        """
-        Check if the Chinese text used by the user can be accepted for this Polish text
-        :param text_zh_proposition: text in Chinese (string) typed in by the user
-        :return: true if this translation is acceptable
-        """
-        for chinese_translation in self.get_translations().all():
-            if comparators.texts_difference(chinese_translation.text, text_zh_proposition) == 0:
-                return True
-        return False
-
-    def add_translation(self, translation_text):
-        TextTranslation(text_zh=translation_text, text_pl=self).save()
-
-    @staticmethod
-    def get_language():
-        return POLISH
-
-
-class TextZH(models.Model):
-    """
-    Chinese text
-    """
-    text = models.CharField(max_length=255, unique=True)
-    textpl_set = models.ManyToManyField(TextPL, through='TextTranslation')
-
-    def __unicode__(self):
-        return unicode(self.text)
-
-    def get_translations(self):
-        """
-        Gets all translations of this text
-        :return: array of Polish texts
-        """
-        return self.textpl_set
-
-    def check_translation(self, text_pl_proposition):
-        """
-        Check if the Polish text used by the user can be accepted for this Chinese text
-        :param text_pl_proposition: text in Polish (string) typed in by the user
-        :return: true if this translation is acceptable
-        """
-        for polish_translation in self.get_translations().all():
-            if comparators.texts_difference(polish_translation.text, text_pl_proposition) == 0:
-                return True
-        return False
-
-    def add_translation(self, translation_text):
-        TextTranslation(text_zh=self, text_pl=translation_text).save()
-
-    @staticmethod
-    def get_language():
-        return CHINESE
-
-class TextTranslation(models.Model):
-    """
-    Pair of a Chinese text and a Polish texxt
-    """
-    text_zh = models.ForeignKey(TextZH)
-    text_pl = models.ForeignKey(TextPL)
+    text = models.CharField(max_length=255)
+    language = models.CharField(max_length=2)
+    translations = models.ManyToManyField("self", symmetrical=True)
 
     class Meta:
-        unique_together = ["text_zh", "text_pl"]
+        unique_together = ["text", "language"]
 
-    def __unicode__(self):
-        return unicode(self.text_zh) + " - " + unicode(self.text_pl)
+    def __str__(self):
+        return self.language + " - " + self.text
+
+    def __repr__(self):
+        return str(self)
+
+    def check_translation(self, proposition):
+        """
+        Check if the proposition is acceptable as a translation for this text
+        :param proposition: translation to verify
+        :return: true if this translation is acceptable
+        """
+        for translation in self.translations.all():
+            if comparators.texts_difference(translation.text, proposition) == 0:
+                return True
+        return False
+
+    def add_translation(self, translation_text):
+        translation_language = other_language(self.language)
+        business_translation, _ = BusinessText.objects.get_or_create(text=translation_text,
+                                                                     language=translation_language)
+        self.translations.add(business_translation)

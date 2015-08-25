@@ -9,8 +9,8 @@ class Subscription(models.Model):
     last_login_date = models.DateTimeField()
     abo_date = models.DateTimeField()
 
-    def __unicode__(self):
-        return unicode(self.name)
+    def __str__(self):
+        return self.name
 
 
 class WordSkill(models.Model):

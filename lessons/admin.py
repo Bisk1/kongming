@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from models import Lesson
+from lessons.models import Lesson
 from users.models import WordSkill
 
 

@@ -1,7 +1,8 @@
 # coding=utf-8
 
 from django.test import TestCase
-from menu.models import WordZH, WordPL, TextZH, WordTranslation, Lesson
+from translations.models import WordZH, WordPL, WordTranslation
+
 
 class WordTranslationTest(TestCase):
 

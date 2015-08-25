@@ -2,10 +2,10 @@ import logging
 
 from django.shortcuts import render, redirect
 
-from models import Lesson, Exercise, ExerciseType, Typing
-from translations.models import TextZH, TextPL
-from forms import ExplanationForm
-
+from exercises.models import Lesson, Exercise, Typing
+from translations.models import BusinessText
+from translations.utils import Languages
+from exercises.forms import ExplanationForm
 
 logger = logging.getLogger(__name__)
 
@@ -17,9 +17,8 @@ def add_exercise(request, lesson_id):
 
 def modify_exercise(request, lesson_id, exercise_id):
     exercise = Exercise.objects.get(id=exercise_id)
-    exercise_type = ExerciseType.objects.get(model=exercise.content_type)
-    exercise_type_slug = exercise_type.slug
-    return redirect('lessons:exercises:modify_' + exercise_type_slug, lesson_id=lesson_id, exercise_id=exercise_id)
+    spec_name = exercise.content_type.name
+    return redirect('lessons:exercises:modify_' + spec_name, lesson_id=lesson_id, exercise_id=exercise_id)
 
 
 def delete_exercise(request, lesson_id, exercise_id):
@@ -34,19 +33,17 @@ def delete_exercise(request, lesson_id, exercise_id):
 def add_typing(request, lesson_id):
     lesson = Lesson.objects.get(id=lesson_id)
     if request.method == 'POST':
-        if request.POST.get('language') == "pl":
-            return handle_add_typing(request=request, lesson=lesson, source_model=TextPL, target_model=TextZH)
-        else:
-            return handle_add_typing(request=request, lesson=lesson, source_model=TextZH, target_model=TextPL)
+        return handle_add_typing(request=request, lesson=lesson)
     else:
         return render(request, 'exercises/typing.html', {'lesson': lesson})
 
 
-def handle_add_typing(request, lesson, source_model, target_model):
+def handle_add_typing(request, lesson):
     typing_spec = Typing()
+    response = handle_typing_spec(request, lesson, typing_spec)
     exercise = Exercise(lesson=lesson, number=request.POST.get('number'), spec=typing_spec)
     exercise.save()
-    return handle_typing_spec(request, lesson, source_model, target_model, typing_spec)
+    return response
 
 
 def modify_typing(request, lesson_id, exercise_id):
@@ -60,27 +57,20 @@ def modify_typing(request, lesson_id, exercise_id):
     exercise = Exercise.objects.get(id=exercise_id)
     lesson = Lesson.objects.get(id=lesson_id)
     if request.method == 'POST':
-        if request.POST.get('language') == "pl":
-            return handle_modify_typing(request=request, lesson=lesson, exercise=exercise,
-                                        source_model=TextPL, target_model=TextZH)
-        else:
-            return handle_modify_typing(request=request, lesson=lesson, exercise=exercise,
-                                        source_model=TextZH, target_model=TextPL)
+        return handle_typing_spec(request=request, lesson=lesson, typing_spec=exercise.spec)
     else:
         return render(request, 'exercises/typing.html', {'lesson': lesson, 'exercise': exercise})
 
 
-def handle_modify_typing(request, lesson, exercise, source_model, target_model):
-    return handle_typing_spec(request, lesson, source_model, target_model, exercise.spec)
-
-
-def handle_typing_spec(request, lesson, source_model, target_model, typing_spec):
-    text_to_translate = source_model.objects.get_or_create(text=request.POST.get('text_to_translate'))[0]
-    text_to_translate.get_translations().clear()
-    for translation in request.POST.getlist('translations'):
-        translated_text = target_model.objects.get_or_create(text=translation)[0]
-        text_to_translate.add_translation(translated_text)
-    typing_spec.text = text_to_translate
+def handle_typing_spec(request, lesson, typing_spec):
+    text_to_translate = request.POST.get('text_to_translate')
+    translations = request.POST.getlist('translations')
+    language = request.POST.get('language')
+    business_text_to_translate, _ = BusinessText.objects.get_or_create(text=text_to_translate, language=language)
+    business_text_to_translate.translations.clear()
+    for translation in translations:
+        business_text_to_translate.add_translation(translation)
+    typing_spec.text_to_translate = business_text_to_translate
     typing_spec.save()
     return redirect('lessons:modify_lesson', lesson_id=lesson.id)
 

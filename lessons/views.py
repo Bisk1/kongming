@@ -3,8 +3,8 @@ import logging
 from django.shortcuts import render, redirect
 
 from lessons.forms import LessonForm
-from models import Lesson
-from exercises.models import Exercise, ExerciseType
+from lessons.models import Lesson
+from exercises.models import Exercise
 
 
 logger = logging.getLogger(__name__)
@@ -40,10 +40,8 @@ def modify_lesson(request, lesson_id):
     else:
         form = LessonForm(instance=lesson)
         exercises = Exercise.objects.filter(lesson=lesson).order_by('number')
-        exercises_types = ExerciseType.objects.all()
         return render(request, 'lessons/lesson.html', {'lesson': lesson,
                                                        'exercises': exercises,
-                                                       'exercises_types': exercises_types,
                                                        'form': form,
                                                        })
 
@@ -53,21 +51,27 @@ def handle_lesson(request, lesson=None):
     form = LessonForm(request.POST, instance=lesson, exercises_ids=exercises_ids)
     if form.is_valid():
         form.save()
-
         for exercise_id in exercises_ids:
             exercise = Exercise.objects.get(pk=exercise_id)
             exercise.number = form.cleaned_data['exercise_%s' % exercise_id]
             exercise.save()
-        return redirect('lessons:lessons')
+        return redirect('lessons:modify_lesson', lesson_id=form.instance.pk)
     else:
         return render(request, 'lessons/lesson.html', {'form': form})
 
 
 def delete_lesson(request, lesson_id):
     """
-    Delete lesson and redirect to lessons management page
+    Delete lesson and redirect to lessons management page.
+    Lessons that have requirement = deleted lesson,
+    will have requirement = requirement of deleted lesson
     :param request: HTTP request
     :return: HTTP response
     """
-    Lesson.objects.get(pk=lesson_id).delete()
+    lesson_to_delete = Lesson.objects.get(pk=lesson_id)
+    lessons_requiring_lesson_to_delete = lesson_to_delete.lesson_set.all()
+    for lesson in lessons_requiring_lesson_to_delete:
+        lesson.requirement = lesson_to_delete.requirement
+        lesson.save()
+    lesson_to_delete.delete()
     return redirect('lessons:lessons')

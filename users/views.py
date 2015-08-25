@@ -9,8 +9,8 @@ from django.core.urlresolvers import reverse
 from django.http import *
 from django.template import RequestContext
 
-from forms import RegistrationForm
-from models import Subscription
+from users.forms import RegistrationForm
+from users.models import Subscription
 
 
 logger = logging.getLogger(__name__)

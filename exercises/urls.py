@@ -1,4 +1,4 @@
-from django.conf.urls import include, patterns, url
+from django.conf.urls import patterns, url
 
 from . import views
 
@@ -12,6 +12,5 @@ urlpatterns = patterns('',
 
     url(r'^explanation/$', views.add_explanation_exercise, name='add_explanation'),
     url(r'^explanation/(?P<exercise_id>\d+)/$', views.modify_explanation_exercise, name='modify_explanation'),
-
 
 )
