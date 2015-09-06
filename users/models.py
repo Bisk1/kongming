@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from translations.models import WordZH
+from words.models import WordZH
 
 
 class Subscription(models.Model):

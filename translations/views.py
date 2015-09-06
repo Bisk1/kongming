@@ -6,9 +6,9 @@ from django.http import *
 from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 
-from translations.models import WordZH, WordPL, WordTranslation, BusinessText
+from translations.models import BusinessText
 from translations.utils import Languages
-
+from words.models import WordZH, WordPL
 logger = logging.getLogger(__name__)
 
 
@@ -73,12 +73,12 @@ def add_translations(word_to_translate, source_word_model, translations):
         word_to_translate = WordPL.objects.get_or_create(word=word_to_translate)[0]
         for translation in translations:
             new_word_zh = WordZH.objects.get_or_create(word=translation['word'], pinyin=translation['pinyin'])[0]
-            WordTranslation.objects.get_or_create(word_zh=new_word_zh, word_pl=word_to_translate)
+            word_to_translate.add(new_word_zh)
     else:
         word_to_translate = WordZH.objects.get_or_create(word=word_to_translate)[0]  # TODO: user should specify pinyin of source word?
         for translation in translations:
-            new_word_zh = WordZH.objects.get_or_create(word=translation['word'])[0]
-            WordTranslation.objects.get_or_create(word_zh=new_word_zh, word_pl=word_to_translate)
+            new_word_pl = WordPL.objects.get_or_create(word=translation['word'])[0]
+            word_to_translate.wordzh_set.add(new_word_pl)
 
 
 def texts_translations(request, source_language):

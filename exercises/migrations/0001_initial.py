@@ -8,21 +8,21 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('lessons', '0001_initial'),
-        ('translations', '0001_initial'),
         ('contenttypes', '0002_remove_content_type_name'),
+        ('translations', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
             name='AbstractExercise',
             fields=[
-                ('id', models.AutoField(auto_created=True, serialize=False, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
             ],
         ),
         migrations.CreateModel(
             name='Exercise',
             fields=[
-                ('id', models.AutoField(auto_created=True, serialize=False, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
                 ('number', models.IntegerField(null=True)),
                 ('object_id', models.PositiveIntegerField()),
                 ('content_type', models.ForeignKey(to='contenttypes.ContentType')),
@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Explanation',
             fields=[
-                ('abstractexercise_ptr', models.OneToOneField(to='exercises.AbstractExercise', parent_link=True, primary_key=True, auto_created=True, serialize=False)),
+                ('abstractexercise_ptr', models.OneToOneField(to='exercises.AbstractExercise', primary_key=True, parent_link=True, serialize=False, auto_created=True)),
                 ('text', models.TextField()),
                 ('image', models.FileField(blank=True, upload_to='image/')),
             ],
@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Typing',
             fields=[
-                ('abstractexercise_ptr', models.OneToOneField(to='exercises.AbstractExercise', parent_link=True, primary_key=True, auto_created=True, serialize=False)),
+                ('abstractexercise_ptr', models.OneToOneField(to='exercises.AbstractExercise', primary_key=True, parent_link=True, serialize=False, auto_created=True)),
                 ('text_to_translate', models.ForeignKey(to='translations.BusinessText')),
             ],
             bases=('exercises.abstractexercise',),

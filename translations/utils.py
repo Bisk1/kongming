@@ -5,11 +5,10 @@ class Languages(Enum):
     polish = 'pl'
     chinese = 'zh'
 
-
-def other_language(language):
-    if language == Languages.polish.value:
-        return Languages.chinese.value
-    elif language == Languages.chinese.value:
-        return Languages.polish.value
-    else:
-        raise Exception('Unknown language: ' + language)
+    def other_language(language):
+        if language == Languages.polish:
+            return Languages.chinese
+        elif language == Languages.chinese:
+            return Languages.polish
+        else:
+            raise Exception('Unknown language: ' + language.value)
