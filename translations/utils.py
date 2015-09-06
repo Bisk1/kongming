@@ -11,4 +11,7 @@ class Languages(Enum):
         elif language == Languages.chinese:
             return Languages.polish
         else:
-            raise Exception('Unknown language: ' + language.value)
+            try:
+                raise Exception('Unknown language: ' + language.value)
+            except AttributeError:
+                raise Exception('Input is not language: ' + language)

@@ -33,7 +33,7 @@ class BusinessText(models.Model):
         return False
 
     def add_translation(self, translation_text):
-        translation_language = Languages.other_language(self.language)
+        translation_language = Languages.other_language(Languages(self.language))
         business_translation, _ = BusinessText.objects.get_or_create(text=translation_text,
-                                                                     language=translation_language)
+                                                                     language=translation_language.value)
         self.translations.add(business_translation)
