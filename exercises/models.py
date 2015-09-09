@@ -48,6 +48,27 @@ class Typing(AbstractExercise):
         return str(self)
 
 
+class Choice(AbstractExercise):
+    text_to_translate = models.ForeignKey(BusinessText, related_name='choice_exercise_as_text_to_translate')
+    correct_choice = models.ForeignKey(BusinessText, related_name='choice_exercise_as_correct')
+    wrong_choices = models.ManyToManyField(BusinessText, related_name='choice_exercise_as_wrong')
+
+    def check_answer(self, proposition):
+        return {'success': proposition == self.correct_choice.text,
+                'correct_translation': self.correct_choice.text}
+
+    def prepare(self):
+        return {'text': self.text_to_translate.text}
+
+    def __str__(self):
+        return self.text_to_translate.language + ': ' + self.text_to_translate.text + ' - ' \
+               + self.correct_choice.text + ' - '
+               #+ ', '.join([wrong_choice.text for wrong_choice in self.wrong_choices])
+
+    def __repr__(self):
+        return str(self)
+
+
 class Explanation(AbstractExercise):
     text = models.TextField()
     image = models.FileField(upload_to="image/", blank=True)

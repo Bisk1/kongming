@@ -13,4 +13,7 @@ urlpatterns = patterns('',
     url(r'^explanation/$', views.add_explanation_exercise, name='add_explanation'),
     url(r'^explanation/(?P<exercise_id>\d+)/$', views.modify_explanation_exercise, name='modify_explanation'),
 
+    url(r'^choice/$', views.add_choice_exercise, name='add_choice'),
+    url(r'^choice/(?P<exercise_id>\d+)/$', views.modify_choice_exercise, name='modify_choice'),
+
 )

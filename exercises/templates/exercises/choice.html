@@ -1,0 +1,26 @@
+{% extends "base.html"%}
+{% block content %}
+{% load staticfiles %}
+
+{% include "form_header_start.html" %}
+    {% if lesson %}
+        Lekcja: {{ lesson.topic }}
+    {% endif %}
+{% include "form_header_end.html" %}
+{% include "form_body_start.html" %}
+    <h6>Ćwiczenie - wybór</h6>
+    <hr>
+    {% if exercise.id %}
+        <form class="form-horizontal" role="form" action="{% url 'lessons:exercises:modify_choice' lesson_id=lesson.id exercise_id=exercise.id %}" method="post">
+    {% else %}
+        <form class="form-horizontal" role="form" action="{% url 'lessons:exercises:add_choice' lesson_id=lesson.id %}" method="post">
+    {% endif %}
+        {% csrf_token %}
+        {% include "form_snippet.html" %}
+            <button type="submit" id="save" class="btn btn-default">Zapisz</button>
+        </form>
+{% include "form_body_end.html" %}
+
+{% endblock %}
+{% block footer %}
+{% endblock %}
