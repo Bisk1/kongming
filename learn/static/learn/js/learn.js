@@ -84,6 +84,7 @@ function updateProgressbar(exercisesFinished) {
 
 $(document).ready(function() {
     $("#check").click(function() {
+        $("#check").attr("disabled", true); // block button until finished AJAX call
         $.ajax({
             url : window.location.href,
             type : "POST",
@@ -108,7 +109,7 @@ $(document).ready(function() {
                 $('#current_exercise_number').html(json.current_exercise_number);
                 $('#fails').html(json.fails);
                 updateProgressbar(json.current_exercise_number);
-
+                $("#check").attr("disabled", false); // unblock button for next AJAX calls
             },
             error : function(xhr,errmsg,err) {
                 $('#result').html((xhr.status + ": " + xhr.responseText)).show();
@@ -117,6 +118,7 @@ $(document).ready(function() {
     });
 
     $("#next").click(function() {
+        $("#next").attr("disabled", true); // block button until finished
         $.ajax({
             url : window.location.href,
             type : "POST",
@@ -162,6 +164,7 @@ $(document).ready(function() {
                     }
                 }
                 updateProgressbar(json.current_exercise_number);
+                $("#next").attr("disabled", false); // unblock button for next AJAX calls
             },
             error : function(xhr,errmsg,err) {
                 $('#result').html((xhr.status + ": " + xhr.responseText)).show();
