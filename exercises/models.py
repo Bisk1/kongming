@@ -42,8 +42,10 @@ class Typing(AbstractExercise):
                 'language': self.text_to_translate.language}
 
     def __str__(self):
-        return self.text_to_translate.language + ': ' + self.text_to_translate.text + ' - ' \
-               + ', '.join([translation.text for translation in self.text_to_translate.translations.all()])
+        return '[{0}] {1} - {2}'.format(self.text_to_translate.language,
+                                        self.text_to_translate.text,
+                                        ', '.join([translation.text for translation in
+                                                   self.text_to_translate.translations.all()]))
 
     def __repr__(self):
         return str(self)
