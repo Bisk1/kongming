@@ -1,76 +1,25 @@
 var exercise_type;
 var language;
 
-// Handles the result of user action
-function handleResult(success) {
+/**
+ * Handle the status of exercise (positive or negative)
+ */
+function handleExerciseStatus(success) {
     if (success) {
-        $('#positive_result').show();
-        $('#negative_result').hide();
+        $('#positive_status').show();
+        $('#negative_status').hide();
     } else {
-        $('#negative_result').show();
-        $('#positive_result').hide();
+        $('#negative_status').show();
+        $('#positive_status').hide();
     }
-    updateResultsIcons(success);
+    updateStatusIcons(success);
 }
 
-function updateResultsIcons(success) {
+function updateStatusIcons(success) {
     if (success) {
-        $("#results-icons-container").append('<i style="color: green" class="icon-ok"></i>');
+        $("#status-icons-container").append('<i style="color: green" class="icon-ok"></i>');
     } else {
-        $("#results-icons-container").append('<i style="color: red" class="icon-minus-sign">');
-    }
-}
-
-/**
- * Moves the exercise content from json response to appropriate HTML divs
- * @param exercise_type exercise type
- * @param json JSON response
- */
-function showExerciseContent(exercise_type, json) {
-    switch (exercise_type) {
-        case('typing'):
-            $('#typing_text').html(json.text);
-            break;
-        case('explanation'):
-            $('#explanation_text').html(json.text);
-            break;
-    }
-}
-
-/**
- * Displays the div for the specified exercise
- * @param exercise_type exercise type
- */
-function showDivForExerciseType(exercise_type) {
-    $('#explanation_exercise').hide();
-    $('#typing_exercise').hide();
-    switch (exercise_type) {
-        case('typing'):
-            $('#typing_exercise').show();
-            break;
-        case('explanation'):
-            $('#explanation_exercise').show();
-            break;
-    }
-}
-
-
-/**
- * Switches Chinese input feature -
- * @param active if true than input box works as Chinese characters input, otherwise as normal input
- */
-function toggleChineseInput(active) {
-    if (active) {
-        $("#proposition").chineseInput({
-            debug: false, // print debug messages
-            input: {
-                initial: 'simplified', // or 'traditional'
-                allowChange: false // allow transition between traditional and simplified
-            },
-            active: true // whether or not the plugin should be active by default
-        });
-    } else {
-        $("#proposition").unbind(); // remove all events from element
+        $("#status-icons-container").append('<i style="color: red" class="icon-minus-sign">');
     }
 }
 
@@ -82,43 +31,79 @@ function updateProgressbar(exercisesFinished) {
                         .text(exercisesFinished + " / " + totalExercises);
 }
 
-$(document).ready(function() {
-    $("#check").click(function() {
-        $("#check").attr("disabled", true); // block button until finished AJAX call
-        $.ajax({
-            url : window.location.href,
-            type : "POST",
-            dataType: "json",
-            data : {
-                proposition : $("#proposition").val(),
-                lesson_action_id: $("#lesson_action_id").val(),
-                csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
-                },
-            success : function(json) {
-                $('#proposition').hide();
-                $('#check').hide();
-                $('#next').html("Dalej").show();
-                $('#result').show();
-                handleResult(json.success);
-                switch (exercise_type) {
-                    case('text_zh'):
-                    case('text_pl'):
-                        $('#correct').html(json.correct_text).show();
-                        break;
-                }
-                $('#current_exercise_number').html(json.current_exercise_number);
-                $('#fails').html(json.fails);
-                updateProgressbar(json.current_exercise_number);
-                $("#check").attr("disabled", false); // unblock button for next AJAX calls
-            },
-            error : function(xhr,errmsg,err) {
-                $('#result').html((xhr.status + ": " + xhr.responseText)).show();
-            }
-        });
-    });
+/**
+ * Move the exercise from json response to appropriate HTML divs
+   and clean old data in divs
+ * @param exercise_type exercise type
+ * @param json JSON response
+ */
+function prepareExercise(exercise_type, json) {
+    switch (exercise_type) {
+        case('typing'):
+            prepareTypingExercise(json);
+            break;
+        case('explanation'):
+            prepareExplanationExercise(json);
+            break;
+        case('choice'):
+            prepareChoiceExercise(json);
+            break;
+    }
+}
 
+/**
+ * Hide all exercises' divs
+ */
+function hideAllExercisesContainers() {
+    $('.exercise-type-container').hide();
+}
+
+
+function handleLessonCheckResponse(json) {
+    $('#next').html("Dalej").show();
+    handleExerciseStatus(json.success);
+    $('#current_exercise_number').html(json.current_exercise_number);
+    $('#fails').html(json.fails);
+    $('#status').show();
+}
+
+
+function checkExercise(proposition, handleExerciseCheckResponse) {
+    $.ajax({
+        url : window.location.href,
+        type : "POST",
+        dataType: "json",
+        data : {
+            proposition : proposition,
+            lesson_action_id: $("#lesson_action_id").val(),
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+            },
+        success : function(json) {
+            handleLessonCheckResponse(json);
+            handleExerciseCheckResponse(json);
+        }
+    });
+}
+
+function handleLessonPrepare(json) {
+    $('#status').hide();
+    if (json.final) {
+        hideAllExercisesContainers();
+        $('#to-lesson-map').show();
+        $('#final').show();
+    }
+    else {
+        $('#current_exercise_number').html(json.current_exercise_number).show();
+        exercise_type = json.exercise_type;
+        hideAllExercisesContainers();
+        prepareExercise(exercise_type, json);
+    }
+    updateProgressbar(json.current_exercise_number);
+}
+
+$(document).ready(function() {
     $("#next").click(function() {
-        $("#next").attr("disabled", true); // block button until finished
+        $("#next").hide();
         $.ajax({
             url : window.location.href,
             type : "POST",
@@ -128,46 +113,7 @@ $(document).ready(function() {
                 csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
                 },
             success : function(json) {
-                $(this).hide();
-                $('#correct').hide();
-                $('#fails').show();
-                $('#result').hide();
-                if (json.final) {
-                    $('#check').hide();
-                    $('#to-lesson-map').show();
-                    $('#final').show();
-                    $('#next').hide();
-                    showDivForExerciseType();
-                }
-                else {
-                    $('#current_exercise_number').html(json.current_exercise_number).show();
-                    exercise_type = json.exercise_type;
-                    language = json.language;
-                    showExerciseContent(exercise_type, json);
-                    showDivForExerciseType(exercise_type);
-                    if (exercise_type == 'explanation') {
-                        // explanation exercise is not checked - user goes to next exercise after reading
-                        $('#check').hide();
-                        $('#next').html("Continue").show();
-                    } else {
-                        $('#next').hide();
-                        $('#proposition').val('').show();
-                        $('#check').html("Check").show();
-                        switch (language) {
-                            case('pl'):
-                                toggleChineseInput(true);
-                                break;
-                            case('zh'):
-                                toggleChineseInput(false);
-                                break;
-                        }
-                    }
-                }
-                updateProgressbar(json.current_exercise_number);
-                $("#next").attr("disabled", false); // unblock button for next AJAX calls
-            },
-            error : function(xhr,errmsg,err) {
-                $('#result').html((xhr.status + ": " + xhr.responseText)).show();
+                handleLessonPrepare(json);
             }
         });
     })
