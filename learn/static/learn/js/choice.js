@@ -12,7 +12,7 @@ function prepareChoiceExercise(json) {
 
 function activateChoiceCheck() {
     $('.choice').click(function() {
-        $(this).off('click');
+        $('.choice').off('click');
         $(this).addClass('selected-choice');
         checkExercise($(this).val(), handleChoiceExerciseResponse)
     });
