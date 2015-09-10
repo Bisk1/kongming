@@ -53,6 +53,7 @@ class ChoiceForm(forms.Form):
         self.instance.correct_choice = BusinessText.objects.get_or_create(text=self.cleaned_data['correct_choice'],
                                                                           language=target_language.value)[0]
         self.instance.save()  # must save before adding many-to-many field instances
+        self.instance.wrong_choices.clear()
         self.instance.wrong_choices.add(BusinessText.objects.get_or_create(text=self.cleaned_data['wrong_choice1'],
                                                                            language=target_language.value)[0])
         self.instance.wrong_choices.add(BusinessText.objects.get_or_create(text=self.cleaned_data['wrong_choice2'],
