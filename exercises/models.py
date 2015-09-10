@@ -7,6 +7,7 @@ from lessons.models import Lesson
 from translations.models import BusinessText
 import random
 
+
 class Exercise(models.Model):
     lesson = models.ForeignKey(Lesson)
     number = models.IntegerField(null=True)
@@ -62,8 +63,9 @@ class Choice(AbstractExercise):
                 'choices': self._get_all_choices_in_random_order()}
 
     def __str__(self):
-        return self.text_to_translate.language + ': ' + self.text_to_translate.text + ' - ' \
-               + self.correct_choice.text
+        return '[{0}] {1} - {2}'.format(self.text_to_translate.language,
+                                        self.text_to_translate.text,
+                                        self.correct_choice.text)
 
     def __repr__(self):
         return str(self)
@@ -71,7 +73,7 @@ class Choice(AbstractExercise):
     def _get_all_choices_in_random_order(self):
         """
         Provide all choices with no way to determine the right one
-        :return:
+        :return: list of all available choices
         """
         all_choices = [business_text.text for business_text in self.wrong_choices.all()]
         all_choices.append(self.correct_choice.text)
