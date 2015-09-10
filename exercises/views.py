@@ -68,7 +68,8 @@ def handle_typing_spec(request, lesson, typing_spec):
     business_text_to_translate, _ = BusinessText.objects.get_or_create(text=text_to_translate, language=language)
     business_text_to_translate.translations.clear()
     for translation in translations:
-        business_text_to_translate.add_translation(translation)
+        if translation:
+            business_text_to_translate.add_translation(translation)
     typing_spec.text_to_translate = business_text_to_translate
     typing_spec.save()
     return redirect('lessons:modify_lesson', lesson_id=lesson.id)
