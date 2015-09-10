@@ -5,7 +5,7 @@ function prepareChoiceExercise(json) {
     $('#choice3').val(json.choices[2]);
     $('#choice4').val(json.choices[3]);
 
-    $('.choice').removeClass('selected-choice').css("color", "");
+    $('.choice').removeClass('btn-primary').removeClass('btn-success').removeClass('btn-danger');
     $('#choice_exercise').show();
     activateChoiceCheck();
 }
@@ -13,16 +13,16 @@ function prepareChoiceExercise(json) {
 function activateChoiceCheck() {
     $('.choice').click(function() {
         $('.choice').off('click');
-        $(this).addClass('selected-choice');
+        $(this).addClass('btn-primary');
         checkExercise($(this).val(), handleChoiceExerciseResponse)
     });
 }
 
 function handleChoiceExerciseResponse(json) {
-    var correctButton = $('.choice[value=' + json.correct_translation + ']');
-    var selectedButton = $('.selected-choice');
-    correctButton.css('color', 'green');
+    var correctButton = $('.choice[value="' + json.correct_translation + '"]');
+    var selectedButton = $('.btn-primary');
+    correctButton.removeClass('btn-primary').addClass('btn-success');
     if (selectedButton.val() != correctButton.val()) {
-        selectedButton.css('color', 'red');
+        selectedButton.removeClass('btn-primary').addClass('btn-danger');
     }
 }

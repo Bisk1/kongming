@@ -19,7 +19,7 @@ function updateStatusIcons(success) {
     if (success) {
         $("#status-icons-container").append('<i style="color: green" class="icon-ok"></i>');
     } else {
-        $("#status-icons-container").append('<i style="color: red" class="icon-minus-sign">');
+        $("#status-icons-container").append('<i style="color: red" class="icon-remove">');
     }
 }
 
@@ -69,7 +69,6 @@ function handleLessonCheckResponse(json) {
 
 
 function checkExercise(proposition, handleExerciseCheckResponse) {
-    console.log('Checking proposition: ' + proposition);
     $.ajax({
         url : window.location.href,
         type : 'POST',
@@ -80,7 +79,6 @@ function checkExercise(proposition, handleExerciseCheckResponse) {
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
             },
         success : function(json) {
-            console.log('Handling succees for ' + json.current_exercise_number);
             handleLessonCheckResponse(json);
             handleExerciseCheckResponse(json);
         }
@@ -88,7 +86,8 @@ function checkExercise(proposition, handleExerciseCheckResponse) {
 }
 
 function handleLessonPrepare(json) {
-    $('#status').hide();
+        $('#positive_status').hide();
+        $('#negative_status').hide();
     if (json.final) {
         hideAllExercisesContainers();
         $('#to-lesson-map').show();
@@ -118,5 +117,10 @@ $(document).ready(function() {
                 handleLessonPrepare(json);
             }
         });
+    });
+
+    // suppress any attempts to submit a form
+    $('form').submit(function() {
+      return false;
     })
 });

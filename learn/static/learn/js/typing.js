@@ -1,10 +1,9 @@
 function prepareTypingExercise(json) {
     $('#correct').hide();
     $('#typing_text').html(json.text);
-    $('#typing_exercise').show();
     $('#proposition').val('').show();
-    $('#check').html('Check').show();
-    console.log(json.language);
+    $('#bad-proposition').hide();
+    $('#check').show();
     switch (json.language) {
         case('pl'):
             toggleChineseInput(true);
@@ -14,6 +13,7 @@ function prepareTypingExercise(json) {
             break;
     }
     activateTypingCheck();
+    $('#typing_exercise').show();
 }
 
 /**
@@ -40,6 +40,9 @@ function handleTypingCheckResponse(json) {
     $('#proposition').hide();
     $('#check').hide();
     $('#correct').html(json.correct_translation).show();
+    if (!json.success) {
+        $('#bad-proposition').html($('#proposition').val()).show();
+    }
 }
 
 function activateTypingCheck() {
