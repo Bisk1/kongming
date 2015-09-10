@@ -5,7 +5,7 @@ from django.db import models
 
 from lessons.models import Lesson
 from translations.models import BusinessText
-
+import random
 
 class Exercise(models.Model):
     lesson = models.ForeignKey(Lesson)
@@ -58,15 +58,25 @@ class Choice(AbstractExercise):
                 'correct_translation': self.correct_choice.text}
 
     def prepare(self):
-        return {'text': self.text_to_translate.text}
+        return {'text': self.text_to_translate.text,
+                'choices': self._get_all_choices_in_random_order()}
 
     def __str__(self):
         return self.text_to_translate.language + ': ' + self.text_to_translate.text + ' - ' \
-               + self.correct_choice.text + ' - '
-               #+ ', '.join([wrong_choice.text for wrong_choice in self.wrong_choices])
+               + self.correct_choice.text
 
     def __repr__(self):
         return str(self)
+
+    def _get_all_choices_in_random_order(self):
+        """
+        Provide all choices with no way to determine the right one
+        :return:
+        """
+        all_choices = [business_text.text for business_text in self.wrong_choices.all()]
+        all_choices.append(self.correct_choice.text)
+        random.shuffle(all_choices)
+        return all_choices
 
 
 class Explanation(AbstractExercise):
