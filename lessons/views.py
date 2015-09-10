@@ -47,7 +47,7 @@ def modify_lesson(request, lesson_id):
 
 
 def handle_lesson(request, lesson=None):
-    exercises_ids=request.POST.getlist('exercises_ids')
+    exercises_ids = request.POST.getlist('exercises_ids')
     form = LessonForm(request.POST, instance=lesson, exercises_ids=exercises_ids)
     if form.is_valid():
         form.save()
@@ -55,6 +55,7 @@ def handle_lesson(request, lesson=None):
             exercise = Exercise.objects.get(pk=exercise_id)
             exercise.number = form.cleaned_data['exercise_%s' % exercise_id]
             exercise.save()
+        lesson.clean_exercises_number()
         return redirect('lessons:modify_lesson', lesson_id=form.instance.pk)
     else:
         return render(request, 'lessons/lesson.html', {'form': form})
