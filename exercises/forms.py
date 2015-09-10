@@ -6,6 +6,7 @@ from exercises.models import Explanation, Choice
 from translations.models import BusinessText
 from translations.utils import Languages
 
+
 class ExplanationForm(forms.ModelForm):
 
     class Meta:
@@ -51,11 +52,11 @@ class ChoiceForm(forms.Form):
                                                                              language=source_language.value)[0]
         self.instance.correct_choice = BusinessText.objects.get_or_create(text=self.cleaned_data['correct_choice'],
                                                                           language=target_language.value)[0]
-        self.instance.save() # must save before adding many-to-many field instances
+        self.instance.save()  # must save before adding many-to-many field instances
         self.instance.wrong_choices.add(BusinessText.objects.get_or_create(text=self.cleaned_data['wrong_choice1'],
-                                                                          language=target_language.value)[0])
+                                                                           language=target_language.value)[0])
         self.instance.wrong_choices.add(BusinessText.objects.get_or_create(text=self.cleaned_data['wrong_choice2'],
-                                                                          language=target_language.value)[0])
+                                                                           language=target_language.value)[0])
         self.instance.wrong_choices.add(BusinessText.objects.get_or_create(text=self.cleaned_data['wrong_choice3'],
-                                                                          language=target_language.value)[0])
+                                                                           language=target_language.value)[0])
         return self.instance
