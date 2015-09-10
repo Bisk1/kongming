@@ -60,25 +60,27 @@ function hideAllExercisesContainers() {
 
 
 function handleLessonCheckResponse(json) {
-    $('#next').html("Dalej").show();
     handleExerciseStatus(json.success);
     $('#current_exercise_number').html(json.current_exercise_number);
     $('#fails').html(json.fails);
     $('#status').show();
+    $('#next').html('Dalej').show();
 }
 
 
 function checkExercise(proposition, handleExerciseCheckResponse) {
+    console.log('Checking proposition: ' + proposition);
     $.ajax({
         url : window.location.href,
-        type : "POST",
-        dataType: "json",
+        type : 'POST',
+        dataType: 'json',
         data : {
             proposition : proposition,
-            lesson_action_id: $("#lesson_action_id").val(),
-            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+            lesson_action_id: $('#lesson_action_id').val(),
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
             },
         success : function(json) {
+            console.log('Handling succees for ' + json.current_exercise_number);
             handleLessonCheckResponse(json);
             handleExerciseCheckResponse(json);
         }
@@ -102,15 +104,15 @@ function handleLessonPrepare(json) {
 }
 
 $(document).ready(function() {
-    $("#next").click(function() {
-        $("#next").hide();
+    $('#next').click(function() {
+        $('#next').hide();
         $.ajax({
             url : window.location.href,
-            type : "POST",
-            dataType: "json",
+            type : 'POST',
+            dataType: 'json',
             data : {
-                lesson_action_id: $("#lesson_action_id").val(),
-                csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+                lesson_action_id: $('#lesson_action_id').val(),
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
                 },
             success : function(json) {
                 handleLessonPrepare(json);

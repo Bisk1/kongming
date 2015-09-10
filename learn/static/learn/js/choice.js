@@ -12,17 +12,17 @@ function prepareChoiceExercise(json) {
 
 function activateChoiceCheck() {
     $('.choice').click(function() {
-        $('.choice').attr('disable', true);
+        $(this).off('click');
         $(this).addClass('selected-choice');
         checkExercise($(this).val(), handleChoiceExerciseResponse)
     });
 }
 
 function handleChoiceExerciseResponse(json) {
-    var correctButton = $('.choice[value="' + json.correct_translation + '"]');
+    var correctButton = $('.choice[value=' + json.correct_translation + ']');
     var selectedButton = $('.selected-choice');
-    correctButton.css("color", "green");
+    correctButton.css('color', 'green');
     if (selectedButton.val() != correctButton.val()) {
-        selectedButton.css("color", "red");
+        selectedButton.css('color', 'red');
     }
 }

@@ -3,7 +3,7 @@ function prepareTypingExercise(json) {
     $('#typing_text').html(json.text);
     $('#typing_exercise').show();
     $('#proposition').val('').show();
-    $('#check').html("Check").show();
+    $('#check').html('Check').show();
     console.log(json.language);
     switch (json.language) {
         case('pl'):
@@ -23,7 +23,7 @@ function prepareTypingExercise(json) {
  */
 function toggleChineseInput(active) {
     if (active) {
-        $("#proposition").chineseInput({
+        $('#proposition').chineseInput({
             debug: false, // print debug messages
             input: {
                 initial: 'simplified', // or 'traditional'
@@ -32,7 +32,7 @@ function toggleChineseInput(active) {
             active: true // whether or not the plugin should be active by default
         });
     } else {
-        $("#proposition").unbind(); // remove all events from element
+        $('#proposition').unbind(); // remove all events from element
     }
 }
 
@@ -43,9 +43,8 @@ function handleTypingCheckResponse(json) {
 }
 
 function activateTypingCheck() {
-    $("#check").attr("disabled", false);
-    $("#check").click(function() {
-        $("#check").attr("disabled", true);
-        checkExercise($("#proposition").val(), handleTypingCheckResponse)
+    $('#check').click(function() {
+        $(this).off('click');
+        checkExercise($('#proposition').val(), handleTypingCheckResponse)
     });
 }
