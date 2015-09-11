@@ -1,5 +1,3 @@
-var exercise_type;
-var language;
 
 /**
  * Handle the status of exercise (positive or negative)
@@ -34,11 +32,10 @@ function updateProgressbar(exercisesFinished) {
 /**
  * Move the exercise from json response to appropriate HTML divs
    and clean old data in divs
- * @param exercise_type exercise type
  * @param json JSON response
  */
-function prepareExercise(exercise_type, json) {
-    switch (exercise_type) {
+function prepareExercise(json) {
+    switch (json.exercise_type) {
         case('typing'):
             prepareTypingExercise(json);
             break;
@@ -58,16 +55,23 @@ function hideAllExercisesContainers() {
     $('.exercise-type-container').hide();
 }
 
-
+/**
+ * Update screen after checking exercise
+ */
 function handleLessonCheckResponse(json) {
     handleExerciseStatus(json.success);
-    $('#current_exercise_number').html(json.current_exercise_number);
     $('#fails').html(json.fails);
     $('#status').show();
     $('#next').html('Dalej').show();
 }
 
 
+/**
+ * Check user's input to the exercise
+ * @param proposition user's input - proposed answer
+ * @param handleExerciseCheckResponse function to be called after checking,
+ * specific to the exercise (e.g. show the right answer)
+ */
 function checkExercise(proposition, handleExerciseCheckResponse) {
     $.ajax({
         url : window.location.href,
@@ -85,19 +89,19 @@ function checkExercise(proposition, handleExerciseCheckResponse) {
     });
 }
 
+/**
+ * Prepare screen for next exercise or final summary
+ * @param json JSON data to prepare exercises
+ */
 function handleLessonPrepare(json) {
         $('#positive_status').hide();
         $('#negative_status').hide();
-    if (json.final) {
         hideAllExercisesContainers();
-        $('#to-lesson-map').show();
+    if (json.final) { // if true there is no more exercises - show final screen
         $('#final').show();
     }
     else {
-        $('#current_exercise_number').html(json.current_exercise_number).show();
-        exercise_type = json.exercise_type;
-        hideAllExercisesContainers();
-        prepareExercise(exercise_type, json);
+        prepareExercise(json);
     }
     updateProgressbar(json.current_exercise_number);
 }
