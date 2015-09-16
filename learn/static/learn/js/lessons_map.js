@@ -80,7 +80,7 @@ var findLessonWithKey = function(lessons_levels, key) {
  * @returns {string} RGB color for style attribute
  */
 var statusColor = function(status) {
-    if (status == 'p') {
+    if (status == 's') {
         return "rgb(0, 250, 154)";
     } else if (status == 'f') {
         return "rgb(255, 0, 0)";

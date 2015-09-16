@@ -84,12 +84,12 @@ class LessonAction(models.Model):
         return response
 
     def mark_status_as_failed(self):
-        self.status = Status.failure
+        self.status = Status.failure.value
         self.save()
 
     def mark_status_as_success_if_not_failed(self):
-        if self.status != Status.failure:
-            self.status = Status.success
+        if self.status != Status.failure.value:
+            self.status = Status.success.value
             self.save()
 
 
@@ -102,9 +102,9 @@ class ExerciseAction(models.Model):
     def check_answer(self, proposition):
         response = self.exercise.spec.check_answer(proposition)
         if response['success']:
-            self.result = Status.success
+            self.result = Status.success.value
         else:
-            self.result = Status.failure
+            self.result = Status.failure.value
         return response
 
     def prepare(self):

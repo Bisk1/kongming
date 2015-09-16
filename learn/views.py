@@ -75,10 +75,10 @@ def simple_lesson_level_dicts(lessons_query_set, user):
 
 def determine_lesson_status_for_user(lesson, user):
     lesson_actions = LessonAction.objects.filter(lesson=lesson, user=user)
-    if lesson_actions.filter(status='p').count() > 0:
-        return Status.success
-    elif lesson_actions.filter(status='f').count() > 0:
-        return Status.failure
+    if lesson_actions.filter(status=Status.success.value).count() > 0:
+        return Status.success.value
+    elif lesson_actions.filter(status=Status.failure.value).count() > 0:
+        return Status.failure.value
     else:
         return None
 
