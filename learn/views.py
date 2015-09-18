@@ -80,7 +80,7 @@ def determine_lesson_status_for_user(lesson, user):
     elif lesson_actions.filter(status=Status.failure.value).count() > 0:
         return Status.failure.value
     else:
-        return None
+        return Status.not_done.value
 
 
 @login_required
