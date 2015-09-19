@@ -66,6 +66,7 @@ def handle_typing_spec(request, lesson, typing_spec):
     translations = request.POST.getlist('translations')
     language = request.POST.get('language')
     business_text_to_translate, _ = BusinessText.objects.get_or_create(text=text_to_translate, language=language)
+    business_text_to_translate.auto_tokenize()
     business_text_to_translate.translations.clear()
     for translation in translations:
         if translation:

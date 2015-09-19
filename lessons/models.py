@@ -20,7 +20,7 @@ class Lesson(models.Model):
         If number is outside this range, lesson action will crash during initialization (ie. when trying to learn)
         :return:
         """
-        fixed_order_exercises_count = self.get_fixed_order_exercises.count()
+        fixed_order_exercises_count = self.get_fixed_order_exercises().count()
         total_exercises_count = self.exercise_set.count()
         if self.exercises_number < fixed_order_exercises_count:
             self.exercises_number = fixed_order_exercises_count

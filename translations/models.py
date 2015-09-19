@@ -1,7 +1,7 @@
 from django.db import models
-
 from . import comparators
 from translations.utils import Languages
+from words.models import to_word_model, WordPL, WordZH
 
 
 class BusinessText(models.Model):
@@ -11,6 +11,8 @@ class BusinessText(models.Model):
     text = models.CharField(max_length=255)
     language = models.CharField(max_length=2)
     translations = models.ManyToManyField("self", symmetrical=True)
+    words_pl = models.ManyToManyField(WordPL)
+    words_zh = models.ManyToManyField(WordZH)
 
     class Meta:
         unique_together = ["text", "language"]
@@ -37,3 +39,23 @@ class BusinessText(models.Model):
         business_translation, _ = BusinessText.objects.get_or_create(text=translation_text,
                                                                      language=translation_language.value)
         self.translations.add(business_translation)
+
+    def get_words(self):
+        if self.language == Languages.chinese.value:
+            return self.words_zh
+        elif self.language == Languages.polish.value:
+            return self.words_pl
+        else:
+            raise Exception("Unknown language: " + self.language)
+
+    def auto_tokenize(self):
+        """
+        Tokenize the business text into words, create their objects
+        if necessary and link the business text to them
+        """
+        tokens = Languages.tokenize(self.language, self.text)
+        word_model = to_word_model(self.language)
+        self.get_words().clear()
+        for token in tokens:
+            word_object = word_model.get_or_create_with_google(word=token)[0]
+            self.get_words().add(word_object)

@@ -46,12 +46,13 @@ class ChoiceForm(forms.Form):
 
     def save(self):
         source_language = Languages(self.cleaned_data['source_language'])
-        print(source_language)
         target_language = Languages.other_language(source_language)
         self.instance.text_to_translate = BusinessText.objects.get_or_create(text=self.cleaned_data['text_to_translate'],
                                                                              language=source_language.value)[0]
+        self.instance.text_to_translate.auto_tokenize()
         self.instance.correct_choice = BusinessText.objects.get_or_create(text=self.cleaned_data['correct_choice'],
                                                                           language=target_language.value)[0]
+        self.instance.correct_choice.auto_tokenize()
         self.instance.save()  # must save before adding many-to-many field instances
         self.instance.wrong_choices.clear()
         self.instance.wrong_choices.add(BusinessText.objects.get_or_create(text=self.cleaned_data['wrong_choice1'],

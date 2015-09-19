@@ -1,8 +1,7 @@
 from django.db import models
-
-
 from translations import comparators
 from translations.utils import Languages
+from words.translator import get_pinyin
 
 
 class WordPL(models.Model):
@@ -33,6 +32,14 @@ class WordPL(models.Model):
             if comparators.words_difference(chinese_translation.word, word_zh_proposition) == 0:
                 return True
         return False
+
+    @classmethod
+    def get_or_create_with_google(clss, word):
+        """
+        Same as get_or_create. Created for symmetry with WordZH.
+        :return:
+        """
+        return WordPL.objects.get_or_create(word=word)
 
     @staticmethod
     def get_language():
@@ -72,6 +79,28 @@ class WordZH(models.Model):
                 return True
         return False
 
+    @classmethod
+    def get_or_create_with_google(cls, word):
+        """
+        If word does not exist, use Google Translate to fetch pinyin
+        :param word: Chinese word to get
+        :return: 2-element tuple same as in get_or_create
+        """
+        try:
+            return WordZH.objects.get( word=word), True
+        except WordZH.DoesNotExist:
+            pinyin = get_pinyin(chinese_word=word)
+            return WordZH.objects.create(word=word, pinyin=pinyin), False
+
     @staticmethod
     def get_language():
         return Languages.chinese
+
+
+def to_word_model(language):
+    if language == Languages.chinese.value:
+        return WordZH
+    elif language == Languages.polish.value:
+        return WordPL
+    else:
+        Languages.handle_non_existent_language(language)
