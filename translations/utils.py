@@ -36,14 +36,13 @@ class Languages(Enum):
         except AttributeError:
             raise Exception('Input is not language: ' + language)
 
+
 def _polish_tokenize(text):
     result = text
-    result = result.replace('  ', ' ')
-    result = result.replace('  ', ' ')
-    result = result.replace('  ', ' ')
     result = result.strip()
     result = result.split(' ')
     return result
+
 
 def _remove_punctuation(text):
     result = text
@@ -57,7 +56,7 @@ def _remove_punctuation(text):
     result = result.replace('\'', ' ')
     result = result.replace('(', ' ')
     result = result.replace(')', ' ')
-
     result = result.replace('？', ' ')
     result = result.replace('！', ' ')
+    result = ' '.join(result.split())  # remove extra whitespace
     return result

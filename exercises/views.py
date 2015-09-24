@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 
 from exercises.models import Lesson, Exercise, Typing
 from translations.models import BusinessText
-from exercises.forms import ExplanationForm, ChoiceForm
+from exercises.forms import ExplanationForm, ChoiceForm, TypingForm
 
 logger = logging.getLogger(__name__)
 
@@ -31,18 +31,12 @@ def delete_exercise(request, lesson_id, exercise_id):
 
 def add_typing(request, lesson_id):
     lesson = Lesson.objects.get(id=lesson_id)
+    exercise = Exercise()
     if request.method == 'POST':
-        return handle_add_typing(request=request, lesson=lesson)
+        return handle_typing_spec(request, lesson, exercise)
     else:
-        return render(request, 'exercises/typing.html', {'lesson': lesson})
-
-
-def handle_add_typing(request, lesson):
-    typing_spec = Typing()
-    response = handle_typing_spec(request, lesson, typing_spec)
-    exercise = Exercise(lesson=lesson, number=request.POST.get('number'), spec=typing_spec)
-    exercise.save()
-    return response
+        form = TypingForm()
+        return render(request, 'exercises/typing.html', {'lesson': lesson, 'form': form})
 
 
 def modify_typing(request, lesson_id, exercise_id):
@@ -53,27 +47,26 @@ def modify_typing(request, lesson_id, exercise_id):
     :param exercise_id: id of the exercise
     :return: HTTP response
     """
-    exercise = Exercise.objects.get(id=exercise_id)
     lesson = Lesson.objects.get(id=lesson_id)
+    exercise = Exercise.objects.get(id=exercise_id)
+    typing_spec = exercise.spec
     if request.method == 'POST':
-        return handle_typing_spec(request=request, lesson=lesson, typing_spec=exercise.spec)
+        return handle_typing_spec(request, lesson, exercise, typing_spec)
     else:
-        return render(request, 'exercises/typing.html', {'lesson': lesson, 'exercise': exercise})
+        form = TypingForm(instance=typing_spec)
+        return render(request, 'exercises/typing.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
 
 
-def handle_typing_spec(request, lesson, typing_spec):
-    text_to_translate = request.POST.get('text_to_translate')
-    translations = request.POST.getlist('translations')
-    language = request.POST.get('language')
-    business_text_to_translate, _ = BusinessText.objects.get_or_create(text=text_to_translate, language=language)
-    business_text_to_translate.auto_tokenize()
-    business_text_to_translate.translations.clear()
-    for translation in translations:
-        if translation:
-            business_text_to_translate.add_translation(translation)
-    typing_spec.text_to_translate = business_text_to_translate
-    typing_spec.save()
-    return redirect('lessons:modify_lesson', lesson_id=lesson.id)
+def handle_typing_spec(request, lesson, exercise, typing_spec=None):
+    form = TypingForm(data=request.POST or None, instance=typing_spec)
+    if form.is_valid():
+        typing_spec = form.save()
+        exercise.lesson = lesson
+        exercise.spec = typing_spec
+        exercise.save()
+        return redirect('lessons:modify_lesson', lesson_id=lesson.id)
+    else:
+        return render(request, 'exercises/typing.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
 
 
 # EXPLANATION

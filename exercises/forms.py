@@ -2,9 +2,51 @@
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from exercises.models import Explanation, Choice
+from exercises.models import Explanation, Choice, Typing
 from translations.models import BusinessText
 from translations.utils import Languages
+
+
+class TypingForm(forms.Form):
+
+    source_language = forms.ChoiceField(label='Język źródłowy', choices=((Languages.chinese.value, 'Chiński'),
+                                                                         (Languages.polish.value, 'Polski')))
+    text_to_translate = forms.CharField(label='Tekst do przetłumaczenia', max_length=255)
+    translation_0 = forms.CharField(label='Tłumaczenie', max_length=255)
+
+    def __init__(self, *args, **kwargs):
+        self.instance = kwargs.pop('instance', None)
+        super().__init__(*args, **kwargs)
+        if self.instance:
+            self._instance_to_fields()
+        else:
+            self.instance = Typing()
+
+    def _instance_to_fields(self):
+        self.fields['source_language'].initial = self.instance.text_to_translate.language
+        self.fields['text_to_translate'].initial = self.instance.text_to_translate.text
+        for i, translation in enumerate(self.instance.text_to_translate.translations.all()):
+            self.fields['translation_%s' % i] = forms.CharField(label='Tłumaczenie', max_length=255,
+                                                                initial=translation.text)
+
+    def save(self):
+        source_language = Languages(self.cleaned_data['source_language'])
+        self.instance.text_to_translate = BusinessText.objects.get_or_create(text=self.cleaned_data['text_to_translate'],
+                                                                             language=source_language.value)[0]
+        for translation in self._received_translations():
+            self.instance.text_to_translate.add_translation(translation)
+        self.instance.text_to_translate.auto_tokenize()
+        self.instance.save()
+        return self.instance
+
+    def _received_translations(self):
+        """
+        Translations that were received in POST request
+        :return:
+        """
+        for name, value in self.cleaned_data.items():
+            if name.startswith('translation_'):
+                yield value
 
 
 class ExplanationForm(forms.ModelForm):
