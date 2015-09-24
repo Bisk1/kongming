@@ -24,8 +24,10 @@ class Lesson(models.Model):
         total_exercises_count = self.exercise_set.count()
         if self.exercises_number < fixed_order_exercises_count:
             self.exercises_number = fixed_order_exercises_count
+            self.save()
         elif self.exercises_number > total_exercises_count:
             self.exercises_number = total_exercises_count
+            self.save()
 
     def __str__(self):
         return self.topic
