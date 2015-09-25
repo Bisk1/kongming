@@ -2,8 +2,6 @@
      return $("#translate_text_url").text();
  };
 
- var emptyTranslationGroup;
-
 var updateTranslationsTable = function(translations) {
     var newTranslationGroup = ($(".translation-group")).first().cloneAndEmptyInputs;
     $(".translation-group").remove();
@@ -13,9 +11,12 @@ var updateTranslationsTable = function(translations) {
     }
 };
 
- $.fn.cloneAndEmptyInputs = function() {
+ $.fn.cloneAndEmptyInputsAndSetNumber = function(number) {
     var newTranslationGroup = this.clone();
-    newTranslationGroup.find("input").val('');
+    newTranslationGroup.find("input")
+        .val('')
+        .attr("id", "id_translation_" + number)
+        .attr("name", "translation_" + number);
     return newTranslationGroup;
  };
 
@@ -67,10 +68,11 @@ $.fn.insertPopulatedTextInput = function(translation) {
 
 $(document).ready(function() {
 
-
     $(document).on("click", "#add_translation_button", function() {
-        var lastTranslationGroup = $(".translation-group").last();
-        lastTranslationGroup.cloneAndEmptyInputs().showDeleteButton().insertAfter(lastTranslationGroup);
+        var lastTranslationInput = $("input[id^='id_translation_']").last();
+        var lastTranslationNumber = parseInt(lastTranslationInput.attr("id").replace("id_translation_", ""));
+        var lastTranslationGroup = lastTranslationInput.parent().parent();
+        lastTranslationGroup.cloneAndEmptyInputsAndSetNumber(lastTranslationNumber + 1).insertAfter(lastTranslationGroup);
     });
 
     $('#edit').click(function() {
@@ -81,10 +83,6 @@ $(document).ready(function() {
         if (e.which == 13) {
             checkAndUpdateTranslationsForm();
         }
-    });
-
-    $(document).on("click", ".delete-button", function() {
-        ($(this)).parent().remove();
     });
 
     $(".text_to_translate" ).autocomplete({
