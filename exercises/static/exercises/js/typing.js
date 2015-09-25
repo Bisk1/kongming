@@ -1,17 +1,23 @@
- var getAjaxTranslateTextUrl = function() {
-     return $("#translate_text_url").text();
- };
+var getSourceLanguage = function() {
+    return $("#id_source_language").find(":selected").val();
+}
+
+var getTranslateTextsServiceUrl = function() {
+    return $("#texts_translations_service_url").text();
+};
 
 var updateTranslationsTable = function(translations) {
-    var newTranslationGroup = ($(".translation-group")).first().cloneAndEmptyInputs;
-    $(".translation-group").remove();
+    var translationGroups = $("input[name^='translation_']").parent().parent();
+    var translationGroupPattern = translationGroups.first().clone(); // for later cloning
+    translationGroups.remove();
     for (var i = 0; i < translations.length; i++) {
-        translationsTable
-            .insertPopulatedTextInput(translations[i]);
+        var predecessor = ($('.form-group')).last(); // append always to the last form-group
+        var translationGroup = translationGroupPattern.cloneAndPopulateInputAndSetNumber(translations[i].text, i);
+        predecessor.after(translationGroup);
     }
 };
 
- $.fn.cloneAndEmptyInputsAndSetNumber = function(number) {
+ $.fn.cloneAndEmptyInputAndSetNumber = function(number) {
     var newTranslationGroup = this.clone();
     newTranslationGroup.find("input")
         .val('')
@@ -20,9 +26,13 @@ var updateTranslationsTable = function(translations) {
     return newTranslationGroup;
  };
 
-$.fn.showDeleteButton = function() {
-    this.find(".delete-button").show();
-    return this;
+$.fn.cloneAndPopulateInputAndSetNumber = function(text, number) {
+    var newTranslationGroup = this.clone();
+    newTranslationGroup.find("input")
+        .val(text)
+        .attr("id", "id_translation_" + number)
+        .attr("name", "translation_" + number);
+    return newTranslationGroup;
 };
 
 var checkAndUpdateTranslationsForm = function(text_to_translate) {
@@ -30,11 +40,13 @@ var checkAndUpdateTranslationsForm = function(text_to_translate) {
         text_to_translate = $(".text_to_translate").val();
     }
     $.ajax({
-        url: getAjaxTranslateTextUrl(),
+        url: getTranslateTextsServiceUrl(),
         type: 'POST',
         dataType: "json",
         data: {
+            operation: 'get_translations',
             text_to_translate : text_to_translate,
+            source_language: getSourceLanguage(),
             csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
         },
         success: function(data) {
@@ -48,31 +60,13 @@ var checkAndUpdateTranslationsForm = function(text_to_translate) {
     });
 };
 
-
-$.fn.insertPopulatedTextInput = function(translation) {
-    this
-    .append($('<tr>')
-        .append($('<td>')
-            .append($('<label>')
-                .append('Zdanie: ')
-            )
-            .append('<input name="translations" value="' + translation.text + '">')
-        )
-        .append($('<td>')
-            .append('<button id="remove" class="btn btn-default">Remove</button>')
-        )
-    );
-    return this;
-};
-
-
 $(document).ready(function() {
 
     $(document).on("click", "#add_translation_button", function() {
-        var lastTranslationInput = $("input[id^='id_translation_']").last();
+        var lastTranslationInput = $("input[name^='translation_']").last();
         var lastTranslationNumber = parseInt(lastTranslationInput.attr("id").replace("id_translation_", ""));
         var lastTranslationGroup = lastTranslationInput.parent().parent();
-        lastTranslationGroup.cloneAndEmptyInputsAndSetNumber(lastTranslationNumber + 1).insertAfter(lastTranslationGroup);
+        lastTranslationGroup.cloneAndEmptyInputAndSetNumber(lastTranslationNumber + 1).insertAfter(lastTranslationGroup);
     });
 
     $('#edit').click(function() {
@@ -85,18 +79,20 @@ $(document).ready(function() {
         }
     });
 
-    $(".text_to_translate" ).autocomplete({
+    $("input[name='text_to_translate']" ).autocomplete({
         source: function(request, response) {
             $.ajax({
-                url: getAjaxTranslateTextUrl(),
+                url: getTranslateTextsServiceUrl(),
                 type: 'POST',
                 dataType: "json",
                 data: {
+                    operation: 'get_matches',
                     text_to_translate : request.term,
+                    source_language: getSourceLanguage(),
                     csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
                 },
                 success: function(data) {
-                    response(data['matching_texts']);
+                    response(data['matches']);
                 },
                 error: function(xhr, errmsg, err) {
                     $('#error_box').html(xhr.status + ": " + xhr.responseText).show();

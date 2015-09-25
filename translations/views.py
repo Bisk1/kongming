@@ -89,21 +89,29 @@ def texts_translations(request, source_language):
     :param source_language: language to translate texts from
     :return: HTTP response
     """
-    if request.is_ajax():
-        source_text = request.POST['source_text']
-        with request.POST['operation'] as operation:
-            if operation == 'set_translations':
-                return set_text_translations(source_text, source_language,
-                                             translations=json.loads(request.POST['translations']))
-            elif operation == 'get_matches':
-                return get_text_matches(source_text, source_language)
-            elif operation == 'get_translations':
-                return get_text_translations(source_text, source_language)
-            else:
-                return HttpResponse('Unrecognized AJAX request', content_type='application/javascript')
     template = loader.get_template('translations/texts_translations.html')
     context = RequestContext(request, {'source_language': source_language})
     return HttpResponse(template.render(context))
+
+
+def texts_translations_service(request):
+    """
+    Same as texts_translations but handles operations in payload.
+    :param request: HTTP request
+    :return: HTTP response
+    """
+    source_language = request.POST['source_language']
+    text_to_translate = request.POST['text_to_translate']
+    operation = request.POST['operation']
+    if operation == 'set_translations':
+        return set_text_translations(text_to_translate, source_language,
+                                     translations=json.loads(request.POST['translations']))
+    elif operation == 'get_matches':
+        return get_text_matches(text_to_translate, source_language)
+    elif operation == 'get_translations':
+        return get_text_translations(text_to_translate, source_language)
+    else:
+        return HttpResponse('Unrecognized request', content_type='application/javascript')
 
 
 def set_text_translations(source_text, source_language, translations):
@@ -142,7 +150,7 @@ def get_text_translations(source_text, source_language):
     :param source_language: language of the text to translate
     :return:
     """
-    business_text_to_translate = BusinessText.objects.get(text=source_text, languages=source_language)
+    business_text_to_translate = BusinessText.objects.get(text=source_text, language=source_language)
     translations = list(business_text_to_translate.translations.values('text'))
     return HttpResponse(json.dumps({'translations': translations}), content_type='application/javascript')
 
