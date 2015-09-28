@@ -5,13 +5,13 @@ from django.utils.translation import ugettext_lazy as _
 from exercises.models import Explanation, Choice, Typing
 from translations.models import BusinessText
 from translations.utils import Languages
-
+from crispy_forms.helper import FormHelper
 
 class TypingForm(forms.Form):
 
     source_language = forms.ChoiceField(label='Język źródłowy', choices=((Languages.chinese.value, 'Chiński'),
                                                                          (Languages.polish.value, 'Polski')))
-    text_to_translate = forms.CharField(label='Tekst do przetłumaczenia', max_length=255)
+    text_to_translate = forms.CharField(label='Tekst do przetłumaczenia', max_length=255, widget=forms.TextInput())
     translation_0 = forms.CharField(label='Tłumaczenie', max_length=255)
 
     def __init__(self, *args, **kwargs):
@@ -62,7 +62,8 @@ class ExplanationForm(forms.ModelForm):
 
 class ChoiceForm(forms.Form):
     source_language = forms.ChoiceField(label='Język źródłowy', choices=((Languages.chinese.value, 'Chiński'),
-                                                                         (Languages.polish.value, 'Polski')))
+                                                                         (Languages.polish.value, 'Polski')),
+                                        widget=forms.RadioSelect)
     text_to_translate = forms.CharField(label='Tekst do przetłumaczenia', max_length=255)
     correct_choice = forms.CharField(label='Prawidłowa odpowiedź', max_length=255)
     wrong_choice1 = forms.CharField(label='Błędna odpowiedź 1', max_length=255)
@@ -76,6 +77,11 @@ class ChoiceForm(forms.Form):
             self._instance_to_fields()
         else:
             self.instance = Choice()
+        self.helper = FormHelper()
+        self.helper.form_class='form-horizontal'
+        self.helper.form_method='post'
+        self.helper.label_class='col-lg-4'
+        self.helper.field_class='col-lg-8'
 
     def _instance_to_fields(self):
         self.fields['source_language'].initial = self.instance.text_to_translate.language

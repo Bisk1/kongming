@@ -1,5 +1,6 @@
 {% extends "base.html"%}
 {% block content %}
+{% load crispy_forms_tags %}
 {% load staticfiles %}
 
 {% include "form_header_start.html" %}
@@ -10,6 +11,7 @@
 {% include "form_body_start.html" %}
     <h6>Ćwiczenie - wybór</h6>
     <hr>
+{% crispy form %}
     {% if exercise.id %}
         <form class="form-horizontal" role="form" action="{% url 'lessons:exercises:modify_choice' lesson_id=lesson.id exercise_id=exercise.id %}" method="post">
     {% else %}
