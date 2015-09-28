@@ -2,8 +2,8 @@ import logging
 
 from django.shortcuts import render, redirect
 
-from exercises.models import Lesson, Exercise, Typing
-from translations.models import BusinessText
+from exercises.models import Lesson, Exercise
+from django.core.urlresolvers import reverse
 from exercises.forms import ExplanationForm, ChoiceForm, TypingForm
 
 logger = logging.getLogger(__name__)
@@ -122,6 +122,7 @@ def add_choice_exercise(request, lesson_id):
         return handle_choice_spec(request, lesson, exercise)
     else:
         form = ChoiceForm()
+        form.helper.form_action = reverse('lessons:exercises:add_choice', kwargs={'lesson_id': lesson.id})
         return render(request, 'exercises/choice.html', {'lesson': lesson, 'form': form})
 
 
@@ -140,6 +141,7 @@ def modify_choice_exercise(request, lesson_id, exercise_id):
         return handle_choice_spec(request, lesson, exercise, choice_spec)
     else:
         form = ChoiceForm(instance=choice_spec)
+        form.helper.form_action = reverse('lessons:exercises:modify_choice', kwargs={'lesson_id': lesson.id, 'exercise_id': exercise_id})
         return render(request, 'exercises/choice.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
 
 

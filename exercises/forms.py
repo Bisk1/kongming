@@ -6,6 +6,21 @@ from exercises.models import Explanation, Choice, Typing
 from translations.models import BusinessText
 from translations.utils import Languages
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit, Layout
+
+
+class MetroAdminFormHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.form_class='form-horizontal'
+        self.form_method='post'
+        self.label_class='col-lg-4'
+        self.field_class='col-lg-8'
+        self.layout = Layout()
+        self.layout.append(
+            Submit('submit', 'Submit', css_class='button white')
+        )
+
 
 class TypingForm(forms.Form):
 
@@ -70,6 +85,8 @@ class ChoiceForm(forms.Form):
     wrong_choice2 = forms.CharField(label='Błędna odpowiedź 2', max_length=255)
     wrong_choice3 = forms.CharField(label='Błędna odpowiedź 3', max_length=255)
 
+    helper = MetroAdminFormHelper()
+
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance', None)
         super().__init__(*args, **kwargs)
@@ -77,11 +94,6 @@ class ChoiceForm(forms.Form):
             self._instance_to_fields()
         else:
             self.instance = Choice()
-        self.helper = FormHelper()
-        self.helper.form_class='form-horizontal'
-        self.helper.form_method='post'
-        self.helper.label_class='col-lg-4'
-        self.helper.field_class='col-lg-8'
 
     def _instance_to_fields(self):
         self.fields['source_language'].initial = self.instance.text_to_translate.language
