@@ -1,11 +1,12 @@
+import random
+
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-
 from django.db import models
 
 from lessons.models import Lesson
 from translations.models import BusinessText
-import random
+from redactor.fields import RedactorField
 
 
 class Exercise(models.Model):
@@ -92,8 +93,11 @@ class Choice(AbstractExercise):
 
 
 class Explanation(AbstractExercise):
-    text = models.TextField()
-    image = models.FileField(upload_to="image/", blank=True)
+    text = RedactorField(
+        verbose_name=u'Text',
+        redactor_options={'focus': 'true'},
+        allow_image_upload=True
+    )
 
     def check_answer(self, proposition):
         raise Exception("Explanation has no check method")

@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # 3rd party apps
     'crispy_forms',
+    'redactor',
     # my apps
     'menu',
     'learn',
@@ -110,6 +111,10 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+REDACTOR_OPTIONS = {'lang': 'pl'}
+REDACTOR_UPLOAD = 'uploads/'

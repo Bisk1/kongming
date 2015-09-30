@@ -1,8 +1,9 @@
 from django.conf.urls import patterns, include, url
-
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
-admin.autodiscover()
 
+admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^', include('menu.urls', namespace='menu')),
@@ -12,4 +13,5 @@ urlpatterns = patterns('',
     url(r'^users/', include('users.urls', namespace='users')),
     url(r'^lessons/', include('lessons.urls', namespace='lessons')),
     url(r'^admin/', include(admin.site.urls)),
-)
+    url(r'^redactor/', include('redactor.urls')),
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

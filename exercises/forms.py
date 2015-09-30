@@ -69,10 +69,9 @@ class ExplanationForm(forms.ModelForm):
 
     class Meta:
         model = Explanation
-        fields = ['text', 'image']
+        fields = ['text']
         labels = {
             'text': _('Treść'),
-            'image': _('Obraz')
         }
 
 
