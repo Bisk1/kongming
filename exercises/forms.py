@@ -16,10 +16,7 @@ class MetroAdminFormHelper(FormHelper):
         self.form_method='post'
         self.label_class='col-lg-4'
         self.field_class='col-lg-8'
-        self.layout = Layout()
-        self.layout.append(
-            Submit('submit', 'Submit', css_class='button white')
-        )
+        self.add_input(Submit('submit', 'Zapisz', css_class='btn btn-primary'))
 
 
 class TypingForm(forms.Form):
