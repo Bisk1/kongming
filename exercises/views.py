@@ -36,6 +36,7 @@ def add_typing(request, lesson_id):
         return handle_typing_spec(request, lesson, exercise)
     else:
         form = TypingForm()
+        form.helper.form_action = reverse('lessons:exercises:add_typing', kwargs={'lesson_id': lesson.id})
         return render(request, 'exercises/typing.html', {'lesson': lesson, 'form': form})
 
 
@@ -54,6 +55,7 @@ def modify_typing(request, lesson_id, exercise_id):
         return handle_typing_spec(request, lesson, exercise, typing_spec)
     else:
         form = TypingForm(instance=typing_spec)
+        form.helper.form_action = reverse('lessons:exercises:modify_typing', kwargs={'lesson_id': lesson.id, 'exercise_id': exercise_id})
         return render(request, 'exercises/typing.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
 
 
@@ -79,6 +81,7 @@ def add_explanation_exercise(request, lesson_id):
         return handle_explanation_spec(request, lesson, exercise)
     else:
         form = ExplanationForm()
+        form.helper.form_action = reverse('lessons:exercises:add_explanation', kwargs={'lesson_id': lesson.id})
         return render(request, 'exercises/explanation.html', {'lesson': lesson, 'form': form})
 
 
@@ -97,6 +100,7 @@ def modify_explanation_exercise(request, lesson_id, exercise_id):
         return handle_explanation_spec(request, lesson, exercise, explanation_spec)
     else:
         form = ExplanationForm(instance=explanation_spec)
+        form.helper.form_action = reverse('lessons:exercises:modify_explanation', kwargs={'lesson_id': lesson.id, 'exercise_id': exercise_id})
         return render(request, 'exercises/explanation.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
 
 

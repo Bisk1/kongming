@@ -21,6 +21,8 @@ class MetroAdminFormHelper(FormHelper):
 
 class TypingForm(forms.Form):
 
+    helper = MetroAdminFormHelper()
+
     source_language = forms.ChoiceField(label='Język źródłowy', choices=((Languages.chinese.value, 'Chiński'),
                                                                          (Languages.polish.value, 'Polski')))
     text_to_translate = forms.CharField(label='Tekst do przetłumaczenia', max_length=255, widget=forms.TextInput())
@@ -62,6 +64,8 @@ class TypingForm(forms.Form):
 
 
 class ExplanationForm(forms.ModelForm):
+
+    helper = MetroAdminFormHelper()
 
     class Meta:
         model = Explanation

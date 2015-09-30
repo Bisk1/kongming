@@ -1,37 +1,13 @@
 {% extends "base.html"%}
 {% block content %}
+{% load crispy_forms_tags %}
 {% load staticfiles %}
 
 <script type="text/javascript" src="{% static "exercises/js/typing.js" %}"></script>
 <div id="texts_translations_service_url" style="visibility: hidden">{% url 'translations:texts_translations_service' %}</div>
 
-    <div class="col-md-12">
-        <div class="widget wblue">
-            <div class="widget-head">
-            <div class="pull-left">Lekcja: {{ lesson.topic }}</div>
-            <div class="clearfix"></div>
-            </div>
-        </div>
-        <div class="widget-content">
-            <div class="padd">
-                <h6>Ćwiczenie - pisanie</h6>
-                <hr>
-            {% if exercise %}
-                <form class="form-horizontal" role="form" action="{% url 'lessons:exercises:modify_typing' lesson_id=lesson.id exercise_id=exercise.id %}" method="post">
-            {% else %}
-                <form class="form-horizontal" role="form" action="{% url 'lessons:exercises:add_typing' lesson_id=lesson.id %}" method="post">
-            {% endif %}
-                {% csrf_token %}
+{% include "form_start.html" with header="Lekcja: "|add:lesson.topic header2="Ćwiczenie - pisanie" %}
+    {% crispy form %}
+{% include "form_end.html" %}
 
-    {% include "form_snippet.html" %}
-
-                    <button type="button" id="add_translation_button" class="btn btn-default">Dodaj tłumaczenie</button>
-                    <button type="submit" id="save" class="btn btn-default">Zapisz</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-{% endblock %}
-{% block footer %}
 {% endblock %}

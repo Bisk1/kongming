@@ -1,26 +1,10 @@
 {% extends "base.html"%}
 {% block content %}
+{% load crispy_forms_tags %}
 {% load staticfiles %}
 
-{% include "form_header_start.html" %}
-    {% if lesson %}
-        Lekcja: {{ lesson.topic }}
-    {% endif %}
-{% include "form_header_end.html" %}
-{% include "form_body_start.html" %}
-    <h6>Ćwiczenie - wyjaśnienie</h6>
-    <hr>
-    {% if exercise.id %}
-        <form class="form-horizontal" role="form" enctype="multipart/form-data" action="{% url 'lessons:exercises:modify_explanation' lesson_id=lesson.id exercise_id=exercise.id %}" method="post">
-    {% else %}
-        <form class="form-horizontal" role="form" enctype="multipart/form-data" action="{% url 'lessons:exercises:add_explanation' lesson_id=lesson.id %}" method="post">
-    {% endif %}
-        {% csrf_token %}
-        {% include "form_snippet.html" %}
-            <button type="submit" id="save" class="btn btn-default">Zapisz</button>
-        </form>
-{% include "form_body_end.html" %}
+{% include "form_start.html" with header="Lekcja: "|add:lesson.topic header2="Ćwiczenie - objaśnienie"  %}
+    {% crispy form %}
+{% include "form_end.html" %}
 
-{% endblock %}
-{% block footer %}
 {% endblock %}

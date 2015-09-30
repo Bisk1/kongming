@@ -3,19 +3,13 @@
 {% load staticfiles %}
 
 
-{% include "form_header_start.html" %}
-    {% if lesson %}
-        Lekcja: {{ lesson.topic }}
-    {% else %}
-        Nowa lekcja
-    {% endif %}
-{% include "form_header_end.html" %}
-{% include "form_body_start.html" %}
-    {% if lesson %}
-        <form class="form-horizontal" role="form" action="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}" method="post">
-    {% else %}
-        <form class="form-horizontal" role="form" action="{% url 'lessons:add_lesson' %}" method="post">
-    {% endif %}
+{% if lesson %}
+    {% include "form_start.html" with header="Lekcja: "|add:lesson.topic %}
+    <form class="form-horizontal" role="form" action="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}" method="post">
+{% else %}
+    {% include "form_start.html" with header="Nowa lekcja" %}
+    <form class="form-horizontal" role="form" action="{% url 'lessons:add_lesson' %}" method="post">
+{% endif %}
         {% csrf_token %}
         {% include "form_snippet.html" %}
             <div class="form-group">
@@ -33,7 +27,7 @@
             <button type="submit" id="save" class="btn btn-default">Zapisz</button>
             <a href="{% url 'lessons:lessons' %}" class="btn btn-default">Powrót</a>
         </form>
-{% include "form_body_end.html" %}
+{% include "form_end.html" %}
 
 
 <div>
