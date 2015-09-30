@@ -1,3 +1,7 @@
 .mainbar-nomargin {
     margin-left: 0px;
 }
+
+th {
+    font-weight: bold;
+}

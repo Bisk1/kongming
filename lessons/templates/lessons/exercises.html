@@ -1,20 +1,25 @@
 {% load staticfiles %}
 
-<table>
+<table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="col-md-1">L.p.</th>
+                <th class="col-md-2">Typ</th>
+                <th class="col-md-7">Treść</th>
+                <th class="col-md-2">Edycja</th>
+            </tr>
+        </thead>
     {% for exercise in exercises %}
         <tr>
-            <td>
+            <td class="col-md-1">
                 <input type="hidden" name="exercises_ids" value="{{ exercise.id }}"/>
                 <input type="input" name="exercise_{{ exercise.id }}" value="{{ exercise.number|default:"" }}" size="1">
             </td>
             <td>{{ exercise.content_type | capfirst }}</td>
+            <td>{{ exercise | linebreaks | truncatechars:150 }}</td>
             <td>
-                {{ exercise | linebreaks }}</td>
-            <td>
-                <a class="modify btn btn-default" href="{% url 'lessons:exercises:modify_exercise' lesson_id=lesson.id exercise_id=exercise.id %}">Edytuj</a>
-            </td>
-            <td>
-                <a class="delete btn btn-default" href="{% url 'lessons:exercises:delete_exercise' lesson_id=lesson.id exercise_id=exercise.id %}">Usuń</a>
+                <a class="btn btn-sm btn-info" href="{% url 'lessons:exercises:modify_exercise' lesson_id=lesson.id exercise_id=exercise.id %}"><i class="icon-pencil"></i></a>
+                <a class="btn btn-sm btn-danger" href="{% url 'lessons:exercises:delete_exercise' lesson_id=lesson.id exercise_id=exercise.id %}"><i class="icon-remove"></i></a>
             </td>
         </tr>
     {% endfor %}

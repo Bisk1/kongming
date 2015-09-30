@@ -4,7 +4,6 @@
     {% if user.is_superuser %}
         <li><a href="{% url 'admin:index' %}">Panel administratora</a></li>
     {% endif %}
-    <li><a href="{% url 'menu:choose_language' %}">Ustawienia języka</a></li>
 </ul>
 
 {% endblock %}
@@ -13,6 +12,3 @@
 Element Company
 </div>
 {% endblock %}
-
-
-
