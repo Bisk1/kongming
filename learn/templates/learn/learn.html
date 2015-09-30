@@ -1,6 +1,7 @@
 {% extends "base.html"%}
 {% block content %}
 {% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static "learn/css/learn.css" %}">
 <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
 <script type="text/javascript" src="{% static "js/chinese-ime/caret.js" %}"></script>
 <script type="text/javascript" src="{% static "js/chinese-ime/jQuery.chineseIME.js" %}"></script>
@@ -9,16 +10,10 @@
 <script type="text/javascript" src="{% static "learn/js/explanation.js" %}"></script>
 <script type="text/javascript" src="{% static "learn/js/learn.js" %}"></script>
 
-{% if error_message %}
-    <p><strong>
-        {{ error_message }}
-    </strong></p>
-{% endif %}
-
 {% csrf_token %}
 
 <form class="container-fluid" action="#">
-    <div id="lesson-container" style="height: 100px">
+    <div id="lesson-container">
         <input type="hidden" id="lesson_action_id" value="{{ lesson_action.id }}">
         <input type="hidden" id="total_exercises_number" value="{{ lesson_action.total_exercises_number }}">
         <div>
@@ -35,14 +30,14 @@
         </div>
     </div>
 
-    <div id="status-container" style="height: 80px">
+    <div id="status-container">
         <div id="status">
             <h2 id="positive_status" class="text-center text-success" style="display: none;">Poprawna odpowiedź!</h2>
             <h2 id="negative_status" class="text-center text-danger" style="display: none;">Zła odpowiedź!</h2>
         </div>
     </div>
 
-    <div id="exercise-container" style="height: 200px">
+    <div id="exercise-container">
         <div id="typing_exercise" class="exercise-type-container" style="display: none;">
             <h2 class="text-center text-primary" id="typing_text"></h2>
             <input id="proposition" class="form-control input-lg" type="text" name="proposition" hidden/>

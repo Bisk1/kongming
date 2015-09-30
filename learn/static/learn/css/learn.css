@@ -1,0 +1,15 @@
+.container-fluid > div {
+    overflow: hidden;
+}
+
+#lesson-container {
+    height: 100px;
+}
+
+#status-container {
+    height: 80px;
+}
+
+#exercise-container {
+    height: 200px;
+}
