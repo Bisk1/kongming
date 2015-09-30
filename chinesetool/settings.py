@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    # django app
+    # django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +41,7 @@ INSTALLED_APPS = (
     # 3rd party apps
     'crispy_forms',
     'redactor',
-    # my apps
+    # project apps
     'menu',
     'learn',
     'lessons',
