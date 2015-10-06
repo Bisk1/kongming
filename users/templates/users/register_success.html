@@ -1,7 +1,6 @@
-{% block title %} - Rejestracja powiodła się!{% endblock %}
-{% block header %}<h2><center>Zostałeś zarejestrowany, twoja nazwa to: {{username}}</center></h2>{% endblock %}
-{% block content%}
-{% url 'users:login' as login_url %}
-{% url 'users:index' as index_url %}
- <center><h3>{% blocktrans %}Now you can <a href="{{ login_url }}">login</a> or go back to <a href="{{ index_url }}">the main page</a>.{% endblocktrans %}</h3></center>
+{% extends "base.html"%}
+
+{% block content %}
+<h2><center>Zostałeś zarejestrowany, twoja nazwa to: {{username}}</center></h2>
+ <center><h3>Teraz możesz się <a href="{% url 'users:login' %}">zalogować</a></h3></center>
 {% endblock %}

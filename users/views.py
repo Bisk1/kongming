@@ -1,17 +1,13 @@
 from datetime import datetime, timedelta
 import logging
 
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.db import transaction
-from django.template import loader
 from django.contrib.auth import authenticate, login, logout
-from django.core.urlresolvers import reverse
-from django.http import *
-from django.template import RequestContext
 
-from users.forms import RegistrationForm
+from users.forms import RegistrationForm, LoginForm
 from users.models import Subscription
-
 
 logger = logging.getLogger(__name__)
 
@@ -22,13 +18,15 @@ def login_my(request):
     :param request: HTTP request
     :return: HTTP response
     """
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        login(request, user)
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = authenticate(username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password'))
+            login(request, user)
+            return redirect(request.GET.get('next', "learn:lessons_map"))
     else:
-        pass
+        form = LoginForm()
+    return render(request, "users/login.html", {"form": form})
 
 
 @transaction.atomic
@@ -42,9 +40,9 @@ def register_page(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = User.objects.create_user(
-                username=form.cleaned_data['username'],
-                password=form.cleaned_data['password1'],
-                email=form.cleaned_data['email']
+                username=form.cleaned_data.get('username'),
+                password=form.cleaned_data.get('password'),
+                email=form.cleaned_data.get('email')
             )
             user.save()
             subscription = Subscription(name=user,
@@ -53,15 +51,10 @@ def register_page(request):
                                         abo_date=datetime.now() + timedelta(days=30))
             subscription.save()
 
-            template = loader.get_template("users/register_success.html")
-            variables = RequestContext(request, {'username': form.cleaned_data['username']})
-            output = template.render(variables)
-            return HttpResponse(output)
+            return render(request, "users/register_success.html", {'username': form.cleaned_data['username']})
     else:
         form = RegistrationForm()
-    template = loader.get_template("users/register.html")
-    context = RequestContext(request, {'form': form})
-    return HttpResponse(template.render(context))
+    return render(request, "users/register.html", {"form": form})
 
 
 def logout_page(request):
@@ -71,4 +64,4 @@ def logout_page(request):
     :return: HTTP response
     """
     logout(request)
-    return HttpResponseRedirect(reverse("menu:index"))
+    return redirect("users:login")

@@ -118,3 +118,5 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 REDACTOR_OPTIONS = {'lang': 'pl'}
 REDACTOR_UPLOAD = 'uploads/'
+
+LOGIN_URL = '/users/login'

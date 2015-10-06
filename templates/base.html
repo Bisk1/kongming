@@ -71,31 +71,28 @@
 
     </head>
     <body>
-    {% if user.is_authenticated %}
-    {% block top_menu %}
+        {% block top_menu %}
         <div class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
             <div class="container">
             <!-- Menu button for smallar screens -->
-		        <div class="navbar-header">
+                <div class="navbar-header">
 
-		            <a href="{% url 'menu:index' %}" class="navbar-brand">Chinese <span class="bold">Tool</span></a>
-		        </div>
+                    <a href="{% url 'learn:lessons_map' %}" class="navbar-brand"><span class="bold">KongMing</span></a>
+                </div>
             <!-- Site name for smallar screens -->
 
             <!-- Navigation starts -->
             <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-
+            {% if user.is_authenticated %}
             <!-- Links -->
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <img src="img/user.jpg" alt="" class="nav-user-pic img-responsive" /><b>{{user.username}}</b> <b class="caret"></b>
+                        <b>{{user.username}}</b> <b class="caret"></b>
                     </a>
                     <!-- Dropdown menu -->
                     <ul class="dropdown-menu">
-                        <li><a href="#"><i class="icon-user"></i> Profile</a></li>
-                        <li><a href="#"><i class="icon-cogs"></i> Settings</a></li>
-                        <li><a href="{% url 'users:logout' %}"><i class="icon-off">Wyloguj</i> </a></li>
+                        <li><a href="{% url 'users:logout' %}"><i class="icon-off"></i> Wyloguj</a></li>
                     </ul>
                 </li>
             </ul>
@@ -103,11 +100,12 @@
             <!-- Notifications -->
             <ul class="nav navbar-nav navbar-right">
             </ul>
-		    </nav>
+            </nav>
+            {% endif %}
             </div>
         </div>
         <div class="content">
-    {% endblock %}
+        {% endblock %}
         {% if user.is_superuser %}
         <!-- Sidebar -->
         <div class="sidebar">
@@ -157,11 +155,11 @@
 
         </div>
         {% endif %}
-	<!-- Main bar -->
+    <!-- Main bar -->
     {% if user.is_superuser %}
-  	<div class="mainbar">
+    <div class="mainbar">
     {% else %}
-  	<div class="mainbar mainbar-nomargin">
+    <div class="mainbar mainbar-nomargin">
     {% endif %}
 
         <!-- Page heading -->
@@ -171,11 +169,11 @@
               <!-- page meta -->
               <span class="page-meta">Z nami nauczysz się chińskiego</span>
             </h2>
-			<div class="clearfix"></div>
-	    </div>
-	    <!-- Page heading ends -->
+            <div class="clearfix"></div>
+        </div>
+        <!-- Page heading ends -->
 
-	    <!-- Matter -->
+        <!-- Matter -->
 
             <div class="matter">
                 <div class="container">
@@ -186,11 +184,6 @@
             </div>
         </div>
      </div>
-    {% else %}
-        <a href="{% url 'menu:login' %}">Zaloguj się</a>
-        <a href="{% url 'users:register' %}">Zarejestruj się</a>
-
-    {% endif %}
 
 {% block footer %}
 <div id="error_box"/>

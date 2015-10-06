@@ -5,18 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from exercises.models import Explanation, Choice, Typing
 from translations.models import BusinessText
 from translations.utils import Languages
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout
-
-
-class MetroAdminFormHelper(FormHelper):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.form_class='form-horizontal'
-        self.form_method='post'
-        self.label_class='col-lg-4'
-        self.field_class='col-lg-8'
-        self.add_input(Submit('submit', 'Zapisz', css_class='btn btn-primary'))
+from templates.forms import MetroAdminFormHelper
 
 
 class TypingForm(forms.Form):

@@ -1,24 +1,9 @@
+{% extends "base.html"%}
+{% load crispy_forms_tags %}
+
 {% block content %}
-<center>
-<h2>Zarejestruj się w aplikacji KongMing</h2>
-Rejestracja jest wymaagana do nauki!
-<p>
-<div style="margin-left:35%;margin-right:35%;">
-<fieldset>
-  <legend>Wszystkie pola oprócz numeru tlefonu są obowiązkowe</legend>
-    <form method="post" action=".">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Zarejestruj się">    <input type="reset" value="Pusty formularz">
-  </form>
-</fieldset>
-</div>
-</center>
-{% endblock %}
-{% block footer %}
-<p>
-<div style="text-align:center;"><a href="{% url 'menu:index' %}">Strona główna</a></div>
-
-{% url 'users:login' as login_url %}
-</p>
-
+{% include "form_start.html" with header="Rejestracja" header2="Rejestracja jest wymagana do nauki" %}
+    {% crispy form %}
+{% include "form_end.html" %}
+<div class="text-center"><a class="btn btn-default" href="{% url 'users:login' %}">Powrót do logowania</a></div>
 {% endblock %}
