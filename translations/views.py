@@ -7,7 +7,7 @@ from django.shortcuts import render
 
 from translations.models import BusinessText
 from translations.utils import Languages
-from words.models import WordZH, WordPL
+from words.models import WordZH, WordPL, to_word_model
 
 
 logger = logging.getLogger(__name__)
@@ -22,7 +22,7 @@ def words_translations(request, source_language):
     :return: HTTP response
     """
     if request.is_ajax():
-        source_word_model = language_name_to_word_model(source_language)
+        source_word_model = to_word_model(source_language)
         if 'translations' in request.POST:
             delete_translations(request.POST['word_to_translate'], source_word_model)
             add_translations(request.POST['word_to_translate'],
@@ -38,15 +38,6 @@ def words_translations(request, source_language):
         else:
             return HttpResponseBadRequest('Unrecognized request', content_type='application/javascript')
     return render(request, 'translations/words_translations.html', {'source_language': source_language})
-
-
-def language_name_to_word_model(language_name):
-    if language_name == "polish":
-        return WordPL
-    elif language_name == "chinese":
-        return WordZH
-    else:
-        raise Exception("Unknown language: " + language_name)
 
 
 def get_translations_if_word_exists(word_to_search, word_model):

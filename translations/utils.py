@@ -1,8 +1,8 @@
 # encoding=utf-8
 
 from enum import Enum
+
 import jieba
-import string
 
 
 class Languages(Enum):
