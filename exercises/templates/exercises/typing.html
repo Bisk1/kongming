@@ -6,8 +6,6 @@
 <script type="text/javascript" src="{% static "exercises/js/typing.js" %}"></script>
 <div id="texts_translations_service_url" style="visibility: hidden">{% url 'translations:texts_translations_service' %}</div>
 
-{% include "form_start.html" with header="Lekcja: "|add:lesson.topic header2="Ćwiczenie - pisanie" %}
     {% crispy form %}
-{% include "form_end.html" %}
 
 {% endblock %}

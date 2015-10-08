@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate
 class RegistrationForm(forms.Form):
 
     helper = MetroAdminFormHelper()
+    helper.header = 'Rejestracja'
+    helper.header = 'Rejestracja jest wymagana do nauki'
 
     username = forms.CharField(label="Login",max_length=30)
     email = forms.EmailField(label="Email")
@@ -28,6 +30,7 @@ class LoginFormHelper(MetroAdminFormHelper):
 class LoginForm(forms.Form):
 
     helper = LoginFormHelper()
+    helper.header = 'Logowanie'
 
     username = forms.CharField(label="Użytkownik", max_length=30)
     password = forms.CharField(label="Hasło", widget=forms.PasswordInput())

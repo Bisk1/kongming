@@ -3,8 +3,6 @@
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 
-{% include "form_start.html" with header="Lekcja: "|add:lesson.topic header2="Ćwiczenie - objaśnienie"  %}
     {% crispy form %}
-{% include "form_end.html" %}
 
 {% endblock %}

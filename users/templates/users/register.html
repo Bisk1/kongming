@@ -2,8 +2,6 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-{% include "form_start.html" with header="Rejestracja" header2="Rejestracja jest wymagana do nauki" %}
     {% crispy form %}
-{% include "form_end.html" %}
-<div class="text-center"><a class="btn btn-default" href="{% url 'users:login' %}">Powrót do logowania</a></div>
+    <div class="text-center"><a class="btn btn-default" href="{% url 'users:login' %}">Powrót do logowania</a></div>
 {% endblock %}

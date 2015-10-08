@@ -9,6 +9,7 @@ from translations.models import BusinessText
 from redactor.fields import RedactorField
 from django.template.loader import render_to_string
 
+
 class Exercise(models.Model):
     lesson = models.ForeignKey(Lesson)
     number = models.IntegerField(null=True)

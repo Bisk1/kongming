@@ -11,6 +11,7 @@ from templates.forms import MetroAdminFormHelper
 class TypingForm(forms.Form):
 
     helper = MetroAdminFormHelper()
+    helper.header2 = 'Ćwiczenie - pisanie'
 
     source_language = forms.ChoiceField(label='Język źródłowy', choices=((Languages.chinese.value, 'Chiński'),
                                                                          (Languages.polish.value, 'Polski')))
@@ -19,7 +20,10 @@ class TypingForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance', None)
+        self.lesson = kwargs.pop('lesson')
         super().__init__(*args, **kwargs)
+        if self.lesson:
+            self.helper.header = 'Lekcja: ' + self.lesson.topic
         if self.instance:
             self._instance_to_fields()
         else:
@@ -55,6 +59,13 @@ class TypingForm(forms.Form):
 class ExplanationForm(forms.ModelForm):
 
     helper = MetroAdminFormHelper()
+    helper.header2 = 'Ćwiczenie - objaśnienie'
+
+    def __init__(self, *args, **kwargs):
+        self.lesson = kwargs.pop('lesson')
+        super().__init__(*args, **kwargs)
+        if self.lesson:
+            self.helper.header = 'Lekcja: ' + self.lesson.topic
 
     class Meta:
         model = Explanation
@@ -65,6 +76,10 @@ class ExplanationForm(forms.ModelForm):
 
 
 class ChoiceForm(forms.Form):
+
+    helper = MetroAdminFormHelper()
+    helper.header2 = 'Ćwiczenie - wybór'
+
     source_language = forms.ChoiceField(label='Język źródłowy', choices=((Languages.chinese.value, 'Chiński'),
                                                                          (Languages.polish.value, 'Polski')),
                                         widget=forms.RadioSelect)
@@ -74,11 +89,13 @@ class ChoiceForm(forms.Form):
     wrong_choice2 = forms.CharField(label='Błędna odpowiedź 2', max_length=255)
     wrong_choice3 = forms.CharField(label='Błędna odpowiedź 3', max_length=255)
 
-    helper = MetroAdminFormHelper()
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance', None)
+        self.lesson = kwargs.pop('lesson')
         super().__init__(*args, **kwargs)
+        if self.lesson:
+            self.helper.header = 'Lekcja: ' + self.lesson.topic
         if self.instance:
             self._instance_to_fields()
         else:

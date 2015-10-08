@@ -1,0 +1,32 @@
+{% load crispy_forms_utils %}
+
+{% specialspaceless %}
+<div class="col-md-12">
+<div class="widget wblue">
+    <div class="widget-head">
+        <div class="pull-left">
+            {% if header %}{{ header }} {% endif %}
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div class="widget-content">
+<div class="padd">
+    {% if header2 %}
+    <h6>{{ header2 }}</h6>
+    <hr>
+    {% endif %}
+    {% if form_tag %}<form {{ flat_attrs|safe }} method="{{ form_method }}" {% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
+        {% if form_method|lower == 'post' and not disable_csrf %}
+            {% csrf_token %}
+        {% endif %}
+
+        {% include "bootstrap3/display_form.html" %}
+
+        {% include "bootstrap3/inputs.html" %}
+
+    {% if form_tag %}</form>{% endif %}
+    {% endspecialspaceless %}
+        </div>
+    </div>
+</div>
