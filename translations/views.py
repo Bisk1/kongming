@@ -1,14 +1,15 @@
 import json
 import logging
 
-from django.template import loader
 from django.http import *
-from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render
 
 from translations.models import BusinessText
 from translations.utils import Languages
 from words.models import WordZH, WordPL
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -27,18 +28,16 @@ def words_translations(request, source_language):
             add_translations(request.POST['word_to_translate'],
                              source_word_model,
                              json.loads(request.POST['translations']))
-            return HttpResponse('{}', content_type='application/javascript')
+            return JsonResponse({})
         elif 'word_to_search' in request.POST:
             matching_words = source_word_model.objects.filter(word__startswith=request.POST['word_to_search'])[:5].values_list('word', flat=True)
-            return HttpResponse(json.dumps({'matching_words': list(matching_words)}), content_type='application/javascript')
+            return JsonResponse({'matching_words': list(matching_words)})
         elif 'word_to_translate' in request.POST:
             translations = get_translations_if_word_exists(request.POST['word_to_translate'], source_word_model)
-            return HttpResponse(json.dumps({'translations': translations}), content_type='application/javascript')
+            return JsonResponse({'translations': translations})
         else:
-            return HttpResponse('Unrecognized AJAX request', content_type='application/javascript')
-    template = loader.get_template('translations/words_translations.html')
-    context = RequestContext(request, {'source_language': source_language})
-    return HttpResponse(template.render(context))
+            return HttpResponseBadRequest('Unrecognized request', content_type='application/javascript')
+    return render(request, 'translations/words_translations.html', {'source_language': source_language})
 
 
 def language_name_to_word_model(language_name):
@@ -89,9 +88,7 @@ def texts_translations(request, source_language):
     :param source_language: language to translate texts from
     :return: HTTP response
     """
-    template = loader.get_template('translations/texts_translations.html')
-    context = RequestContext(request, {'source_language': source_language})
-    return HttpResponse(template.render(context))
+    return render(request, 'translations/texts_translations.html', {'source_language': source_language})
 
 
 def texts_translations_service(request):
@@ -111,7 +108,7 @@ def texts_translations_service(request):
     elif operation == 'get_translations':
         return get_text_translations(text_to_translate, source_language)
     else:
-        return HttpResponse('Unrecognized request', content_type='application/javascript')
+        return HttpResponseBadRequest('Unrecognized request', content_type='application/javascript')
 
 
 def set_text_translations(source_text, source_language, translations):
@@ -128,7 +125,7 @@ def set_text_translations(source_text, source_language, translations):
         translation_language = Languages.chinese if source_language==Languages.polish else Languages.polish
         business_translation, _ = BusinessText.objects.get_or_create(text=translation, language=translation_language)
         business_text_to_translate.translations.add(business_translation)
-    return HttpResponse('{}', content_type='application/javascript')
+    return JsonResponse({})
 
 
 def get_text_matches(source_text, source_language):
@@ -140,7 +137,7 @@ def get_text_matches(source_text, source_language):
     """
     matching_business_texts = BusinessText.objects.filter(text__startswith=source_text, language=source_language)
     matching_texts = matching_business_texts[:5].values_list('text', flat=True)
-    return HttpResponse(json.dumps({'matches': list(matching_texts)}), content_type='application/javascript')
+    return JsonResponse({'matches': list(matching_texts)})
 
 
 def get_text_translations(source_text, source_language):
@@ -152,7 +149,7 @@ def get_text_translations(source_text, source_language):
     """
     business_text_to_translate = BusinessText.objects.get(text=source_text, language=source_language)
     translations = list(business_text_to_translate.translations.values('text'))
-    return HttpResponse(json.dumps({'translations': translations}), content_type='application/javascript')
+    return JsonResponse({'translations': translations})
 
 
 
