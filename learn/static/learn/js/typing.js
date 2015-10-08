@@ -37,10 +37,7 @@ var TypingExerciseController = (function () {
 
     return {
         prepare: function (json, lessonController) {
-            $('#correct').hide();
-            $('#typing_text').html(json.text);
-            $('#proposition').val('').show();
-            $('#bad-proposition').hide();
+            $('#exercise-container').html(json.html);
             $('#check').show();
             switch (json.language) {
             case ('pl'):
@@ -51,7 +48,6 @@ var TypingExerciseController = (function () {
                 break;
             }
             registerCheckEvent(lessonController);
-            $('#typing_exercise').show();
         }
     };
 

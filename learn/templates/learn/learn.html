@@ -38,43 +38,11 @@
     </div>
 
     <div id="exercise-container">
-        <div id="typing_exercise" class="exercise-type-container" style="display: none;">
-            <h2 class="text-center text-primary" id="typing_text"></h2>
-            <input id="proposition" class="form-control input-lg" type="text" name="proposition" hidden/>
-            <div id="chinese-ime" style="display: none;">
-                <div class="typing"></div>
-                <ul class="options" style="display: inline; list-style-type: none;">
-                </ul>
-            </div>
-            <h4 id="correct" class="text-success text-center" style="display: none;"></h4>
-            <h4 id="bad-proposition" class="text-danger text-center" style="display: none;"></h4>
-        </div>
-        <div id="explanation_exercise" class="exercise-type-container" style="display: none;">
-            <div class="text-primary" id="explanation_text"></div>
-        </div>
-        <div id="choice_exercise" class="exercise-type-container" style="display: none;">
-            <h2 class="text-center text-primary" id="choice_text_to_translate"></h2>
-            <div class="rows">
-                <div class="col-md-6">
-                    <input type="button" class="choice btn btn-default btn-block" id="choice1"/>
-                </div>
-                <div class="col-md-6">
-                    <input type="button" class="choice btn btn-default btn-block" id="choice2"/>
-                </div>
-            </div>
-            <div class="rows">
-                <div class="col-md-6">
-                    <input type="button" class="choice btn btn-default btn-block" id="choice3"/>
-                </div>
-                <div class="col-md-6">
-                    <input type="button" class="choice btn btn-default btn-block" id="choice4"/>
-                </div>
-            </div>
-        </div>
-        <div id="final" hidden>
-            <h2 class="text-primary text-center">Ukończyłeś lekcję!</h2>
-            <a class="btn btn-default btn-block" id="to-lesson-map" href="{% url 'learn:lessons_map' %}" id="to-lesson-map">Do mapy lekcji</a>
-        </div>
+    </div>
+
+    <div id="final" style="display: none">
+        <h2 class="text-primary text-center" >Ukończyłeś lekcję!</h2>
+        <a class="btn btn-default btn-block" id="to-lesson-map" href="{% url 'learn:lessons_map' %}" id="to-lesson-map">Do mapy lekcji</a>
     </div>
     <div>
         <button type="button" class="btn btn-default" id="check" style="display: none">Sprawdź</button>

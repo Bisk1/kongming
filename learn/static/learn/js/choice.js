@@ -18,14 +18,7 @@ var ChoiceExerciseController = (function () {
 
     return {
         prepare: function (json, lessonController) {
-            $('#choice_text_to_translate').html(json.text);
-            $('#choice1').val(json.choices[0]);
-            $('#choice2').val(json.choices[1]);
-            $('#choice3').val(json.choices[2]);
-            $('#choice4').val(json.choices[3]);
-
-            $('.choice').removeClass('btn-primary').removeClass('btn-success').removeClass('btn-danger');
-            $('#choice_exercise').show();
+            $('#exercise-container').html(json.html);
             registerCheckEvent(lessonController);
         }
     };

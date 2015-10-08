@@ -60,13 +60,6 @@ var LessonController = (function () {
     };
 
     /**
-     * Hide all exercises' divs
-     */
-    lc.hideAllExercisesContainers = function () {
-        $('.exercise-type-container').hide();
-    };
-
-    /**
      * Update screen after checking exercise
      */
     lc.handleLessonCheckResponse = function (json) {
@@ -106,8 +99,8 @@ var LessonController = (function () {
     lc.handleLessonPrepare = function (json) {
         $('#positive_status').hide();
         $('#negative_status').hide();
-        lc.hideAllExercisesContainers();
         if (json.final) { // if true there is no more exercises - show final screen
+            $('#exercise-container').remove();
             $('#final').show();
         } else {
             lc.prepareExercise(json);

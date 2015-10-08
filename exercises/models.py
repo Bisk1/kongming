@@ -7,7 +7,7 @@ from django.db import models
 from lessons.models import Lesson
 from translations.models import BusinessText
 from redactor.fields import RedactorField
-
+from django.template.loader import render_to_string
 
 class Exercise(models.Model):
     lesson = models.ForeignKey(Lesson)
@@ -30,6 +30,9 @@ class AbstractExercise(models.Model):
     def prepare(self):
         raise NotImplementedError
 
+    def render(self):
+        raise NotImplementedError
+
 
 class Typing(AbstractExercise):
     text_to_translate = models.ForeignKey(BusinessText)
@@ -41,6 +44,9 @@ class Typing(AbstractExercise):
     def prepare(self):
         return {'text': self.text_to_translate.text,
                 'language': self.text_to_translate.language}
+
+    def render(self):
+        return render_to_string('learn/typing.html', self.prepare())
 
     def __str__(self):
         return '[{0}] Text: {1}\n' \
@@ -68,6 +74,9 @@ class Choice(AbstractExercise):
     def prepare(self):
         return {'text': self.text_to_translate.text,
                 'choices': self._get_all_choices_in_random_order()}
+
+    def render(self):
+        return render_to_string('learn/choice.html', self.prepare())
 
     def __str__(self):
         return '[{0}] Text: {1}\n' \
@@ -104,6 +113,9 @@ class Explanation(AbstractExercise):
 
     def prepare(self):
         return {'text': self.text}
+
+    def render(self):
+        return render_to_string('learn/explanation.html', self.prepare())
 
     def __str__(self):
         return self.text

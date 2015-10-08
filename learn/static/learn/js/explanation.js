@@ -1,8 +1,7 @@
 var ExplanationExerciseController = (function () {
     return {
         prepare: function (json) {
-            $('#explanation_text').html(json.text);
-            $('#explanation_exercise').show();
+            $('#exercise-container').html(json.html);
             $('#check').hide();
             $('#next').html('Dalej').show();
         }

@@ -110,6 +110,7 @@ class ExerciseAction(models.Model):
     def prepare(self):
         response = self.exercise.spec.prepare()
         response['exercise_type'] = self.exercise.content_type.name
+        response['html'] = self.exercise.spec.render()
         return response
 
 

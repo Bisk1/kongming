@@ -1,6 +1,6 @@
 var getSourceLanguage = function() {
     return $("#id_source_language").find(":selected").val();
-}
+};
 
 var getTranslateTextsServiceUrl = function() {
     return $("#texts_translations_service_url").text();
