@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from lessons.models import Lesson
 from django.utils.translation import ugettext_lazy as _
+
+from lessons.models import Lesson
 from exercises.models import Exercise
 
 
@@ -17,6 +18,13 @@ class LessonForm(forms.ModelForm):
             'requirement': _('Wymaganie')
         }
 
+    def clean(self):
+        cleaned_data = super(LessonForm, self).clean()
+        for name, value in self.data.items():
+            if name.startswith('exercise_'):
+                cleaned_data[name] = value
+        return cleaned_data
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         self.instance.clean_exercises_number()
@@ -25,6 +33,7 @@ class LessonForm(forms.ModelForm):
             exercise = Exercise.objects.get(pk=exercise_id)
             exercise.number = number
             exercise.save()
+        return self.instance
 
     def _received_exercises_numbers(self):
         """

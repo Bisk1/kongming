@@ -1,72 +1,59 @@
 import logging
 
-from django.shortcuts import render, redirect
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView
+from django.core.urlresolvers import reverse, reverse_lazy
 
 from lessons.forms import LessonForm
 from lessons.models import Lesson
 from exercises.models import Exercise
 
-
 logger = logging.getLogger(__name__)
 
 
-def lessons(request):
-    """
-    Displays available lessons for modifying and adding new lessons
-    :param request: HTTP request
-    :return: HTTP response
-    """
-    all_lessons = Lesson.objects.all()
-    return render(request, 'lessons/lessons.html', {'lessons': all_lessons})
+class LessonListView(ListView):
+    model = Lesson
 
 
-def add_lesson(request):
-    if request.method == 'POST':
-        return handle_lesson(request)
-    else:
-        form = LessonForm()
-        return render(request, 'lessons/lesson.html', {'form': form})
+class CreateLessonView(CreateView):
+    model = Lesson
+    template_name = 'lessons/lesson.html'
+    form_class = LessonForm
+
+    def get_success_url(self):
+        return reverse('lessons:modify_lesson', kwargs={'lesson_id': self.object.pk})
 
 
-def modify_lesson(request, lesson_id):
-    """
-    Modifies lesson - allows to change requirement and exercises
-    :param request: HTTP request
-    :return: HTTP response
-    """
-    lesson = Lesson.objects.get(pk=lesson_id)
-    if request.method == 'POST':
-        return handle_lesson(request, lesson)
-    else:
-        form = LessonForm(instance=lesson)
-        exercises = Exercise.objects.filter(lesson=lesson).order_by('number')
-        return render(request, 'lessons/lesson.html', {'lesson': lesson,
-                                                       'exercises': exercises,
-                                                       'form': form,
-                                                       })
+class ModifyLessonView(UpdateView):
+    model = Lesson
+    template_name = 'lessons/lesson.html'
+    form_class = LessonForm
+    slug_field = 'pk'
+    slug_url_kwarg = 'lesson_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['exercises'] = Exercise.objects.filter(lesson=self.get_object()).order_by('number')
+        return context
+
+    def get_success_url(self):
+        return reverse('lessons:modify_lesson', kwargs={'lesson_id': self.object.pk})
 
 
-def handle_lesson(request, lesson=None):
-    form = LessonForm(request.POST, instance=lesson)
-    if form.is_valid():
-        form.save()
-        return redirect('lessons:modify_lesson', lesson_id=form.instance.pk)
-    else:
-        return render(request, 'lessons/lesson.html', {'form': form})
+class DeleteLessonView(DeleteView):
+    model = Lesson
+    template_name = 'lessons/confirm_delete.html'
+    success_url = reverse_lazy('lessons:lessons')
+    slug_field = 'pk'
+    slug_url_kwarg = 'lesson_id'
 
-
-def delete_lesson(request, lesson_id):
-    """
-    Delete lesson and redirect to lessons management page.
-    Lessons that have requirement = deleted lesson,
-    will have requirement = requirement of deleted lesson
-    :param request: HTTP request
-    :return: HTTP response
-    """
-    lesson_to_delete = Lesson.objects.get(pk=lesson_id)
-    lessons_requiring_lesson_to_delete = lesson_to_delete.lesson_set.all()
-    for lesson in lessons_requiring_lesson_to_delete:
-        lesson.requirement = lesson_to_delete.requirement
-        lesson.save()
-    lesson_to_delete.delete()
-    return redirect('lessons:lessons')
+    def delete(self, *args, **kwargs):
+        """
+        Lessons that have requirement = deleted lesson,
+        will have requirement = requirement of deleted lesson
+        """
+        lesson_to_delete = self.get_object()
+        lessons_requiring_lesson_to_delete = lesson_to_delete.lesson_set.all()
+        for lesson in lessons_requiring_lesson_to_delete:
+            lesson.requirement = lesson_to_delete.requirement
+            lesson.save()
+        return super().delete(self, *args, **kwargs)

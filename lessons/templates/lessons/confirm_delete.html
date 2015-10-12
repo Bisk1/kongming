@@ -1,0 +1,15 @@
+{% extends "base.html"%}
+{% block content %}
+{% load staticfiles %}
+
+{% include "form_start.html" with header="Czy na pewno chcesz usunąć lekcję: "|add:lesson.topic|add:"?" %}
+    <form class="form-horizontal" role="form" action="{% url 'lessons:delete_lesson' lesson_id=lesson.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" id="save" class="btn btn-primary">Tak</button>
+        <a href="{% url 'lessons:lessons' %}" class="btn btn-default">Powrót</a>
+    </form>
+{% include "form_end.html" %}
+
+{% endblock %}
+{% block footer %}
+{% endblock %}
