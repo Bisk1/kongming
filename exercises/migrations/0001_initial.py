@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import redactor.fields
 
 
 class Migration(migrations.Migration):
@@ -16,13 +17,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AbstractExercise',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
             ],
         ),
         migrations.CreateModel(
             name='Exercise',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
                 ('number', models.IntegerField(null=True)),
                 ('object_id', models.PositiveIntegerField()),
                 ('content_type', models.ForeignKey(to='contenttypes.ContentType')),
@@ -30,18 +31,27 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Choice',
+            fields=[
+                ('abstractexercise_ptr', models.OneToOneField(auto_created=True, to='exercises.AbstractExercise', serialize=False, parent_link=True, primary_key=True)),
+                ('correct_choice', models.ForeignKey(to='translations.BusinessText', related_name='choice_exercise_as_correct')),
+                ('text_to_translate', models.ForeignKey(to='translations.BusinessText', related_name='choice_exercise_as_text_to_translate')),
+                ('wrong_choices', models.ManyToManyField(related_name='choice_exercise_as_wrong', to='translations.BusinessText')),
+            ],
+            bases=('exercises.abstractexercise',),
+        ),
+        migrations.CreateModel(
             name='Explanation',
             fields=[
-                ('abstractexercise_ptr', models.OneToOneField(to='exercises.AbstractExercise', primary_key=True, parent_link=True, serialize=False, auto_created=True)),
-                ('text', models.TextField()),
-                ('image', models.FileField(blank=True, upload_to='image/')),
+                ('abstractexercise_ptr', models.OneToOneField(auto_created=True, to='exercises.AbstractExercise', serialize=False, parent_link=True, primary_key=True)),
+                ('text', redactor.fields.RedactorField(verbose_name='Text')),
             ],
             bases=('exercises.abstractexercise',),
         ),
         migrations.CreateModel(
             name='Typing',
             fields=[
-                ('abstractexercise_ptr', models.OneToOneField(to='exercises.AbstractExercise', primary_key=True, parent_link=True, serialize=False, auto_created=True)),
+                ('abstractexercise_ptr', models.OneToOneField(auto_created=True, to='exercises.AbstractExercise', serialize=False, parent_link=True, primary_key=True)),
                 ('text_to_translate', models.ForeignKey(to='translations.BusinessText')),
             ],
             bases=('exercises.abstractexercise',),

@@ -7,7 +7,7 @@ from django.shortcuts import render
 
 from translations.models import BusinessText
 from translations.utils import Languages
-from words.models import WordZH, WordPL, to_word_model
+from words.models import WordZH, WordEN, to_word_model
 
 
 logger = logging.getLogger(__name__)
@@ -43,9 +43,9 @@ def words_translations(request, source_language):
 def get_translations_if_word_exists(word_to_search, word_model):
     try:
         if word_model == WordZH:
-            return list(WordZH.objects.get(word=word_to_search).wordpl_set.values('word'))
-        elif word_model == WordPL:
-            return list(WordPL.objects.get(word=word_to_search).wordzh_set.values('word', 'pinyin'))
+            return list(WordZH.objects.get(word=word_to_search).worden_set.values('word'))
+        elif word_model == WordEN:
+            return list(WordEN.objects.get(word=word_to_search).wordzh_set.values('word', 'pinyin'))
         else:
             logger.error("Unknown word model: " + word_model)
             return list()
@@ -59,16 +59,16 @@ def delete_translations(word_to_translate, source_word_model):
 
 
 def add_translations(word_to_translate, source_word_model, translations):
-    if source_word_model == WordPL:
-        word_to_translate = WordPL.objects.get_or_create(word=word_to_translate)[0]
+    if source_word_model == WordEN:
+        word_to_translate = WordEN.objects.get_or_create(word=word_to_translate)[0]
         for translation in translations:
             new_word_zh = WordZH.objects.get_or_create(word=translation['word'], pinyin=translation['pinyin'])[0]
             word_to_translate.add(new_word_zh)
     else:
         word_to_translate = WordZH.objects.get_or_create(word=word_to_translate)[0]  # TODO: user should specify pinyin of source word?
         for translation in translations:
-            new_word_pl = WordPL.objects.get_or_create(word=translation['word'])[0]
-            word_to_translate.wordzh_set.add(new_word_pl)
+            new_word_en = WordEN.objects.get_or_create(word=translation['word'])[0]
+            word_to_translate.wordzh_set.add(new_word_en)
 
 
 def texts_translations(request, source_language):
@@ -113,7 +113,7 @@ def set_text_translations(source_text, source_language, translations):
     business_text_to_translate, _ = BusinessText.objects.get_or_create(text=source_text, language=source_language)
     business_text_to_translate.translations.clear()
     for translation in translations:
-        translation_language = Languages.chinese if source_language==Languages.polish else Languages.polish
+        translation_language = Languages.chinese if source_language==Languages.english else Languages.english
         business_translation, _ = BusinessText.objects.get_or_create(text=translation, language=translation_language)
         business_text_to_translate.translations.add(business_translation)
     return JsonResponse({})

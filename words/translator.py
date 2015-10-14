@@ -18,8 +18,8 @@ def get_from_google(word, src):
 def language_to_google_code(language):
     if language == Languages.chinese:
         return 'zh-CN'
-    elif language == Languages.polish:
-        return 'pl'
+    elif language == Languages.english:
+        return 'en'
     else:
         raise Exception('Unrecognized language: ' + language)
 

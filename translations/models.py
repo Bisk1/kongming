@@ -1,7 +1,7 @@
 from django.db import models
 from . import comparators
 from translations.utils import Languages
-from words.models import to_word_model, WordPL, WordZH
+from words.models import to_word_model, WordEN, WordZH
 
 
 class BusinessText(models.Model):
@@ -11,7 +11,7 @@ class BusinessText(models.Model):
     text = models.CharField(max_length=255)
     language = models.CharField(max_length=2)
     translations = models.ManyToManyField("self", symmetrical=True)
-    words_pl = models.ManyToManyField(WordPL)
+    words_en = models.ManyToManyField(WordEN)
     words_zh = models.ManyToManyField(WordZH)
 
     class Meta:
@@ -43,8 +43,8 @@ class BusinessText(models.Model):
     def get_words(self):
         if self.language == Languages.chinese.value:
             return self.words_zh
-        elif self.language == Languages.polish.value:
-            return self.words_pl
+        elif self.language == Languages.english.value:
+            return self.words_en
         else:
             raise Exception("Unknown language: " + self.language)
 

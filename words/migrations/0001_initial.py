@@ -11,19 +11,19 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='WordPL',
+            name='WordEN',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
-                ('word', models.CharField(max_length=100, unique=True)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
+                ('word', models.CharField(unique=True, max_length=100)),
             ],
         ),
         migrations.CreateModel(
             name='WordZH',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('word', models.CharField(max_length=50)),
                 ('pinyin', models.CharField(max_length=100)),
-                ('wordpl_set', models.ManyToManyField(to='words.WordPL')),
+                ('worden_set', models.ManyToManyField(to='words.WordEN')),
             ],
         ),
         migrations.AlterUniqueTogether(

@@ -11,6 +11,6 @@ class MetroAdminFormHelper(FormHelper):
         self.form_method='post'
         self.label_class='col-lg-4'
         self.field_class='col-lg-8'
-        self.primary_submit_button = Submit('submit', 'Zapisz', css_class='btn btn-primary')  # can modify in subclass
+        self.primary_submit_button = Submit('submit', 'Save', css_class='btn btn-primary')  # can modify in subclass
         self.add_input(self.primary_submit_button)
-        self.add_input(Reset('reset', 'Czyść', css_class='btn btn-default'))
+        self.add_input(Reset('reset', 'Reset', css_class='btn btn-default'))

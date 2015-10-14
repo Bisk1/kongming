@@ -6,15 +6,15 @@ import jieba
 
 
 class Languages(Enum):
-    polish = 'pl'
+    english= 'en'
     chinese = 'zh'
 
     @staticmethod
     def other_language(language):
-        if language == Languages.polish:
+        if language == Languages.english:
             return Languages.chinese
         elif language == Languages.chinese:
-            return Languages.polish
+            return Languages.english
         else:
             Languages.handle_non_existent_language(language)
 
@@ -24,8 +24,8 @@ class Languages(Enum):
         to_tokenize = _remove_punctuation(text)
         if language == Languages.chinese.value:
             return jieba.cut(to_tokenize)
-        elif language == Languages.polish.value:
-            return _polish_tokenize(to_tokenize)
+        elif language == Languages.english.value:
+            return _english_tokenize(to_tokenize)
         else:
             Languages.handle_non_existent_language(language)
 
@@ -37,7 +37,7 @@ class Languages(Enum):
             raise Exception('Input is not language: ' + language)
 
 
-def _polish_tokenize(text):
+def _english_tokenize(text):
     result = text
     result = result.strip()
     result = result.split(' ')

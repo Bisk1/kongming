@@ -4,9 +4,9 @@ from translations.utils import Languages
 from words.translator import get_pinyin
 
 
-class WordPL(models.Model):
+class WordEN(models.Model):
     """
-    Polish word has string value and set of
+    English word has string value and set of
     Chinese translations related to it
     """
     word = models.CharField(max_length=100, unique=True)
@@ -24,7 +24,7 @@ class WordPL(models.Model):
 
     def check_translation(self, word_zh_proposition):
         """
-        Check if the Chinese word used by the user can be accepted for this Polish word
+        Check if the Chinese word used by the user can be accepted for this English word
         :param word_zh_proposition: word in Chinese (string) typed in by the user
         :return: true if this translation is acceptable
         """
@@ -39,21 +39,21 @@ class WordPL(models.Model):
         Same as get_or_create. Created for symmetry with WordZH.
         :return:
         """
-        return WordPL.objects.get_or_create(word=word)
+        return WordEN.objects.get_or_create(word=word)
 
     @staticmethod
     def get_language():
-        return Languages.polish
+        return Languages.english
 
 
 class WordZH(models.Model):
     """
     Chinese word contains string value and set of
-    Polish translations related to it
+    English translations related to it
     """
     word = models.CharField(max_length=50)
     pinyin = models.CharField(max_length=100)
-    wordpl_set = models.ManyToManyField(WordPL)
+    worden_set = models.ManyToManyField(WordEN)
 
     class Meta:
         unique_together = ["word", "pinyin"]
@@ -64,18 +64,18 @@ class WordZH(models.Model):
     def get_translations(self):
         """
         Gets all accurate translations of this word
-        :return: array of Polish words
+        :return: array of English words
         """
-        return self.wordpl_set
+        return self.worden_set
 
-    def check_translation(self, word_pl_proposition):
+    def check_translation(self, word_en_proposition):
         """
-        Check if the Polish word used by the user can be accepted for this Chinese word
-        :param word_pl_proposition: word in Polish (string) typed in by the user
+        Check if the English word used by the user can be accepted for this Chinese word
+        :param word_en_proposition: word in English (string) typed in by the user
         :return: true if this translation is acceptable
         """
-        for polish_translation in self.get_translations().all():
-            if comparators.words_difference(polish_translation.word, word_pl_proposition) < 2:
+        for english_translation in self.get_translations().all():
+            if comparators.words_difference(english_translation.word, word_en_proposition) < 2:
                 return True
         return False
 
@@ -100,7 +100,7 @@ class WordZH(models.Model):
 def to_word_model(language):
     if language == Languages.chinese.value:
         return WordZH
-    elif language == Languages.polish.value:
-        return WordPL
+    elif language == Languages.english.value:
+        return WordEN
     else:
         Languages.handle_non_existent_language(language)

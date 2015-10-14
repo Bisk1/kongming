@@ -66,7 +66,7 @@ var LessonController = (function () {
         lc.handleExerciseStatus(json.success);
         $('#fails').html(json.fails);
         $('#status').show();
-        $('#next').html('Dalej').show();
+        $('#next').html('Next').show();
     };
 
     /**

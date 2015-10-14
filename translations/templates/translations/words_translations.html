@@ -4,34 +4,34 @@
 <script type="text/javascript" src="{% static "translations/js/words_translations.js" %}"></script>
 
 <div>
-    Język źródłowy:
-    {% ifequal source_language "polish" %}Polski{% endifequal %}
-    {% ifequal source_language "chinese" %}Chiński{% endifequal %}
+    Source language:
+    {% ifequal source_language "english" %}English{% endifequal %}
+    {% ifequal source_language "chinese" %}Chinese{% endifequal %}
 </div>
 
 
 <div>
     <div>
         {% csrf_token %}
-        <label for="word_to_search">Słowo:</label>
+        <label for="word_to_search">Word:</label>
         <input type="text" name="word_to_search" id="word_to_search" value="{{ choice.id }}" />
         {% ifequal source_language "chinese" %}
             <label for="pinyin_to_search">Pinyin</label>
             <input type="text" name="pinyin_to_search" id="pinyin_to_search" />
         {% endifequal %}
         <input type="hidden" id="source_language" name="source_language" value="{{ source_language }}"/>
-        <button type="button" class="btn btn-default" id="edit">Edytuj</button>
+        <button type="button" class="btn btn-default" id="edit">Edit</button>
     </div>
 
 
     <div id="translations">
         <div id="translations_header"></div>
-    Tłumaczenia:
+    Translations:
         <table id="translations_table">
             <tbody>
             </tbody>
         </table>
-    <button type="button" class="btn btn-default" id="add_translation_button">Dodaj</button>
+    <button type="button" class="btn btn-default" id="add_translation_button">Add</button>
     </div>
     <button type="button" class="btn btn-default" id="save_button">Zapisz</button>
     <div id="save_message"></div>

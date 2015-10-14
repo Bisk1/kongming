@@ -95,11 +95,9 @@ DATABASES = {
     }
 }
 
-LANGUAGE_CODE = 'pl'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'Poland'
-
-USE_I18N = True
 
 USE_L10N = True
 
@@ -116,7 +114,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-REDACTOR_OPTIONS = {'lang': 'pl'}
+REDACTOR_OPTIONS = {'lang': 'en'}
 REDACTOR_UPLOAD = 'uploads/'
 
 LOGIN_URL = '/users/login'

@@ -1,6 +1,6 @@
 {% extends "base.html"%}
 
 {% block content %}
-<h2><center>Zostałeś zarejestrowany, twoja nazwa to: {{username}}</center></h2>
- <center><h3>Teraz możesz się <a href="{% url 'users:login' %}">zalogować</a></h3></center>
+<h2><center>You have registered, your username is: {{username}}</center></h2>
+ <center><h3>Now you can <a href="{% url 'users:login' %}">log in</a></h3></center>
 {% endblock %}

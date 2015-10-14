@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ExerciseAction',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
                 ('result', models.CharField(default='u', max_length=1)),
                 ('number', models.IntegerField()),
                 ('exercise', models.ForeignKey(to='exercises.Exercise')),
@@ -26,11 +26,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='LessonAction',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
                 ('total_exercises_number', models.IntegerField(default=0)),
                 ('current_exercise_number', models.IntegerField(default=0)),
                 ('fails', models.IntegerField(default=0)),
-                ('status', models.CharField(default=None, max_length=1, null=True)),
+                ('status', models.CharField(default=None, null=True, max_length=1)),
                 ('lesson', models.ForeignKey(to='lessons.Lesson', null=True)),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],

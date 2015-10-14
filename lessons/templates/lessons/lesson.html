@@ -4,10 +4,10 @@
 
 
 {% if lesson %}
-    {% include "form_start.html" with header="Lekcja: "|add:lesson.topic %}
+    {% include "form_start.html" with header="Lesson: "|add:lesson.topic %}
     <form class="form-horizontal" role="form" action="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}" method="post">
 {% else %}
-    {% include "form_start.html" with header="Nowa lekcja" %}
+    {% include "form_start.html" with header="New lesson" %}
     <form class="form-horizontal" role="form" action="{% url 'lessons:add_lesson' %}" method="post">
 {% endif %}
         {% csrf_token %}
@@ -15,28 +15,28 @@
             <div class="form-group">
             {% if lesson %}
                 <div>
-                    Ćwiczenia:
+                    Exercises:
                     <div id="exercises">
                     {% include "lessons/exercises.html" %}
                     </div>
                 </div>
              {% else %}
-                Zapisz lekcję, aby dodać ćwiczenia.
+                Save the lesson to add exercises
             {% endif %}
             </div>
-            <button type="submit" id="save" class="btn btn-default">Zapisz</button>
-            <a href="{% url 'lessons:lessons' %}" class="btn btn-default">Powrót</a>
+            <button type="submit" id="save" class="btn btn-default">Save</button>
+            <a href="{% url 'lessons:lessons' %}" class="btn btn-default">Return</a>
         </form>
 {% include "form_end.html" %}
 
 
 <div>
 {% if lesson %}
-    Dodaj ćwiczenie:
+    Add exercise:
     <div>
-        <a href="{% url 'lessons:exercises:add_typing' lesson_id=lesson.id %}" class="btn btn-default">Pisanie</a>
-        <a href="{% url 'lessons:exercises:add_explanation' lesson_id=lesson.id %}" class="btn btn-default">Objaśnienie</a>
-        <a href="{% url 'lessons:exercises:add_choice' lesson_id=lesson.id %}" class="btn btn-default">Wybór</a>
+        <a href="{% url 'lessons:exercises:add_typing' lesson_id=lesson.id %}" class="btn btn-default">Typing</a>
+        <a href="{% url 'lessons:exercises:add_explanation' lesson_id=lesson.id %}" class="btn btn-default">Explanation</a>
+        <a href="{% url 'lessons:exercises:add_choice' lesson_id=lesson.id %}" class="btn btn-default">Choice</a>
     </div>
 {% endif %}
 </div>

@@ -3,7 +3,7 @@ var ExplanationExerciseController = (function () {
         prepare: function (json) {
             $('#exercise-container').html(json.html);
             $('#check').hide();
-            $('#next').html('Dalej').show();
+            $('#next').html('Next').show();
         }
     };
 

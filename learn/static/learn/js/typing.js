@@ -40,7 +40,7 @@ var TypingExerciseController = (function () {
             $('#exercise-container').html(json.html);
             $('#check').show();
             switch (json.language) {
-            case ('pl'):
+            case ('en'):
                 toggleChineseInput(true);
                 break;
             case ('zh'):

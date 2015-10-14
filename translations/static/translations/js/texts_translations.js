@@ -39,7 +39,7 @@ var saveTranslations = function() {
     $("#save_message").html('Saving...');
     var text_to_translate = $("#text_to_search").val();
     var translations = [];
-    var isTranslationsChinese = (getSourceLanguage() == 'polish');
+    var isTranslationsChinese = (getSourceLanguage() == 'english');
     $("#translations_table tr").each(function() {
         if (isTranslationsChinese) {
             translations.push({text: $(this).find(":nth-child(2) > input").val()});

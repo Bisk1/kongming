@@ -11,19 +11,19 @@ from templates.forms import MetroAdminFormHelper
 class TypingForm(forms.Form):
 
     helper = MetroAdminFormHelper()
-    helper.header2 = 'Ćwiczenie - pisanie'
+    helper.header2 = 'Exercise - writing'
 
-    source_language = forms.ChoiceField(label='Język źródłowy', choices=((Languages.chinese.value, 'Chiński'),
-                                                                         (Languages.polish.value, 'Polski')))
-    text_to_translate = forms.CharField(label='Tekst do przetłumaczenia', max_length=255, widget=forms.TextInput())
-    translation_0 = forms.CharField(label='Tłumaczenie', max_length=255)
+    source_language = forms.ChoiceField(label='Source language', choices=((Languages.chinese.value, 'Chinese'),
+                                                                         (Languages.english.value, 'English')))
+    text_to_translate = forms.CharField(label='Text to translate', max_length=255, widget=forms.TextInput())
+    translation_0 = forms.CharField(label='Translation', max_length=255)
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance', None)
         self.lesson = kwargs.pop('lesson')
         super().__init__(*args, **kwargs)
         if self.lesson:
-            self.helper.header = 'Lekcja: ' + self.lesson.topic
+            self.helper.header = 'Lesson: ' + self.lesson.topic
         if self.instance:
             self._instance_to_fields()
         else:
@@ -33,7 +33,7 @@ class TypingForm(forms.Form):
         self.fields['source_language'].initial = self.instance.text_to_translate.language
         self.fields['text_to_translate'].initial = self.instance.text_to_translate.text
         for i, translation in enumerate(self.instance.text_to_translate.translations.all()):
-            self.fields['translation_%s' % i] = forms.CharField(label='Tłumaczenie', max_length=255,
+            self.fields['translation_%s' % i] = forms.CharField(label='Translation', max_length=255,
                                                                 initial=translation.text)
 
     def save(self):
@@ -59,35 +59,35 @@ class TypingForm(forms.Form):
 class ExplanationForm(forms.ModelForm):
 
     helper = MetroAdminFormHelper()
-    helper.header2 = 'Ćwiczenie - objaśnienie'
+    helper.header2 = 'Exercise - explanation'
 
     def __init__(self, *args, **kwargs):
         self.lesson = kwargs.pop('lesson')
         super().__init__(*args, **kwargs)
         if self.lesson:
-            self.helper.header = 'Lekcja: ' + self.lesson.topic
+            self.helper.header = 'Lesson: ' + self.lesson.topic
 
     class Meta:
         model = Explanation
         fields = ['text']
         labels = {
-            'text': _('Treść'),
+            'text': _('Content'),
         }
 
 
 class ChoiceForm(forms.Form):
 
     helper = MetroAdminFormHelper()
-    helper.header2 = 'Ćwiczenie - wybór'
+    helper.header2 = 'Exercise - choice'
 
-    source_language = forms.ChoiceField(label='Język źródłowy', choices=((Languages.chinese.value, 'Chiński'),
-                                                                         (Languages.polish.value, 'Polski')),
+    source_language = forms.ChoiceField(label='Source language', choices=((Languages.chinese.value, 'Chinese'),
+                                                                         (Languages.english.value, 'English')),
                                         widget=forms.RadioSelect)
-    text_to_translate = forms.CharField(label='Tekst do przetłumaczenia', max_length=255)
-    correct_choice = forms.CharField(label='Prawidłowa odpowiedź', max_length=255)
-    wrong_choice1 = forms.CharField(label='Błędna odpowiedź 1', max_length=255)
-    wrong_choice2 = forms.CharField(label='Błędna odpowiedź 2', max_length=255)
-    wrong_choice3 = forms.CharField(label='Błędna odpowiedź 3', max_length=255)
+    text_to_translate = forms.CharField(label='Text to translate', max_length=255)
+    correct_choice = forms.CharField(label='Correct answer', max_length=255)
+    wrong_choice1 = forms.CharField(label='Wrong answer 1', max_length=255)
+    wrong_choice2 = forms.CharField(label='Wrong answer 2', max_length=255)
+    wrong_choice3 = forms.CharField(label='Wrong answer 3', max_length=255)
 
 
     def __init__(self, *args, **kwargs):
@@ -95,7 +95,7 @@ class ChoiceForm(forms.Form):
         self.lesson = kwargs.pop('lesson')
         super().__init__(*args, **kwargs)
         if self.lesson:
-            self.helper.header = 'Lekcja: ' + self.lesson.topic
+            self.helper.header = 'Lesson: ' + self.lesson.topic
         if self.instance:
             self._instance_to_fields()
         else:

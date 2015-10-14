@@ -13,9 +13,9 @@ class LessonForm(forms.ModelForm):
         model = Lesson
         fields = ['topic', 'exercises_number', 'requirement']
         labels = {
-            'topic': _('Temat'),
-            'exercises_number': _('Liczba ćwiczeń'),
-            'requirement': _('Wymaganie')
+            'topic': _('Topic'),
+            'exercises_number': _('Exercises number'),
+            'requirement': _('Requirement')
         }
 
     def clean(self):
