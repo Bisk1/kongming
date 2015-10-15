@@ -129,9 +129,26 @@ $(document).ready(function () {
             }
         });
     });
+    // Enter key press clicks the current visible button
+    $('body').keypress(function(e){
+        if(e.which == 13){
+            clickFirstVisible('#next', '#check', '#to-lesson-map');
+        }
+    });
 
     // suppress any attempts to submit a form
     $('form').submit(function () {
         return false;
     });
 });
+
+var clickFirstVisible = function(elementsIds) {
+    for (var i = 0; i < elementsIds.size(); i++) {
+        var element = $(elementId);
+        if (element.css('display') != 'none') {
+            element.click();
+            return;
+        }
+    }
+
+};

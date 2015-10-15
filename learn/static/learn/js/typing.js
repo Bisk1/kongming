@@ -33,11 +33,6 @@ var TypingExerciseController = (function () {
             $(this).off('click');
             lessonController.checkExercise($('#proposition').val(), handleCheckResponse);
         });
-        $('#proposition').keypress(function(e){
-            if(e.which == 13){
-                $('#check').click();
-            }
-        });
     };
 
     return {
