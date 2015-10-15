@@ -132,7 +132,7 @@ $(document).ready(function () {
     // Enter key press clicks the current visible button
     $('body').keypress(function(e){
         if(e.which == 13){
-            clickFirstVisible('#next', '#check', '#to-lesson-map');
+            clickFirstVisible(['#next', '#check', '#to-lesson-map']);
         }
     });
 
@@ -143,10 +143,14 @@ $(document).ready(function () {
 });
 
 var clickFirstVisible = function(elementsIds) {
-    for (var i = 0; i < elementsIds.size(); i++) {
-        var element = $(elementId);
-        if (element.css('display') != 'none') {
-            element.click();
+    for (var i = 0; i < elementsIds.length; i++) {
+        console.log('id: ' + elementsIds[i]);
+        var element = $(elementsIds[i]);
+        if (!element.is(':hidden')) {
+            element.click(); // does not work with 'a' element
+            if (element.is('a')) {
+                document.getElementById(element.attr('id')).click();
+            }
             return;
         }
     }
