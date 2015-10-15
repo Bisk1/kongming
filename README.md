@@ -22,6 +22,6 @@ The project core is structured into several Django apps:
  * translations - holds all the texts (words, sentences, grammar structures examples) which are translated by user
  * lessons
  * exercises - contains models for all the exercises types and API to prepare and check them
- * learn - controls the process of learning by presenting lessons and taking user throguh the lesson flow
+ * learn - controls the process of learning by presenting lessons and taking user through the lesson flow
  
  
