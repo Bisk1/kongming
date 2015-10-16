@@ -20,6 +20,7 @@ var checkAndUpdateTranslationsForm = function(word_to_translate) {
         type: 'POST',
         dataType: "json",
         data: {
+            operation: 'get_translations',
             word_to_translate : word_to_translate,
             csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
         },
@@ -51,6 +52,7 @@ var saveTranslations = function() {
         type: 'POST',
         dataType: "json",
         data: {
+            operation: 'set_translations',
             word_to_translate : word_to_translate,
             translations : JSON.stringify(translations),
             csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
@@ -168,6 +170,7 @@ $(document).ready(function() {
                 type: 'POST',
                 dataType: "json",
                 data: {
+                    operation: 'get_matches',
                     word_to_search : request.term,
                     csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
                 },

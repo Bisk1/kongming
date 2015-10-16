@@ -81,8 +81,9 @@ var LessonController = (function () {
             type: 'POST',
             dataType: 'json',
             data: {
-                proposition: proposition,
+                operation: 'check',
                 lesson_action_id: $('#lesson_action_id').val(),
+                proposition: proposition,
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
             },
             success: function (json) {
@@ -121,6 +122,7 @@ $(document).ready(function () {
             type: 'POST',
             dataType: 'json',
             data: {
+                operation: 'prepare',
                 lesson_action_id: $('#lesson_action_id').val(),
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
             },
@@ -144,7 +146,6 @@ $(document).ready(function () {
 
 var clickFirstVisible = function(elementsIds) {
     for (var i = 0; i < elementsIds.length; i++) {
-        console.log('id: ' + elementsIds[i]);
         var element = $(elementsIds[i]);
         if (!element.is(':hidden')) {
             element.click(); // does not work with 'a' element

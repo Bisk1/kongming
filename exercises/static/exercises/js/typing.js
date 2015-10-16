@@ -3,7 +3,7 @@ var getSourceLanguage = function() {
 };
 
 var getTranslateTextsServiceUrl = function() {
-    return $("#texts_translations_service_url").text();
+    return $("#texts_translations_api_url").text();
 };
 
 var updateTranslationsTable = function(translations) {

@@ -6,7 +6,7 @@ import jieba
 
 
 class Languages(Enum):
-    english= 'en'
+    english = 'en'
     chinese = 'zh'
 
     @staticmethod
