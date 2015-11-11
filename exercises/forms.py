@@ -34,14 +34,16 @@ class TypingForm(forms.Form):
         self.fields['text_to_translate'].initial = self.instance.text_to_translate.text
         for i, translation in enumerate(self.instance.text_to_translate.translations.all()):
             self.fields['translation_%s' % i] = forms.CharField(label='Translation', max_length=255,
-                                                                initial=translation.text)
+                                                                initial=translation.text, required=False)
 
     def save(self):
         source_language = Languages(self.cleaned_data['source_language'])
         self.instance.text_to_translate = BusinessText.objects.get_or_create(text=self.cleaned_data['text_to_translate'],
                                                                              language=source_language.value)[0]
+        self.instance.text_to_translate.translations.clear()
         for translation in self._received_translations():
-            self.instance.text_to_translate.add_translation(translation)
+            if translation:
+                self.instance.text_to_translate.add_translation(translation)
         self.instance.text_to_translate.auto_tokenize()
         self.instance.save()
         return self.instance
@@ -53,7 +55,7 @@ class TypingForm(forms.Form):
         """
         for name, value in self.cleaned_data.items():
             if name.startswith('translation_'):
-                yield value
+                yield value.strip()
 
 
 class ExplanationForm(forms.ModelForm):
