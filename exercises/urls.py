@@ -16,4 +16,7 @@ urlpatterns = patterns('',
     url(r'^choice/$', views.add_choice_exercise, name='add_choice'),
     url(r'^choice/(?P<exercise_id>\d+)/$', views.modify_choice_exercise, name='modify_choice'),
 
+    url(r'^listening/$', views.add_listening_exercise, name='add_listening'),
+    url(r'^listening/(?P<exercise_id>\d+)/$', views.modify_listening_exercise, name='modify_listening'),
+
 )

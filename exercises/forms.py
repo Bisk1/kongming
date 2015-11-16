@@ -2,7 +2,7 @@
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from exercises.models import Explanation, Choice, Typing
+from exercises.models import Explanation, Choice, Typing, Listening
 from translations.models import BusinessText
 from translations.utils import Languages
 from templates.forms import MetroAdminFormHelper
@@ -127,4 +127,36 @@ class ChoiceForm(forms.Form):
                                                                            language=target_language.value)[0])
         self.instance.wrong_choices.add(BusinessText.objects.get_or_create(text=self.cleaned_data['wrong_choice3'],
                                                                            language=target_language.value)[0])
+        return self.instance
+
+
+class ListeningForm(forms.Form):
+
+    helper = MetroAdminFormHelper()
+    helper.header2 = 'Exercise - listening'
+
+    text = forms.CharField(label='Text to listen', max_length=255)
+    audio = forms.FileField()
+
+    def __init__(self, *args, **kwargs):
+        self.instance = kwargs.pop('instance', None)
+        self.lesson = kwargs.pop('lesson')
+        super().__init__(*args, **kwargs)
+        if self.lesson:
+            self.helper.header = 'Lesson: ' + self.lesson.topic
+        if self.instance:
+            print("There is instance")
+            self._instance_to_fields()
+        else:
+            self.instance = Listening()
+
+    def _instance_to_fields(self):
+        self.fields['text'].initial = self.instance.text.text
+        self.fields['audio'].initial = self.instance.audio
+
+    def save(self):
+        self.instance.text = BusinessText.objects.get_or_create(text=self.cleaned_data['text'],
+                                                                language=Languages.chinese.value)[0]
+        self.instance.audio = self.cleaned_data['audio']
+        self.instance.save()
         return self.instance

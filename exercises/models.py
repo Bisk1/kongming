@@ -3,11 +3,11 @@ import random
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from redactor.fields import RedactorField
+from django.template.loader import render_to_string
 
 from lessons.models import Lesson
 from translations.models import BusinessText
-from redactor.fields import RedactorField
-from django.template.loader import render_to_string
 
 
 class Exercise(models.Model):
@@ -123,3 +123,25 @@ class Explanation(AbstractExercise):
 
     def __repr__(self):
         return str(self)
+
+
+
+class Listening(AbstractExercise):
+    text = models.ForeignKey(BusinessText)
+    audio = models.FileField(upload_to='wav')
+
+    def check_answer(self, proposition):
+        return proposition == self.text.text
+
+    def prepare(self):
+        return {'text': self.text}
+
+    def render(self):
+        return render_to_string('learn/explanation.html', self.prepare())
+
+    def __str__(self):
+        return self.text.text
+
+    def __repr__(self):
+        return str(self)
+
