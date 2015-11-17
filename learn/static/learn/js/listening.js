@@ -1,9 +1,9 @@
-var TypingExerciseController = (function () {
+var ListeningExerciseController = (function () {
 
     var handleCheckResponse = function (json) {
         $('#proposition').hide();
         $('#check').hide();
-        $('#correct').html(json.correct_translation).show();
+        $('#correct').html(json.text).show();
         if (!json.success) {
             $('#bad-proposition').html($('#proposition').val()).show();
         }
@@ -16,19 +16,24 @@ var TypingExerciseController = (function () {
         });
     };
 
+    // Space key is alternative method to play the audio
+    var addSpaceHandler = function() {
+        $(document).keypress(function(e){
+            if(e.which == 32){
+                audio = document.getElementById('listening_audio');
+                audio.play();
+                return false; // this prevents scrolling down
+            }
+        });
+    }
+
     return {
         prepare: function (json, lessonController) {
             $('#exercise-container').html(json.html);
             $('#check').show();
-            switch (json.language) {
-            case ('en'):
-                toggleChineseInput(true);
-                break;
-            case ('zh'):
-                toggleChineseInput(false);
-                break;
-            }
+            toggleChineseInput(true);
             registerCheckEvent(lessonController);
+            addSpaceHandler();
         }
     };
 

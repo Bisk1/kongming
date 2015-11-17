@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 
 from exercises.models import Lesson, Exercise
 from django.core.urlresolvers import reverse
-from exercises.forms import ExplanationForm, ChoiceForm, TypingForm
+from exercises.forms import ExplanationForm, ChoiceForm, TypingForm, ListeningForm
 
 logger = logging.getLogger(__name__)
 
@@ -159,3 +159,50 @@ def handle_choice_spec(request, lesson, exercise, choice_spec=None):
         return redirect('lessons:modify_lesson', lesson_id=lesson.id)
     else:
         return render(request, 'exercises/choice.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
+
+
+# LISTENING
+
+
+def add_listening_exercise(request, lesson_id):
+    lesson = Lesson.objects.get(id=lesson_id)
+    exercise = Exercise()
+    if request.method == 'POST':
+        return handle_listening_spec(request, lesson, exercise)
+    else:
+        form = ListeningForm(lesson=lesson)
+        form.helper.form_action = reverse('lessons:exercises:add_listening', kwargs={'lesson_id': lesson.id})
+        return render(request, 'exercises/listening.html', {'lesson': lesson, 'form': form})
+
+
+def modify_listening_exercise(request, lesson_id, exercise_id):
+    """
+    Modify exercise - listening - for a lesson
+    :param request: HTTP request
+    :param lesson_id: id of lesson that exercise belongs to
+    :param exercise_id: id of the exercise
+    :return: HTTP response
+    """
+    lesson = Lesson.objects.get(id=lesson_id)
+    exercise = Exercise.objects.get(id=exercise_id)
+    listening_spec = exercise.spec
+    if request.method == 'POST':
+        return handle_listening_spec(request, lesson, exercise, listening_spec)
+    else:
+        form = ListeningForm(instance=listening_spec, lesson=lesson)
+        form.helper.form_action = reverse('lessons:exercises:modify_listening', kwargs={'lesson_id': lesson.id, 'exercise_id': exercise_id})
+        return render(request, 'exercises/listening.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
+
+
+def handle_listening_spec(request, lesson, exercise, listening_spec=None):
+    form = ListeningForm(data=request.POST or None, files=request.FILES, instance=listening_spec, lesson=lesson)
+    if form.is_valid():
+        listening_spec = form.save()
+        exercise.lesson = lesson
+        exercise.spec = listening_spec
+        exercise.save()
+        return redirect('lessons:modify_lesson', lesson_id=lesson.id)
+    else:
+        return render(request, 'exercises/listening.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
+
+

@@ -59,3 +59,14 @@ class BusinessText(models.Model):
         for token in tokens:
             word_object = word_model.get_or_create_with_google(word=token)[0]
             self.get_words().add(word_object)
+
+    @classmethod
+    def get_or_create_and_auto_tokenize(cls, *args, **kwargs):
+        """
+        Same as get_or_create, but if created, tokenize the text
+        :return: tuple (object, created)
+        """
+        object, created = BusinessText.objects.get_or_create(*args, **kwargs)
+        if created:
+            object.auto_tokenize()
+        return object, created

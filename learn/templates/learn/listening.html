@@ -1,0 +1,21 @@
+<div class="rows margin-bottom-20">
+    <div class="col-md-12">
+        <audio controls id="listening_audio">
+          <source src="{{ audio_url }}" type="audio/wav">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+</div>
+<div class="rows">
+    <div class="col-md-12">
+        <input id="proposition" class="form-control input-lg" type="text" name="proposition" hidden/>
+        <div id="chinese-ime" style="display: none;">
+            <div class="typing"></div>
+            <ul class="options" style="display: inline; list-style-type: none;">
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<h4 id="correct" class="text-success text-center" style="display: none;"></h4>

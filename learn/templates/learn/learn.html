@@ -5,7 +5,9 @@
 <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
 <script type="text/javascript" src="{% static "js/chinese-ime/caret.js" %}"></script>
 <script type="text/javascript" src="{% static "js/chinese-ime/jQuery.chineseIME.js" %}"></script>
+<script type="text/javascript" src="{% static "learn/js/chinese_input.js" %}"></script>
 <script type="text/javascript" src="{% static "learn/js/typing.js" %}"></script>
+<script type="text/javascript" src="{% static "learn/js/listening.js" %}"></script>
 <script type="text/javascript" src="{% static "learn/js/choice.js" %}"></script>
 <script type="text/javascript" src="{% static "learn/js/explanation.js" %}"></script>
 <script type="text/javascript" src="{% static "learn/js/learn.js" %}"></script>
@@ -41,7 +43,7 @@
     </div>
 
     <div id="final" style="display: none">
-        <h2 class="text-primary text-center" >You have finished the lesson!</h2>
+        <h2 class="text-primary text-center margin-bottom-20">You have finished the lesson!</h2>
         <a class="btn btn-default btn-block" id="to-lesson-map" href="{% url 'learn:lessons_map' %}" id="to-lesson-map">To lesson map</a>
     </div>
     <div class="text-center">

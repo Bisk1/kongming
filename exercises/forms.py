@@ -2,7 +2,7 @@
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from exercises.models import Explanation, Choice, Typing
+from exercises.models import Explanation, Choice, Typing, Listening
 from translations.models import BusinessText
 from translations.utils import Languages
 from templates.forms import MetroAdminFormHelper
@@ -34,17 +34,16 @@ class TypingForm(forms.Form):
         self.fields['text_to_translate'].initial = self.instance.text_to_translate.text
         for i, translation in enumerate(self.instance.text_to_translate.translations.all()):
             self.fields['translation_%s' % i] = forms.CharField(label='Translation', max_length=255,
-                                                                initial=translation.text, required=False)
+                                                                initial=translation.text)
 
     def save(self):
         source_language = Languages(self.cleaned_data['source_language'])
-        self.instance.text_to_translate = BusinessText.objects.get_or_create(text=self.cleaned_data['text_to_translate'],
-                                                                             language=source_language.value)[0]
+        self.instance.text_to_translate = BusinessText.get_or_create_and_auto_tokenize(
+            text=self.cleaned_data['text_to_translate'],
+            language=source_language.value)[0]
         self.instance.text_to_translate.translations.clear()
         for translation in self._received_translations():
-            if translation:
-                self.instance.text_to_translate.add_translation(translation)
-        self.instance.text_to_translate.auto_tokenize()
+            self.instance.text_to_translate.add_translation(translation)
         self.instance.save()
         return self.instance
 
@@ -115,12 +114,13 @@ class ChoiceForm(forms.Form):
     def save(self):
         source_language = Languages(self.cleaned_data['source_language'])
         target_language = Languages.other_language(source_language)
-        self.instance.text_to_translate = BusinessText.objects.get_or_create(text=self.cleaned_data['text_to_translate'],
-                                                                             language=source_language.value)[0]
-        self.instance.text_to_translate.auto_tokenize()
-        self.instance.correct_choice = BusinessText.objects.get_or_create(text=self.cleaned_data['correct_choice'],
-                                                                          language=target_language.value)[0]
-        self.instance.correct_choice.auto_tokenize()
+        self.instance.text_to_translate = BusinessText.get_or_create_and_auto_tokenize(
+            text=self.cleaned_data['text_to_translate'],
+            language=source_language.value)[0]
+        self.instance.correct_choice = BusinessText.get_or_create_and_auto_tokenize(
+            text=self.cleaned_data['correct_choice'],
+            language=target_language.value)[0]
+
         self.instance.save()  # must save before adding many-to-many field instances
         self.instance.wrong_choices.clear()
         self.instance.wrong_choices.add(BusinessText.objects.get_or_create(text=self.cleaned_data['wrong_choice1'],
@@ -129,4 +129,36 @@ class ChoiceForm(forms.Form):
                                                                            language=target_language.value)[0])
         self.instance.wrong_choices.add(BusinessText.objects.get_or_create(text=self.cleaned_data['wrong_choice3'],
                                                                            language=target_language.value)[0])
+        return self.instance
+
+
+class ListeningForm(forms.Form):
+
+    helper = MetroAdminFormHelper()
+    helper.header2 = 'Exercise - listening'
+
+    text = forms.CharField(label='Text to listen', max_length=255)
+    audio = forms.FileField()
+
+    def __init__(self, *args, **kwargs):
+        self.instance = kwargs.pop('instance', None)
+        self.lesson = kwargs.pop('lesson')
+        super().__init__(*args, **kwargs)
+        if self.lesson:
+            self.helper.header = 'Lesson: ' + self.lesson.topic
+        if self.instance:
+            self._instance_to_fields()
+        else:
+            self.instance = Listening()
+
+    def _instance_to_fields(self):
+        self.fields['text'].initial = self.instance.text.text
+        self.fields['audio'].initial = self.instance.audio
+
+    def save(self):
+        self.instance.text = BusinessText.get_or_create_and_auto_tokenize(
+            text=self.cleaned_data['text'],
+            language=Languages.chinese.value)[0]
+        self.instance.audio = self.cleaned_data['audio']
+        self.instance.save()
         return self.instance
