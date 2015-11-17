@@ -6,7 +6,8 @@ var LessonController = (function () {
     var exerciseControllers = {
         choice: ChoiceExerciseController,
         typing: TypingExerciseController,
-        explanation: ExplanationExerciseController
+        explanation: ExplanationExerciseController,
+        listening: ListeningExerciseController
     };
 
     lc.updateStatusIcons = function (success) {
@@ -55,6 +56,9 @@ var LessonController = (function () {
             break;
         case ('choice'):
             exerciseControllers.choice.prepare(json, lc);
+            break;
+        case ('listening'):
+            exerciseControllers.listening.prepare(json, lc);
             break;
         }
     };
@@ -130,7 +134,7 @@ $(document).ready(function () {
         });
     });
     // Enter key press clicks the current visible button
-    $('body').keypress(function(e){
+    $(document).keypress(function(e){
         if(e.which == 13){
             clickFirstVisible(['#next', '#check', '#to-lesson-map']);
         }

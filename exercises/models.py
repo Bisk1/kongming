@@ -125,19 +125,19 @@ class Explanation(AbstractExercise):
         return str(self)
 
 
-
 class Listening(AbstractExercise):
     text = models.ForeignKey(BusinessText)
     audio = models.FileField(upload_to='wav')
 
     def check_answer(self, proposition):
-        return proposition == self.text.text
+        return {'success': proposition == self.text.text,
+                'text': self.text.text}
 
     def prepare(self):
-        return {'text': self.text}
+        return {'audio_url': self.audio.url}
 
     def render(self):
-        return render_to_string('learn/explanation.html', self.prepare())
+        return render_to_string('learn/listening.html', self.prepare())
 
     def __str__(self):
         return self.text.text

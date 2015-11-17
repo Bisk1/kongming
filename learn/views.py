@@ -25,7 +25,6 @@ def lessons_map(request):
     return render(request, 'learn/lessons_map.html', {'lessons_levels': serialized_lessons_levels})
 
 
-
 @login_required
 def learn(request, lesson_id):
     """

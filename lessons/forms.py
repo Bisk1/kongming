@@ -31,7 +31,10 @@ class LessonForm(forms.ModelForm):
 
         for exercise_id, number in self._received_exercises_numbers():
             exercise = Exercise.objects.get(pk=exercise_id)
-            exercise.number = number
+            if number:
+                exercise.number = number
+            else:
+                exercise.number = None
             exercise.save()
         return self.instance
 
