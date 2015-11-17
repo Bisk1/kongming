@@ -38,11 +38,11 @@ class TypingForm(forms.Form):
 
     def save(self):
         source_language = Languages(self.cleaned_data['source_language'])
-        self.instance.text_to_translate = BusinessText.objects.get_or_create(text=self.cleaned_data['text_to_translate'],
-                                                                             language=source_language.value)[0]
+        self.instance.text_to_translate = BusinessText.get_or_create_and_auto_tokenize(
+            text=self.cleaned_data['text_to_translate'],
+            language=source_language.value)[0]
         for translation in self._received_translations():
             self.instance.text_to_translate.add_translation(translation)
-        self.instance.text_to_translate.auto_tokenize()
         self.instance.save()
         return self.instance
 
@@ -113,12 +113,13 @@ class ChoiceForm(forms.Form):
     def save(self):
         source_language = Languages(self.cleaned_data['source_language'])
         target_language = Languages.other_language(source_language)
-        self.instance.text_to_translate = BusinessText.objects.get_or_create(text=self.cleaned_data['text_to_translate'],
-                                                                             language=source_language.value)[0]
-        self.instance.text_to_translate.auto_tokenize()
-        self.instance.correct_choice = BusinessText.objects.get_or_create(text=self.cleaned_data['correct_choice'],
-                                                                          language=target_language.value)[0]
-        self.instance.correct_choice.auto_tokenize()
+        self.instance.text_to_translate = BusinessText.get_or_create_and_auto_tokenize(
+            text=self.cleaned_data['text_to_translate'],
+            language=source_language.value)[0]
+        self.instance.correct_choice = BusinessText.get_or_create_and_auto_tokenize(
+            text=self.cleaned_data['correct_choice'],
+            language=target_language.value)[0]
+
         self.instance.save()  # must save before adding many-to-many field instances
         self.instance.wrong_choices.clear()
         self.instance.wrong_choices.add(BusinessText.objects.get_or_create(text=self.cleaned_data['wrong_choice1'],
@@ -154,8 +155,9 @@ class ListeningForm(forms.Form):
         self.fields['audio'].initial = self.instance.audio
 
     def save(self):
-        self.instance.text = BusinessText.objects.get_or_create(text=self.cleaned_data['text'],
-                                                                language=Languages.chinese.value)[0]
+        self.instance.text = BusinessText.get_or_create_and_auto_tokenize(
+            text=self.cleaned_data['text'],
+            language=Languages.chinese.value)[0]
         self.instance.audio = self.cleaned_data['audio']
         self.instance.save()
         return self.instance
