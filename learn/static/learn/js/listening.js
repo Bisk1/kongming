@@ -24,8 +24,7 @@ var ListeningExerciseController = (function () {
     var addSpaceHandler = function() {
         $(document).keypress(function(e){
             if(e.which == 32){
-                audio = document.getElementById('listening_audio');
-                audio.play();
+                document.getElementById('listening_audio').play();
                 return false; // this prevents scrolling down
             }
         });
