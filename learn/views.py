@@ -26,6 +26,7 @@ class ExerciseOperation(Enum):
     PREPARE = 'prepare'
     CHECK = 'check'
 
+
 class LearnView(View):
     """
     Accept requests to prepare and check exercises

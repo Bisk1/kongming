@@ -7,6 +7,7 @@ from redactor.fields import RedactorField
 from django.template.loader import render_to_string
 
 from lessons.models import Lesson
+from translations.comparators import texts_difference
 from translations.models import BusinessText
 
 
@@ -130,7 +131,7 @@ class Listening(AbstractExercise):
     audio = models.FileField(upload_to='wav')
 
     def check_answer(self, proposition):
-        return {'success': proposition == self.text.text,
+        return {'success': texts_difference(proposition, self.text.text) == 0,
                 'text': self.text.text}
 
     def prepare(self):
@@ -144,4 +145,3 @@ class Listening(AbstractExercise):
 
     def __repr__(self):
         return str(self)
-

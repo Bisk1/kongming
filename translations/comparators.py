@@ -38,5 +38,15 @@ def texts_difference(text1, text2):
     :param text2: second text to compare
     :return: number of different characters or 1000 if more than 2
     """
+    text1 = escape_chinese_punctuation(text1)
+    text2 = escape_chinese_punctuation(text2)
     #TODO: improve text comparison algorithm
     return words_difference(text1, text2)
+
+
+def escape_chinese_punctuation(text):
+    res = text
+    res = res.replace('？', '?')
+    res = res.replace('！', '!')
+    res = res.replace('。', '.')
+    return res
