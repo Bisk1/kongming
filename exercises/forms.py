@@ -145,7 +145,6 @@ class ListeningForm(forms.Form):
         if self.lesson:
             self.helper.header = 'Lesson: ' + self.lesson.topic
         if self.instance:
-            print("There is instance")
             self._instance_to_fields()
         else:
             self.instance = Listening()

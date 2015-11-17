@@ -148,7 +148,6 @@ $(document).ready(function () {
 
 var clickFirstVisible = function(elementsIds) {
     for (var i = 0; i < elementsIds.length; i++) {
-        console.log('id: ' + elementsIds[i]);
         var element = $(elementsIds[i]);
         if (!element.is(':hidden')) {
             element.click(); // does not work with 'a' element
