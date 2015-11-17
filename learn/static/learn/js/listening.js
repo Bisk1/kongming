@@ -16,6 +16,10 @@ var ListeningExerciseController = (function () {
         });
     };
 
+    var focusCursorOnInput = function() {
+        $('#proposition').focus();
+    };
+
     // Space key is alternative method to play the audio
     var addSpaceHandler = function() {
         $(document).keypress(function(e){
@@ -25,7 +29,7 @@ var ListeningExerciseController = (function () {
                 return false; // this prevents scrolling down
             }
         });
-    }
+    };
 
     return {
         prepare: function (json, lessonController) {
@@ -34,6 +38,7 @@ var ListeningExerciseController = (function () {
             toggleChineseInput(true);
             registerCheckEvent(lessonController);
             addSpaceHandler();
+            focusCursorOnInput();
         }
     };
 

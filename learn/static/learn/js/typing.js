@@ -16,6 +16,10 @@ var TypingExerciseController = (function () {
         });
     };
 
+    var focusCursorOnInput = function() {
+        $('#proposition').focus();
+    };
+
     return {
         prepare: function (json, lessonController) {
             $('#exercise-container').html(json.html);
@@ -29,6 +33,7 @@ var TypingExerciseController = (function () {
                 break;
             }
             registerCheckEvent(lessonController);
+            focusCursorOnInput();
         }
     };
 
