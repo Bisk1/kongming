@@ -9,15 +9,75 @@ from exercises.forms import ExplanationForm, ChoiceForm, TypingForm, ListeningFo
 logger = logging.getLogger(__name__)
 
 
-def add_exercise(request, lesson_id):
-    exercise_type = request.POST.get('exercise_type')
-    return redirect('lessons:exercises:add_' + str(exercise_type), lesson_id=lesson_id)
+class ExerciseTypeHandler:
+
+    def __init__(self, name, form_class):
+        self.name = name
+        self.form_class = form_class
+
+    def get_name(self):
+        return self.name
+
+    def get_form_class(self):
+        return self.form_class
+
+
+exercises_types_handlers = {
+    'typing': ExerciseTypeHandler('typing', TypingForm),
+    'choice': ExerciseTypeHandler('choice', ChoiceForm),
+    'explanation': ExerciseTypeHandler('explanation', ExplanationForm),
+    'listening': ExerciseTypeHandler('listening', ListeningForm)
+}
+
+
+def add_exercise(request, lesson_id, exercise_type):
+    exercise_type_handler = exercises_types_handlers[exercise_type]
+    lesson = Lesson.objects.get(id=lesson_id)
+    exercise = Exercise()
+    if request.method == 'POST':
+        return handle_spec(request, exercise_type_handler, lesson, exercise)
+    else:
+        form_class = exercise_type_handler.get_form_class()
+        form = form_class(lesson=lesson)
+        form.helper.form_action = reverse('lessons:exercises:add_exercise',
+                                          kwargs={'lesson_id': lesson.id,
+                                                  'exercise_type': exercise_type})
+        return render(request, 'exercises/' + exercise_type_handler.name + '.html',
+                      {'lesson': lesson, 'form': form})
 
 
 def modify_exercise(request, lesson_id, exercise_id):
     exercise = Exercise.objects.get(id=exercise_id)
     spec_name = exercise.content_type.name
-    return redirect('lessons:exercises:modify_' + spec_name, lesson_id=lesson_id, exercise_id=exercise_id)
+    exercise_type_handler = exercises_types_handlers[spec_name]
+
+    lesson = Lesson.objects.get(id=lesson_id)
+    exercise = Exercise.objects.get(id=exercise_id)
+    spec = exercise.spec
+    if request.method == 'POST':
+        return handle_spec(request, lesson, exercise, spec)
+    else:
+        form = exercise_type_handler.get_form_class()(instance=spec, lesson=lesson)
+        form.helper.form_action = reverse('lessons:exercises:modify_exercise',
+                                          kwargs={'lesson_id': lesson.id,
+                                                  'exercise_id': exercise_id})
+        return render(request, 'exercises/' + str(exercise_type_handler.name) + '.html',
+                      {'lesson': lesson, 'exercise': exercise, 'form': form})
+
+
+def handle_spec(request, exercise_type_handler, lesson, exercise, spec=None):
+    form = exercise_type_handler.get_form_class()(data=request.POST or None,
+                                                  files=request.FILES or None,
+                                                  instance=spec, lesson=lesson)
+    if form.is_valid():
+        spec = form.save()
+        exercise.lesson = lesson
+        exercise.spec = spec
+        exercise.save()
+        return redirect('lessons:modify_lesson', lesson_id=lesson.id)
+    else:
+        return render(request, 'exercises/' + exercise_type_handler + '.html',
+                      {'lesson': lesson, 'exercise': exercise, 'form': form})
 
 
 def delete_exercise(request, lesson_id, exercise_id):
@@ -25,184 +85,3 @@ def delete_exercise(request, lesson_id, exercise_id):
     exercise.spec.delete()
     exercise.delete()
     return redirect('lessons:modify_lesson', lesson_id=lesson_id)
-
-# TYPING
-
-
-def add_typing(request, lesson_id):
-    lesson = Lesson.objects.get(id=lesson_id)
-    exercise = Exercise()
-    if request.method == 'POST':
-        return handle_typing_spec(request, lesson, exercise)
-    else:
-        form = TypingForm(lesson=lesson)
-        form.helper.form_action = reverse('lessons:exercises:add_typing', kwargs={'lesson_id': lesson.id})
-        return render(request, 'exercises/typing.html', {'lesson': lesson, 'form': form})
-
-
-def modify_typing(request, lesson_id, exercise_id):
-    """
-    Modify typing exercise
-    :param request: HTTP request
-    :param lesson_id: id of lesson that exercise belongs to
-    :param exercise_id: id of the exercise
-    :return: HTTP response
-    """
-    lesson = Lesson.objects.get(id=lesson_id)
-    exercise = Exercise.objects.get(id=exercise_id)
-    typing_spec = exercise.spec
-    if request.method == 'POST':
-        return handle_typing_spec(request, lesson, exercise, typing_spec)
-    else:
-        form = TypingForm(instance=typing_spec, lesson=lesson)
-        form.helper.form_action = reverse('lessons:exercises:modify_typing', kwargs={'lesson_id': lesson.id, 'exercise_id': exercise_id})
-        return render(request, 'exercises/typing.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
-
-
-def handle_typing_spec(request, lesson, exercise, typing_spec=None):
-    form = TypingForm(data=request.POST or None, instance=typing_spec, lesson=lesson)
-    if form.is_valid():
-        typing_spec = form.save()
-        exercise.lesson = lesson
-        exercise.spec = typing_spec
-        exercise.save()
-        return redirect('lessons:modify_lesson', lesson_id=lesson.id)
-    else:
-        return render(request, 'exercises/typing.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
-
-
-# EXPLANATION
-
-
-def add_explanation_exercise(request, lesson_id):
-    lesson = Lesson.objects.get(id=lesson_id)
-    exercise = Exercise()
-    if request.method == 'POST':
-        return handle_explanation_spec(request, lesson, exercise)
-    else:
-        form = ExplanationForm(lesson=lesson)
-        form.helper.form_action = reverse('lessons:exercises:add_explanation', kwargs={'lesson_id': lesson.id})
-        return render(request, 'exercises/explanation.html', {'lesson': lesson, 'form': form})
-
-
-def modify_explanation_exercise(request, lesson_id, exercise_id):
-    """
-    Modify exercise - explanation - for a lesson
-    :param request: HTTP request
-    :param lesson_id: id of lesson that exercise belongs to
-    :param exercise_id: id of the exercise
-    :return: HTTP response
-    """
-    lesson = Lesson.objects.get(id=lesson_id)
-    exercise = Exercise.objects.get(id=exercise_id)
-    explanation_spec = exercise.spec
-    if request.method == 'POST':
-        return handle_explanation_spec(request, lesson, exercise, explanation_spec)
-    else:
-        form = ExplanationForm(instance=explanation_spec, lesson=lesson)
-        form.helper.form_action = reverse('lessons:exercises:modify_explanation', kwargs={'lesson_id': lesson.id, 'exercise_id': exercise_id})
-        return render(request, 'exercises/explanation.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
-
-
-def handle_explanation_spec(request, lesson, exercise, explanation_spec=None):
-    form = ExplanationForm(request.POST, request.FILES, instance=explanation_spec, lesson=lesson)
-    if form.is_valid():
-        explanation_spec = form.save()
-        exercise.lesson = lesson
-        exercise.spec = explanation_spec
-        exercise.save()
-        return redirect('lessons:modify_lesson', lesson_id=lesson.id)
-    else:
-        return render(request, 'exercises/explanation.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
-
-
-# CHOICE
-
-
-def add_choice_exercise(request, lesson_id):
-    lesson = Lesson.objects.get(id=lesson_id)
-    exercise = Exercise()
-    if request.method == 'POST':
-        return handle_choice_spec(request, lesson, exercise)
-    else:
-        form = ChoiceForm(lesson=lesson)
-        form.helper.form_action = reverse('lessons:exercises:add_choice', kwargs={'lesson_id': lesson.id})
-        return render(request, 'exercises/choice.html', {'lesson': lesson, 'form': form})
-
-
-def modify_choice_exercise(request, lesson_id, exercise_id):
-    """
-    Modify exercise - choice - for a lesson
-    :param request: HTTP request
-    :param lesson_id: id of lesson that exercise belongs to
-    :param exercise_id: id of the exercise
-    :return: HTTP response
-    """
-    lesson = Lesson.objects.get(id=lesson_id)
-    exercise = Exercise.objects.get(id=exercise_id)
-    choice_spec = exercise.spec
-    if request.method == 'POST':
-        return handle_choice_spec(request, lesson, exercise, choice_spec)
-    else:
-        form = ChoiceForm(instance=choice_spec, lesson=lesson)
-        form.helper.form_action = reverse('lessons:exercises:modify_choice', kwargs={'lesson_id': lesson.id, 'exercise_id': exercise_id})
-        return render(request, 'exercises/choice.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
-
-
-def handle_choice_spec(request, lesson, exercise, choice_spec=None):
-    form = ChoiceForm(data=request.POST or None, instance=choice_spec, lesson=lesson)
-    if form.is_valid():
-        choice_spec = form.save()
-        exercise.lesson = lesson
-        exercise.spec = choice_spec
-        exercise.save()
-        return redirect('lessons:modify_lesson', lesson_id=lesson.id)
-    else:
-        return render(request, 'exercises/choice.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
-
-
-# LISTENING
-
-
-def add_listening_exercise(request, lesson_id):
-    lesson = Lesson.objects.get(id=lesson_id)
-    exercise = Exercise()
-    if request.method == 'POST':
-        return handle_listening_spec(request, lesson, exercise)
-    else:
-        form = ListeningForm(lesson=lesson)
-        form.helper.form_action = reverse('lessons:exercises:add_listening', kwargs={'lesson_id': lesson.id})
-        return render(request, 'exercises/listening.html', {'lesson': lesson, 'form': form})
-
-
-def modify_listening_exercise(request, lesson_id, exercise_id):
-    """
-    Modify exercise - listening - for a lesson
-    :param request: HTTP request
-    :param lesson_id: id of lesson that exercise belongs to
-    :param exercise_id: id of the exercise
-    :return: HTTP response
-    """
-    lesson = Lesson.objects.get(id=lesson_id)
-    exercise = Exercise.objects.get(id=exercise_id)
-    listening_spec = exercise.spec
-    if request.method == 'POST':
-        return handle_listening_spec(request, lesson, exercise, listening_spec)
-    else:
-        form = ListeningForm(instance=listening_spec, lesson=lesson)
-        form.helper.form_action = reverse('lessons:exercises:modify_listening', kwargs={'lesson_id': lesson.id, 'exercise_id': exercise_id})
-        return render(request, 'exercises/listening.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
-
-
-def handle_listening_spec(request, lesson, exercise, listening_spec=None):
-    form = ListeningForm(data=request.POST or None, files=request.FILES, instance=listening_spec, lesson=lesson)
-    if form.is_valid():
-        listening_spec = form.save()
-        exercise.lesson = lesson
-        exercise.spec = listening_spec
-        exercise.save()
-        return redirect('lessons:modify_lesson', lesson_id=lesson.id)
-    else:
-        return render(request, 'exercises/listening.html', {'lesson': lesson, 'exercise': exercise, 'form': form})
-
-
