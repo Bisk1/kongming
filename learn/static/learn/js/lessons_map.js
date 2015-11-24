@@ -110,15 +110,47 @@ var LessonsMapGenerator = (function () {
                 .attr("height", lessonHeight)
                 .attr("xlink:href", statusImage(lesson, requirement));
 
-        svgGroup
-            .append("text")
-                .attr("x", lesson.x + lessonWidth/2)
-                .attr("y", lesson.y + lessonHeight*0.4)
-                .attr("class","lesson-title")
-                .text(lesson.topic);
-
+        var textSpans = breakIntoSpanTexts(lesson.topic, 15);
+        var xTextPosition = lesson.x + lessonWidth / 2;
+        var yTextPosition = lesson.y + lessonHeight / 5;
+        var textField =
+            svgGroup
+                .append("text")
+                .attr("x", xTextPosition)
+                .attr("y", yTextPosition)
+                .attr("class","lesson-title");
+        for (var i = 0; i < textSpans.length; i++) {
+            textField
+                .append("tspan")
+                .attr("x", xTextPosition)
+                .attr("dy", "1.2em")
+                .text(textSpans[i]);
+        }
         return this;
       };
+
+
+    /**
+     * Break text into pieces long enough to fit into
+     * spans of specified length
+     * @param fullText text to break
+     * @param maxCharacters maximum number of characters in each piece
+     */
+    var breakIntoSpanTexts = function(fullText, maxCharacters) {
+        var words = fullText.split(" ");
+        var spanTexts = [""];
+        var i = 0;
+        for (var j = 0; j < words.length; j++) {
+            if (((spanTexts[i] + words[j]).length) > maxCharacters) {
+                i++;
+                spanTexts[i] = words[j];
+            } else {
+                spanTexts[i] = spanTexts[i] + " " + words[j];
+            }
+        }
+        return spanTexts;
+    };
+
     })();
 
     /**
