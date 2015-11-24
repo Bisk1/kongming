@@ -18,3 +18,10 @@
   background-color: black;
   margin : 0px auto;
 }
+
+.lesson-title {
+    font-family: Lato;
+    font-size: 1.5em;
+    text-anchor: middle;
+    fill: black;
+}

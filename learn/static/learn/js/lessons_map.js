@@ -2,7 +2,9 @@ var LessonsMapGenerator = (function () {
     var topMargin = 5;
     var mapWidth = 1000;
     var lessonWidth = 200;
-    var lessonHeight = 100;
+    var lessonHeight = 200;
+    var verticalSpacing = 100;
+    var verticalDistance = verticalSpacing + lessonHeight;
 
     /**
      * Compute distance between two lessons containers horizontally
@@ -43,7 +45,7 @@ var LessonsMapGenerator = (function () {
         var y = topMargin;
         for (var i = 0; i < lessons_levels.length; i++) {
             lessons_levels[i] = findLevelLessonsPositions(lessons_levels[i], y);
-            y = y + 150;
+            y = y + verticalDistance;
         }
         return lessons_levels;
     };
@@ -65,28 +67,35 @@ var LessonsMapGenerator = (function () {
     };
 
     /**
-     * Return color to fill a lesson container dependent on lesson status
-     * @param status lesson status
-     * @returns {string} RGB color for style attribute
+     * Return image to represent lesson status:
+     * 1) If lesson was opened and completed successfully: green book
+     * 2) If lesson was opened but failed: red book
+     * 3) If lesson was not opened and is locked because of incomplete requirement: gray book
+     * 3) If lesson was not opened and is available: blue book
+     * @param lesson
+     * @param requirement
+     * @returns (string) image URL for the lesson
      */
-    var statusColor = function(status) {
-        if (status == 's') {
-            return "rgb(0, 250, 154)";
-        } else if (status == 'f') {
-            return "rgb(255, 0, 0)";
+    var statusImage = function(lesson, requirement) {
+        if (lesson.status == 's') {
+            return "/static/learn/img/book_green.png";
+        } else if (lesson.status == 'f') {
+            return "/static/learn/img/book_red.png";
+        } else if (requirement.status == 's') {
+            return "/static/learn/img/book_blue.png";
         } else {
-            return "rgb(190, 190, 190)";
+            return "/static/learn/img/book_gray.png";
         }
     };
-
 
     /**
      * D3 plugin to add a lesson container to the SVG container that it is called on
      * @param lesson lesson that is used to generate container content
+     * @param requirement lesson that is requirement to the first paramater lesson
      * @returns {d3.selection} element that function is called on
      */
     (function() {
-      d3.selection.prototype.drawLessonContainer = function(lesson) {
+      d3.selection.prototype.drawLessonContainer = function(lesson, requirement) {
         var svgGroup =
             this
             .append("a")
@@ -94,20 +103,18 @@ var LessonsMapGenerator = (function () {
                 .append("g");
 
         svgGroup
-            .append("rect")
+            .append("image")
                 .attr("x", lesson.x)
                 .attr("y", lesson.y)
                 .attr("width", lessonWidth)
-                .attr("height", "100")
-                .attr("style", "fill:" + statusColor(lesson.status) + ";stroke-width:3;stroke:rgb(0,0,0)");
+                .attr("height", lessonHeight)
+                .attr("xlink:href", statusImage(lesson, requirement));
+
         svgGroup
             .append("text")
                 .attr("x", lesson.x + lessonWidth/2)
-                .attr("y", lesson.y + lessonHeight/2)
-                .attr("font-family", "Verdana")
-                .attr("font-size", "11s")
-                .attr("fill", "black")
-                .attr("style","text-anchor: middle;")
+                .attr("y", lesson.y + lessonHeight*0.4)
+                .attr("class","lesson-title")
                 .text(lesson.topic);
 
         return this;
@@ -122,7 +129,9 @@ var LessonsMapGenerator = (function () {
     var drawLessons = function(lessons_levels, map_selector) {
         for (var i = 0; i < lessons_levels.length; i++) {
             for (var j = 0; j < lessons_levels[i].length; j++) {
-                d3.select(map_selector).drawLessonContainer(lessons_levels[i][j]);
+                var lesson = lessons_levels[i][j];
+                var requirement = findLessonWithKey(lessons_levels, lesson.requirement);
+                d3.select(map_selector).drawLessonContainer(lesson, requirement);
             }
         }
     };
@@ -147,7 +156,6 @@ var LessonsMapGenerator = (function () {
 
     /**
      * Draw arrows in an SVG container for specified lessons levels collection to join lessons with their requirements
-     * @param lesson lesson to draw an arrow to
      * @param lessons_levels lessons levels collection with lessons to join - contains both sources and destinations
      * @param map_selector  map SVG selector
      */
@@ -159,6 +167,10 @@ var LessonsMapGenerator = (function () {
         }
     };
 
+    var adjustMapHeight = function(lessons_levels_count, map_selector) {
+        var totalHeight =  (lessons_levels_count - 1) * verticalDistance + lessonHeight;
+        $(map_selector).height(totalHeight);
+    };
     return {
         /**
          * Draw lessons map using specified lessons levels list in an SVG container with specified selector
@@ -169,6 +181,7 @@ var LessonsMapGenerator = (function () {
             lessons_levels = findLessonsPositions(lessons_levels);
             drawLessons(lessons_levels, map_selector);
             drawArrows(lessons_levels, map_selector);
+            adjustMapHeight(lessons_levels.length, map_selector);
         },
 
         setWidth: function(width) {
