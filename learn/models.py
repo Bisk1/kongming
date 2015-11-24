@@ -11,6 +11,7 @@ from enum import Enum
 
 class Status(Enum):
     not_done = 'u'
+    locked = 'l'
     success = 's'
     failure = 'f'
 

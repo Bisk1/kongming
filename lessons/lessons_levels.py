@@ -54,4 +54,10 @@ def determine_lesson_status_for_user(lesson, user):
     elif lesson_actions.filter(status=Status.failure.value).count() > 0:
         return Status.failure.value
     else:
-        return Status.not_done.value
+        if lesson.requirement is None:
+            return Status.not_done.value
+        requirement_lesson_actions = LessonAction.objects.filter(lesson=lesson.requirement, user=user)
+        if requirement_lesson_actions.filter(status=Status.success.value).count() > 0:
+            return Status.not_done.value
+        else:
+            return Status.locked.value

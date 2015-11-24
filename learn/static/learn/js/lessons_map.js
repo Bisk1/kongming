@@ -1,4 +1,12 @@
 var LessonsMapGenerator = (function () {
+    var STATUS = {
+      SUCCESS : {value: 's'},
+      FAILURE: {value: 'f'},
+      NOT_DONE : {value: 'u'},
+      LOCKED : {value: 'l'}
+    };
+
+
     var topMargin = 5;
     var mapWidth = 1000;
     var lessonWidth = 200;
@@ -70,18 +78,17 @@ var LessonsMapGenerator = (function () {
      * Return image to represent lesson status:
      * 1) If lesson was opened and completed successfully: green book
      * 2) If lesson was opened but failed: red book
-     * 3) If lesson was not opened and is locked because of incomplete requirement: gray book
+     * 3) If lesson was not opened and is locked: gray book
      * 3) If lesson was not opened and is available: blue book
-     * @param lesson
-     * @param requirement
+     * @param status
      * @returns (string) image URL for the lesson
      */
-    var statusImage = function(lesson, requirement) {
-        if (lesson.status == 's') {
+    var statusImage = function(status) {
+        if (status == STATUS.SUCCESS.value) {
             return "/static/learn/img/book_green.png";
-        } else if (lesson.status == 'f') {
+        } else if (status == STATUS.FAILURE.value) {
             return "/static/learn/img/book_red.png";
-        } else if (requirement == undefined || requirement.status == 's') {
+        } else if (status == STATUS.NOT_DONE.value) {
             return "/static/learn/img/book_blue.png";
         } else {
             return "/static/learn/img/book_gray.png";
@@ -89,26 +96,43 @@ var LessonsMapGenerator = (function () {
     };
 
     /**
+     * Create SVG group in specified container for specified lesson.
+     * If the lesson is not locked, the SVG group should be embedded
+     * in a link to the lesson
+     * @param lesson
+     * @param container
+     * @returns {void|*} SVG group
+     */
+    var getSvgGroupForLessonContainer = function(lesson, container) {
+        if (lesson.status != STATUS.LOCKED.value) {
+            return container
+                .append("a")
+                    .attr("xlink:href", generateLearnURL(lesson.pk))
+                    .append("g");
+        } else {
+            return container.append("g");
+        }
+
+    };
+
+    /**
      * D3 plugin to add a lesson container to the SVG container that it is called on
      * @param lesson lesson that is used to generate container content
-     * @param requirement lesson that is requirement to the first paramater lesson
      * @returns {d3.selection} element that function is called on
      */
     (function() {
-      d3.selection.prototype.drawLessonContainer = function(lesson, requirement) {
-        var svgGroup =
-            this
-            .append("a")
-                .attr("xlink:href", generateLearnURL(lesson.pk))
-                .append("g");
+      d3.selection.prototype.drawLessonContainer = function(lesson) {
+        var svgGroup = getSvgGroupForLessonContainer(lesson, this);
 
-        svgGroup
-            .append("image")
-                .attr("x", lesson.x)
-                .attr("y", lesson.y)
-                .attr("width", lessonWidth)
-                .attr("height", lessonHeight)
-                .attr("xlink:href", statusImage(lesson, requirement));
+        var image =
+            svgGroup
+                .append("image")
+                    .attr("x", lesson.x)
+                    .attr("y", lesson.y)
+                    .attr("width", lessonWidth)
+                    .attr("height", lessonHeight)
+                    .attr("xlink:href", statusImage(lesson.status));
+
 
         var textSpans = breakIntoSpanTexts(lesson.topic, 15);
         var xTextPosition = lesson.x + lessonWidth / 2;
@@ -162,8 +186,7 @@ var LessonsMapGenerator = (function () {
         for (var i = 0; i < lessons_levels.length; i++) {
             for (var j = 0; j < lessons_levels[i].length; j++) {
                 var lesson = lessons_levels[i][j];
-                var requirement = findLessonWithKey(lessons_levels, lesson.requirement);
-                d3.select(map_selector).drawLessonContainer(lesson, requirement);
+                d3.select(map_selector).drawLessonContainer(lesson);
             }
         }
     };
