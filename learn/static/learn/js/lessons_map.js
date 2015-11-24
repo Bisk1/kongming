@@ -81,7 +81,7 @@ var LessonsMapGenerator = (function () {
             return "/static/learn/img/book_green.png";
         } else if (lesson.status == 'f') {
             return "/static/learn/img/book_red.png";
-        } else if (requirement.status == 's') {
+        } else if (requirement == undefined || requirement.status == 's') {
             return "/static/learn/img/book_blue.png";
         } else {
             return "/static/learn/img/book_gray.png";
