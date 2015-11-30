@@ -2,3 +2,4 @@
 .idea
 /staticfiles/
 /media/
+chromedriver.exe
