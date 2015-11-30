@@ -13,8 +13,8 @@
 <div>
     <div>
         {% csrf_token %}
-        <label for="sentence_to_search">Text:</label>
-        <input type="text" id="sentence_to_search" value="{{ choice.id }}" />
+        <label for="text_to_search">Text:</label>
+        <input type="text" id="text_to_search" value="{{ choice.id }}" />
         <input type="hidden" id="source_language" value="{{ source_language }}"/>
         <button type="button" class="btn btn-default" id="edit">Edit</button>
     </div>

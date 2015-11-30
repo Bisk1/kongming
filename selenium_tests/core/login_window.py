@@ -5,7 +5,7 @@ from selenium_tests.core.window import Window
 class LoginWindow(Window):
     user_input_css = "#id_username"
     password_input_css = "#id_password"
-    submit_button_css = 'button[type="submit"]'
+    submit_button_css = 'input[type="submit"]'
 
     def __init__(self, url):
         super(LoginWindow, self).__init__()

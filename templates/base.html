@@ -122,7 +122,7 @@
                 <li class="norange"><a href="{% url 'learn:lessons_map' %}"><i class="icon-sitemap"></i>Learn!</a></li>
 
                 <li class="nviolet"><a href="{% url 'lessons:lessons' %}"><i class="icon-cog"></i>Lessons</a></li>
-                <li class="has_submenu nlightblue">
+                <li id="words_menu" class="has_submenu nlightblue">
                     <a href="#">
                         <!-- Menu name with icon -->
                         <i class="icon-book"></i>Words
@@ -131,11 +131,11 @@
                     </a>
 
                     <ul>
-                        <li><a href="{% url 'translations:words_translations' source_language='english' %}">English - Chinese</a></li>
-                        <li><a href="{% url 'translations:words_translations' source_language='chinese' %}">Chinese - English</a></li>
+                        <li id="words_menu_en" ><a href="{% url 'translations:words_translations' source_language='en' %}">English - Chinese</a></li>
+                        <li id="words_menu_zh"><a href="{% url 'translations:words_translations' source_language='zh' %}">Chinese - English</a></li>
                     </ul>
                 </li>
-                <li class="has_submenu nlightblue">
+                <li id="texts_menu" class="has_submenu nlightblue">
                     <a href="#">
                         <!-- Menu name with icon -->
                         <i class="icon-book"></i>Texts
@@ -144,8 +144,8 @@
                     </a>
 
                     <ul>
-                        <li><a href="{% url 'translations:texts_translations' source_language='english' %}">English - Chinese</a></li>
-                        <li><a href="{% url 'translations:texts_translations' source_language='chinese' %}">Chinese - English</a></li>
+                        <li><a href="{% url 'translations:texts_translations' source_language='en' %}">English - Chinese</a></li>
+                        <li><a href="{% url 'translations:texts_translations' source_language='zh' %}">Chinese - English</a></li>
                     </ul>
                 </li>
 

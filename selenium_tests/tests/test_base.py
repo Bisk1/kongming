@@ -1,8 +1,8 @@
-import unittest
 from selenium_tests.core.login_window import LoginWindow
+from unittest import TestCase
 
 
-class BaseTest(unittest.TestCase):
+class TestBase(TestCase):
     def setUp(self):
         login_window = LoginWindow(url="localhost:8000")
         login_window.load()
