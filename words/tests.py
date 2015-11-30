@@ -1,4 +1,5 @@
 # coding=utf-8
+from unittest import skip
 
 from django.test import TestCase
 from words.models import WordZH, WordEN
@@ -12,91 +13,75 @@ class WordTranslationTest(TestCase):
         """
         exists should return true for translation if it exists as the only one
         """
-        word_zh = WordZH.objects.create(word="好")
-        word_en = WordEN.objects.create(word="good")
-        word_zh.WordEN_set.add(word_en)
+        hao = WordZH.objects.create(word="好")
+        good = WordEN.objects.create(word="good")
+        hao.worden_set.add(good)
 
-        english_word_list = WordEN.objects.filter(word="good")
-        self.assertEqual(len(english_word_list), 1)
-        chinese_translations = english_word_list[0].wordzh_set
-        self.assertEqual(len(chinese_translations.all()), 1)
-        self.assertEqual(chinese_translations.all()[0].word, "好")
+        good = WordEN.objects.get(word="good")
+        chinese_translations_of_good = [word.word for word in good.wordzh_set.all()]
+        self.assertCountEqual(chinese_translations_of_good, ["好"])
 
-        chinese_word_list = WordZH.objects.filter(word="好")
-        self.assertTrue(len(chinese_word_list) == 1)
-        english_translations = chinese_word_list[0].WordEN_set
-        self.assertEqual(len(english_translations.all()), 1)
-        self.assertEqual(english_translations.all()[0].word, "good")
+        hao = WordZH.objects.get(word="好")
+        english_translations_of_hao = [word.word for word in hao.worden_set.all()]
+        self.assertCountEqual(english_translations_of_hao, ["good"])
 
     def test_exists_with_many_translation(self):
         """
         exists should return true for translation if it exists as one of many
         """
-        word_zh1 = WordZH.objects.create(word="好")
-        word_zh2 = WordZH.objects.create(word="很")
-        word_en1 = WordEN.objects.create(word="good")
-        word_en2 = WordEN.objects.create(word="very")
+        hao = WordZH.objects.create(word="好")
+        hen = WordZH.objects.create(word="很")
+        good = WordEN.objects.create(word="good")
+        very = WordEN.objects.create(word="very")
 
-        word_zh1.WordEN_set.add(word_en1)
-        word_zh1.WordEN_set.add(word_en2)
-        word_zh2.WordEN_set.add(word_en2)
+        hao.worden_set.add(good)
+        hao.worden_set.add(very)
+        hen.worden_set.add(very)
 
-        english_word_list1 = WordEN.objects.filter(word="good")
-        self.assertEqual(len(english_word_list1), 1)
-        chinese_translations1 = english_word_list1[0].wordzh_set
-        self.assertEqual(len(chinese_translations1.all()), 1)
-        self.assertEqual(chinese_translations1.all()[0].word, "好")
+        good = WordEN.objects.get(word="good")
+        chinese_translations_of_good = [word.word for word in good.wordzh_set.all()]
+        self.assertCountEqual(chinese_translations_of_good, ["好"])
 
-        english_word_list2 = WordEN.objects.filter(word="very")
-        self.assertEqual(len(english_word_list2), 1)
-        chinese_translations2 = english_word_list2[0].wordzh_set
-        self.assertEqual(len(chinese_translations2.all()), 2)
-        self.assertIn(chinese_translations2.all()[0].word, ["好", "很"])
-        self.assertIn(chinese_translations2.all()[1].word, ["好", "很"])
-        self.assertNotEqual(chinese_translations2.all()[0].word, chinese_translations2.all()[1].word)
+        very = WordEN.objects.get(word="very")
+        chinese_translations_of_very = [word.word for word in very.wordzh_set.all()]
+        self.assertCountEqual(chinese_translations_of_very, ["好", "很"])
 
-        chinese_word_list1 = WordZH.objects.filter(word="好")
-        self.assertEqual(len(chinese_word_list1), 1)
-        english_translations1 = chinese_word_list1[0].WordEN_set
-        self.assertEqual(len(english_translations1.all()), 2)
-        self.assertIn(english_translations1.all()[0].word, ["good", "very"])
-        self.assertIn(english_translations1.all()[1].word, ["good", "very"])
-        self.assertNotEqual(english_translations1.all()[0].word, english_translations1.all()[1].word)
+        hao = WordZH.objects.get(word="好")
+        english_translations_of_hao = [word.word for word in hao.worden_set.all()]
+        self.assertCountEqual(english_translations_of_hao, ["good", "very"])
 
-        chinese_word_list2 = WordZH.objects.filter(word="很")
-        self.assertEqual(len(chinese_word_list2), 1)
-        english_translations2 = chinese_word_list2[0].WordEN_set
-        self.assertEqual(len(english_translations2.all()), 1)
-        self.assertEqual(english_translations2.all()[0].word, "very")
+        hen = WordZH.objects.get(word="很")
+        english_translations_of_hen = [word.word for word in hen.worden_set.all()]
+        self.assertCountEqual(english_translations_of_hen, ["very"])
 
     def test_exists_with_no_translation(self):
         """
         exists should return false for translation if there is no translation including these words
         """
-        word_zh = WordZH.objects.create(word="好")
-        word_en = WordEN.objects.create(word="good")
+        WordZH.objects.create(word="好")
+        WordEN.objects.create(word="good")
 
-        english_word_list = WordEN.objects.filter(word="good")
-        self.assertEqual(len(english_word_list), 1)
-        chinese_translations1 = english_word_list[0].wordzh_set
-        self.assertEqual(len(chinese_translations1.all()), 0)
+        good = WordEN.objects.get(word="good")
+        chinese_translations_of_good = good.wordzh_set.all()
+        self.assertEqual(len(chinese_translations_of_good), 0)
 
         chinese_word_list = WordZH.objects.filter(word="好")
         self.assertEqual(len(chinese_word_list), 1)
-        english_translations1 = chinese_word_list[0].WordEN_set
+        english_translations1 = chinese_word_list[0].worden_set
         self.assertEqual(len(english_translations1.all()), 0)
 
     def test_exists_with_no_words(self):
         """
         exists should return false for translation if there is no words specified in the database
         """
-        english_word_list = WordEN.objects.filter(word="good")
-        self.assertEqual(len(english_word_list), 0)
+        money_matches = WordEN.objects.filter(word="money")
+        self.assertEqual(len(money_matches), 0)
 
-        chinese_word_list = WordZH.objects.filter(word="好")
-        self.assertEqual(len(chinese_word_list), 0)
+        shui_matches = WordZH.objects.filter(word="水")
+        self.assertEqual(len(shui_matches), 0)
 
 
+@skip("Translator violates Google terms, need to find other solution")
 class TranslatorTest(TestCase):
 
     def test_can_translate_chinese_word_with_google(self):
@@ -112,7 +97,7 @@ class TranslatorTest(TestCase):
     def test_can_translate_chinese_word_with_db(self):
         word_zh = WordZH(word='some_word_zh', pinyin='some_word_zh_pinyin')
         word_zh.save()
-        word_zh.WordEN_set.create(word='some_word_en')
+        word_zh.worden_set.create(word='some_word_en')
         word_en = translator.translate('some_word_zh', Languages.chinese)
         self.assertEqual(word_en, 'some_word_en')
 
