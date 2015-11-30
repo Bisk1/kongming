@@ -96,11 +96,12 @@ class TextsTranslationsApiView(View):
         """
         API for accessing text translations
         """
-        source_language = request.POST['source_language']
+        source_language = Languages.from_string(request.POST['source_language'])
         source_text = request.POST['source_text']
         operation = request.POST['operation']
         if operation == TranslationsOperation.set_translations.value:
-            self.texts_translations_service.set_text_translations(source_text, source_language, translations=json.loads(request.POST['translations']))
+            translations = [translation['text'] for translation in json.loads(request.POST['translations'])]
+            self.texts_translations_service.set_text_translations(source_text, source_language, translations=translations)
             return JsonResponse({}, status=204)
         elif operation == TranslationsOperation.get_matches.value:
             text_matches = self.texts_translations_service.get_text_matches(source_text, source_language)

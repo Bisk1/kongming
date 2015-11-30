@@ -18,6 +18,14 @@ class Languages(Enum):
         else:
             Languages.handle_non_existent_language(language)
 
+    @classmethod
+    def from_string(cls, string):
+        if string == 'en':
+            return cls.english
+        elif string == 'zh':
+            return cls.chinese
+        else:
+            cls.handle_non_existent_language(string)
 
     @staticmethod
     def tokenize(language, text):

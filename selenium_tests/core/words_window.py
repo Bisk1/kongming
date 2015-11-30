@@ -4,7 +4,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium_tests.core.window import Window
 
 class WordsWindow(Window):
-    word_to_search_input_css = "#word_to_search"
+    text_to_search_input_css = "#word_to_search"
     first_translation_text_css = "table#translations_table tr:first-child > td:nth-child(2) > input"
     first_translation_pinyin_css = "table#translations_table tr:first-child > td:nth-child(4) > input"
     edit_button_css = "#edit"
@@ -17,8 +17,8 @@ class WordsWindow(Window):
     def __init__(self, driver):
         super(WordsWindow, self).__init__(driver=driver)
 
-    def type_word_to_search(self, text):
-        self.driver.find_element_by_css_selector(self.word_to_search_input_css).send_keys(text)
+    def type_text_to_search(self, text):
+        self.driver.find_element_by_css_selector(self.text_to_search_input_css).send_keys(text)
 
     def type_first_translation_text(self, text):
         self.driver.find_element_by_css_selector(self.first_translation_text_css).send_keys(text)

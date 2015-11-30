@@ -26,7 +26,7 @@ var checkAndUpdateTranslationsForm = function(text_to_translate) {
         data: {
             operation: "get_translations",
             source_language: getSourceLanguage(),
-            source_text : source_text,
+            source_text : text_to_translate,
             csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
         },
         success: function(data) {
@@ -80,7 +80,7 @@ $.fn.insertPopulatedTextInput = function(translation) {
             .append('Translation: ')
         )
         .append($('<td>')
-            .append('<input name="translations" value="' + translation.text + '">')
+            .append('<input name="translations" value="' + translation + '">')
         )
         .append($('<td>')
             .append('<button id="remove">Remove</button>')
