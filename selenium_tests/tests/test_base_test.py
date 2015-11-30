@@ -9,4 +9,5 @@ class BaseTest(unittest.TestCase):
         self.main_window = login_window.login(username="admin", password="abcdef")
 
     def tearDown(self):
+        print("Trying to tearDown")
         self.main_window.exit()

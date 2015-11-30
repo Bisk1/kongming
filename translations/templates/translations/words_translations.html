@@ -5,8 +5,8 @@
 
 <div>
     Source language:
-    {% ifequal source_language "english" %}English{% endifequal %}
-    {% ifequal source_language "chinese" %}Chinese{% endifequal %}
+    {% ifequal source_language "en" %}English{% endifequal %}
+    {% ifequal source_language "zh" %}Chinese{% endifequal %}
 </div>
 
 
@@ -15,7 +15,7 @@
         {% csrf_token %}
         <label for="word_to_search">Word:</label>
         <input type="text" name="word_to_search" id="word_to_search" value="{{ choice.id }}" />
-        {% ifequal source_language "chinese" %}
+        {% ifequal source_language "zh" %}
             <label for="pinyin_to_search">Pinyin</label>
             <input type="text" name="pinyin_to_search" id="pinyin_to_search" />
         {% endifequal %}

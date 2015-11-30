@@ -1,3 +1,8 @@
+Languages = {
+    ENGLISH : 'en',
+    CHINESE : 'zh'
+}
+
 var getSourceLanguage = function() {
     return $("#source_language").val();
 };
@@ -21,6 +26,7 @@ var checkAndUpdateTranslationsForm = function(word_to_translate) {
         dataType: "json",
         data: {
             operation: 'get_translations',
+            source_language: getSourceLanguage(),
             word_to_translate : word_to_translate,
             csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
         },
@@ -39,7 +45,7 @@ var saveTranslations = function() {
     $("#save_message").html('Saving...');
     var word_to_translate = $("#word_to_search").val();
     var translations = [];
-    var isTranslationsChinese = (getSourceLanguage() == 'english');
+    var isTranslationsChinese = (getSourceLanguage() == Languages.ENGLISH);
     $("#translations_table tr").each(function() {
         if (isTranslationsChinese) {
             translations.push({word: $(this).find(":nth-child(2) > input").val(), pinyin: $(this).find(":nth-child(4) > input").val()});
@@ -53,6 +59,7 @@ var saveTranslations = function() {
         dataType: "json",
         data: {
             operation: 'set_translations',
+            source_language: getSourceLanguage(),
             word_to_translate : word_to_translate,
             translations : JSON.stringify(translations),
             csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
@@ -68,7 +75,7 @@ var saveTranslations = function() {
 
 
 $.fn.insertWordInputWithWord = function(translation) {
-    if (getSourceLanguage() == 'chinese') {
+    if (getSourceLanguage() == Languages.CHINESE) {
         this
         .append($('<tr>')
             .append($('<td>')
@@ -106,7 +113,7 @@ $.fn.insertWordInputWithWord = function(translation) {
 
 
 $.fn.insertWordInput = function() {
-    if (getSourceLanguage() == 'chinese') {
+    if (getSourceLanguage() == Languages.CHINESE) {
         this
         .append($('<tr>')
             .append($('<td>')
@@ -171,6 +178,7 @@ $(document).ready(function() {
                 dataType: "json",
                 data: {
                     operation: 'get_matches',
+                    source_language: getSourceLanguage(),
                     word_to_search : request.term,
                     csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
                 },
