@@ -35,9 +35,9 @@ $.fn.cloneAndPopulateInputAndSetNumber = function(text, number) {
     return newTranslationGroup;
 };
 
-var checkAndUpdateTranslationsForm = function(text_to_translate) {
-    if(typeof text_to_translate == "undefined") {
-        text_to_translate = $(".text_to_translate").val();
+var checkAndUpdateTranslationsForm = function(source_text) {
+    if(typeof source_text == "undefined") {
+        source_text = $(".text_to_translate").val();
     }
     $.ajax({
         url: getTranslateTextsServiceUrl(),
@@ -45,12 +45,12 @@ var checkAndUpdateTranslationsForm = function(text_to_translate) {
         dataType: "json",
         data: {
             operation: 'get_translations',
-            text_to_translate : text_to_translate,
+            source_text : source_text,
             source_language: getSourceLanguage(),
             csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
         },
         success: function(data) {
-            $("#translations_header").html('Tekst: '  + text_to_translate);
+            $("#translations_header").html('Tekst: '  + source_text);
             updateTranslationsTable(data.translations);
             $('#add_translation_button').show();
         },
@@ -87,7 +87,7 @@ $(document).ready(function() {
                 dataType: "json",
                 data: {
                     operation: 'get_matches',
-                    text_to_translate : request.term,
+                    source_text : request.term,
                     source_language: getSourceLanguage(),
                     csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
                 },
