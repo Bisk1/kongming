@@ -66,7 +66,7 @@
         <![endif]-->
 
         <!-- Favicon -->
-        <link rel="shortcut icon" href="img/favicon/favicon.png">
+        <link rel="shortcut icon" href="{% static "img/favicon/favicon.png" %}">
     {% endblock %}
 
     </head>
@@ -122,32 +122,10 @@
                 <li class="norange"><a href="{% url 'learn:lessons_map' %}"><i class="icon-sitemap"></i>Learn!</a></li>
 
                 <li class="nviolet"><a href="{% url 'lessons:lessons' %}"><i class="icon-cog"></i>Lessons</a></li>
-                <li id="words_menu" class="has_submenu nlightblue">
-                    <a href="#">
-                        <!-- Menu name with icon -->
-                        <i class="icon-book"></i>Words
-                        <!-- Icon for dropdown -->
-                        <span class="pull-right"><i class="icon-angle-right"></i></span>
-                    </a>
 
-                    <ul>
-                        <li id="words_menu_en" ><a href="{% url 'translations:words_translations' source_language='en' %}">English - Chinese</a></li>
-                        <li id="words_menu_zh"><a href="{% url 'translations:words_translations' source_language='zh' %}">Chinese - English</a></li>
-                    </ul>
-                </li>
-                <li id="texts_menu" class="has_submenu nlightblue">
-                    <a href="#">
-                        <!-- Menu name with icon -->
-                        <i class="icon-book"></i>Texts
-                        <!-- Icon for dropdown -->
-                        <span class="pull-right"><i class="icon-angle-right"></i></span>
-                    </a>
+                <li class="nlightblue"><a href="{% url 'translations:words_translations' %}"><i class="icon-cog"></i>Words</a></li>
 
-                    <ul>
-                        <li id="texts_menu_en"><a href="{% url 'translations:texts_translations' source_language='en' %}">English - Chinese</a></li>
-                        <li id="texts_menu_zh"><a href="{% url 'translations:texts_translations' source_language='zh' %}">Chinese - English</a></li>
-                    </ul>
-                </li>
+                <li class="nlightblue"><a href="{% url 'translations:texts_translations' %}"><i class="icon-sitemap"></i>Texts</a></li>
 
                 </ul>
             </div>

@@ -1,37 +1,8 @@
 {% extends "base.html"%}
 {% block content %}
+{% load crispy_forms_tags %}
 {% load staticfiles %}
-<script type="text/javascript" src="{% static "translations/js/texts_translations.js" %}"></script>
 
-<div>
-    Source language:
-    {% ifequal source_language "english" %}English{% endifequal %}
-    {% ifequal source_language "chinese" %}Chinese{% endifequal %}
-</div>
-
-
-<div>
-    <div>
-        {% csrf_token %}
-        <label for="text_to_search">Text:</label>
-        <input type="text" id="text_to_search" value="{{ choice.id }}" />
-        <input type="hidden" id="source_language" value="{{ source_language }}"/>
-        <button type="button" class="btn btn-default" id="edit">Edit</button>
-    </div>
-
-
-    <div id="translations">
-        <div id="translations_header"></div>
-    Translations:
-        <table id="translations_table">
-            <tbody>
-            </tbody>
-        </table>
-    <button type="button" class="btn btn-default" id="add_translation_button" >Add</button>
-    </div>
-    <button type="button" class="btn btn-default" id="save_button">Save</button>
-    <div id="save_message"></div>
-</div>
-
+    {% crispy form %}
 
 {% endblock %}

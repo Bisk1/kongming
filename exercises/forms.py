@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+from crispy_forms.layout import Button
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from exercises.models import Explanation, Choice, Typing, Listening
+from translations.forms import BusinessTextInputWithTranslations
 from translations.models import BusinessText
 from translations.utils import Languages
 from templates.forms import MetroAdminFormHelper
@@ -12,10 +14,12 @@ class TypingForm(forms.Form):
 
     helper = MetroAdminFormHelper()
     helper.header2 = 'Exercise - writing'
+    helper.add_input(Button('add', 'Add translation'))
 
     source_language = forms.ChoiceField(label='Source language', choices=((Languages.chinese.value, 'Chinese'),
-                                                                         (Languages.english.value, 'English')))
-    text_to_translate = forms.CharField(label='Text to translate', max_length=255, widget=forms.TextInput())
+                                                                          (Languages.english.value, 'English')))
+    text_to_translate = forms.CharField(label='Text to translate', max_length=255,
+                                        widget=BusinessTextInputWithTranslations)
     translation_0 = forms.CharField(label='Translation', max_length=255)
 
     def __init__(self, *args, **kwargs):
@@ -52,7 +56,7 @@ class TypingForm(forms.Form):
         Translations that were received in POST request
         :return:
         """
-        for name, value in self.cleaned_data.items():
+        for name, value in self.data.items():
             if name.startswith('translation_'):
                 yield value.strip()
 

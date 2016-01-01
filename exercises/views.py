@@ -55,7 +55,7 @@ def modify_exercise(request, lesson_id, exercise_id):
     exercise = Exercise.objects.get(id=exercise_id)
     spec = exercise.spec
     if request.method == 'POST':
-        return handle_spec(request, lesson, exercise, spec)
+        return handle_spec(request, exercise_type_handler, lesson, exercise)
     else:
         form = exercise_type_handler.get_form_class()(instance=spec, lesson=lesson)
         form.helper.form_action = reverse('lessons:exercises:modify_exercise',
