@@ -10,7 +10,7 @@ var BusinessTextInput = (function() {
     var onSelectCallbacks = [];
 
     bti.init = (function() {
-        $("#id_source_word" ).autocomplete({
+        $("#id_source_text" ).autocomplete({
             source: function(request, response) {
                 $.ajax({
                     url: textsTranslationsApi,

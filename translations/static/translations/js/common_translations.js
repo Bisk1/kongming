@@ -53,7 +53,7 @@ var TranslationsApi = (function () {
         emptyTranslationDiv = firstTranslationDiv.clone();
         emptyTranslationDiv.find("input").val("");
 
-        var sourceInputDiv = firstTranslationDiv.prev();
+        sourceInputDiv = firstTranslationDiv.prev();
 
         $(document).on("click", "#button-id-add", function () {
             var lastTranslationDiv = findLastTranslationDiv();
