@@ -3,3 +3,4 @@
 /staticfiles/
 /media/
 chromedriver.exe
+.env

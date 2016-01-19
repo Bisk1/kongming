@@ -84,20 +84,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kongming.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'chinese_db',
-        'USER': 'chinese_user',
-        'PASSWORD': 'chinese_pass',
-        'HOST': '',
-        'PORT': '',
-        'default-character-set': 'utf8'
-    }
-}
+DATABASES = {'default': dj_database_url.config()}
 
 # Parse database configuration from $DATABASE_URL
-DATABASES['default'] =  dj_database_url.config()
 
 LANGUAGE_CODE = 'en'
 
