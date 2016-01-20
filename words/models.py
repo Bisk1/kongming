@@ -1,8 +1,9 @@
 from django.db import models
 from translations import comparators
 from translations.utils import Languages
-from words.translator import get_pinyin
+from words.translator import CedictClient
 
+translator = CedictClient()
 
 class WordEN(models.Model):
     """
@@ -34,7 +35,7 @@ class WordEN(models.Model):
         return False
 
     @classmethod
-    def get_or_create_with_google(clss, word):
+    def get_or_create_with_translator(clss, word):
         """
         Same as get_or_create. Created for symmetry with WordZH.
         :return:
@@ -80,16 +81,16 @@ class WordZH(models.Model):
         return False
 
     @classmethod
-    def get_or_create_with_google(cls, word):
+    def get_or_create_with_translator(cls, word):
         """
-        If word does not exist, use Google Translate to fetch pinyin
+        If word does not exist, use translator to fetch pinyin
         :param word: Chinese word to get
         :return: 2-element tuple same as in get_or_create
         """
         try:
-            return WordZH.objects.get( word=word), True
+            return WordZH.objects.get(word=word), True
         except WordZH.DoesNotExist:
-            pinyin = get_pinyin(chinese_word=word)
+            pinyin = translator.get_pinyin(word)
             return WordZH.objects.create(word=word, pinyin=pinyin), False
 
     @staticmethod

@@ -1,29 +1,54 @@
 # coding=utf-8
 
-from googletrans import translator
-from translations.utils import Languages
+import requests
 
 
-def translate(word, src):
-    translation = get_from_google(word, src)
-    return translation.text
+class Translator:
+
+    def get_word_zh(self, text, pinyin):
+        raise NotImplementedError
+
+    def get_word_en(self, text):
+        raise NotImplementedError
+
+    def get_pinyin(self, text):
+        raise NotImplementedError
 
 
-def get_from_google(word, src):
-    return translator.translate(word,
-                                src=language_to_google_code(src),
-                                dest=language_to_google_code(Languages.other_language(src)))
+class CedictClient(Translator):
 
+    BASE_URL = "http://cedict.herokuapp.com/api/"
 
-def language_to_google_code(language):
-    if language == Languages.chinese:
-        return 'zh-CN'
-    elif language == Languages.english:
-        return 'en'
-    else:
-        raise Exception('Unrecognized language: ' + language)
+    def get_word_zh_translations(self, text, pinyin=None):
+        if pinyin is None:
+            return self._get_word_zh_translations_by_text(text)
+        else:
+            return self._get_word_zh_translations_by_text_and_pinyin(text, pinyin)
 
+    def _get_word_zh_translations_by_text(self, text):
+        return self._get_word_zh_by_text(text)['translations']
 
-def get_pinyin(chinese_word):
-    word = get_from_google(chinese_word, Languages.chinese)
-    return word.pronunciation
+    def _get_word_zh_translations_by_text_and_pinyin(self, text, pinyin):
+        response = requests.get(self.BASE_URL + "zh/" + text + "/" + pinyin)
+        data = response.json()
+        if response.status_code == 404:
+            raise KeyError
+        return data['translations']
+
+    def get_word_en_translations(self, text):
+        response = requests.get(self.BASE_URL + "en/" + text)
+        if response.status_code == 404:
+            raise KeyError
+        data = response.json()
+        return data['translations'][0]
+
+    def get_pinyin(self, text):
+        word = self._get_word_zh_by_text(text)
+        return word['pinyin']
+
+    def _get_word_zh_by_text(self, text):
+        response = requests.get(self.BASE_URL + "zh/" + text)
+        data = response.json()
+        if response.status_code == 404:
+            raise KeyError
+        return data[0]

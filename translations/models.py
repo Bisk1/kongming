@@ -57,7 +57,7 @@ class BusinessText(models.Model):
         word_model = to_word_model(self.language)
         self.get_words().clear()
         for token in tokens:
-            word_object = word_model.get_or_create_with_google(word=token)[0]
+            word_object = word_model.get_or_create_with_translator(word=token)[0]
             self.get_words().add(word_object)
 
     @classmethod
