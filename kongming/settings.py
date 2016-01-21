@@ -85,6 +85,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'kongming.wsgi.application'
 
 DATABASES = {'default': dj_database_url.config()}
+DATABASES['default']['CONN_MAX_AGE'] = 500
 
 # Parse database configuration from $DATABASE_URL
 
