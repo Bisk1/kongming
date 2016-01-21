@@ -27,7 +27,11 @@ class LessonForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        self._update_exercises_numbers()
+        self.instance.clean_exercises_number()
+        return self.instance
 
+    def _update_exercises_numbers(self):
         for exercise_id, number in self._received_exercises_numbers():
             exercise = Exercise.objects.get(pk=exercise_id)
             if number:
@@ -35,9 +39,6 @@ class LessonForm(forms.ModelForm):
             else:
                 exercise.number = None
             exercise.save()
-
-        self.instance.clean_exercises_number()
-        return self.instance
 
     def _received_exercises_numbers(self):
         """
