@@ -33,14 +33,13 @@ class LessonAction(models.Model):
 
         fixed_exercises_count = exercises.filter(number__isnull=False).count()
         random_exercises_count = lesson.exercises_number - fixed_exercises_count
-        random_exercises = exercises.filter(number__isnull=True).order_by('?')[:random_exercises_count]
+        random_exercises = iter(exercises.filter(number__isnull=True).order_by('?')[:random_exercises_count])
         j = 0
         for i in range(1, lesson.exercises_number + 1):
             try:
                 exercise = exercises.get(number=i)
             except Exercise.DoesNotExist:
-                exercise = random_exercises[j]
-                j += 1
+                exercise = next(random_exercises)
             new_exercise_action = ExerciseAction(exercise=exercise, lesson_action=new_lesson_action, number=i)
             new_exercise_action.save()
         return new_lesson_action
