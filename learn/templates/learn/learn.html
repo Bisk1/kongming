@@ -43,8 +43,9 @@
     </div>
 
     <div id="final" style="display: none">
-        <h2 class="text-primary text-center margin-bottom-20">You have finished the lesson!</h2>
-        <a class="btn btn-default btn-block" id="to-lesson-map" href="{% url 'learn:lessons_map' %}" id="to-lesson-map">To lesson map</a>
+        <h2 id="lesson_positive_status" class="text-primary text-center text-success margin-bottom-20" style="display: none;">You have successfully finished the lesson!</h2>
+        <h2 id="lesson_negative_status" class="text-primary text-center text-danger margin-bottom-20" style="display: none;">Too many mistakes. Try again!</h2>
+        <a class="btn btn-default btn-block" id="to-lesson-map" href="{% url 'learn:lessons_map' %}">To lesson map</a>
     </div>
     <div class="text-center">
         <button type="button" class="btn btn-default btn-lg" id="check" style="display: none">Check</button>

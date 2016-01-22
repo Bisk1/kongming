@@ -22,7 +22,7 @@ class LessonAction(models.Model):
     fails = models.IntegerField(default=0)
     user = models.ForeignKey(User)
     lesson = models.ForeignKey(Lesson, null=True)
-    status = models.CharField(null=True, default=None, max_length=1)
+    status = models.CharField(null=True, default='u', max_length=1)
 
     @classmethod
     def create_lesson_action(cls, user, lesson):
@@ -34,7 +34,6 @@ class LessonAction(models.Model):
         fixed_exercises_count = exercises.filter(number__isnull=False).count()
         random_exercises_count = lesson.exercises_number - fixed_exercises_count
         random_exercises = exercises.filter(number__isnull=True).order_by('?')[:random_exercises_count]
-        #random_exercises = random.sample(random_exercises_candidates, random_choice_exercises_count)
         j = 0
         for i in range(1, lesson.exercises_number + 1):
             try:
@@ -66,6 +65,8 @@ class LessonAction(models.Model):
         response = self.get_exercise_action().check_answer(proposition)
         if not response['success']:
             self.fails += 1
+            if self.fails > 2:
+                self.mark_status_as_failed()
             self.save()
         return self.add_lesson_specific_data(response)
 
@@ -75,7 +76,8 @@ class LessonAction(models.Model):
 
     def get_final_response(self):
         self.mark_status_as_success_if_not_failed()
-        response = {'final': True}
+        response = {'final': True,
+                    'success': self.status == Status.success.value}
         return self.add_lesson_specific_data(response)
 
     def add_lesson_specific_data(self, response):
@@ -92,6 +94,9 @@ class LessonAction(models.Model):
         if self.status != Status.failure.value:
             self.status = Status.success.value
             self.save()
+
+    def __str__(self):
+        return "Topic: [" + str(self.lesson) + "] by [" + str(self.user) + "] status: [" + str(self.status) + "]"
 
 
 class ExerciseAction(models.Model):
