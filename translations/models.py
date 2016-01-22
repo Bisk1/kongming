@@ -46,7 +46,7 @@ class BusinessText(models.Model):
         elif self.language == Languages.english.value:
             return self.words_en
         else:
-            raise Exception("Unknown language: " + self.language)
+            raise Exception("Unknown language: " + str(self.language))
 
     def auto_tokenize(self):
         """
