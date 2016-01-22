@@ -95,7 +95,7 @@ class LessonAction(models.Model):
             self.save()
 
     def __str__(self):
-        return "Topic: [" + str(self.lesson) + "] by [" + str(self.user) + "] status: [" + str(self.status) + "]"
+        return "LessonAction - Topic: [" + str(self.lesson) + "] User: [" + str(self.user) + "] Status: [" + str(self.status) + "]"
 
 
 class ExerciseAction(models.Model):
@@ -118,4 +118,6 @@ class ExerciseAction(models.Model):
         response['html'] = self.exercise.spec.render()
         return response
 
+    def __str__(self):
+        return "ExerciseAction - Exercise: [" + str(self.exercise) + "] LessonAction: [" + str(self.lesson_action) + "] Result: [" + str(self.result) + "]"
 
