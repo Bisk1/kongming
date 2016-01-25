@@ -34,7 +34,6 @@ class LessonAction(models.Model):
         fixed_exercises_count = exercises.filter(number__isnull=False).count()
         random_exercises_count = lesson.exercises_number - fixed_exercises_count
         random_exercises = iter(exercises.filter(number__isnull=True).order_by('?')[:random_exercises_count])
-        j = 0
         for i in range(1, lesson.exercises_number + 1):
             try:
                 exercise = exercises.get(number=i)
@@ -95,7 +94,9 @@ class LessonAction(models.Model):
             self.save()
 
     def __str__(self):
-        return "LessonAction - Topic: [" + str(self.lesson) + "] User: [" + str(self.user) + "] Status: [" + str(self.status) + "]"
+        return "LessonAction - Topic: [" + str(self.lesson) + \
+               "] User: [" + str(self.user) + \
+               "] Status: [" + str(self.status) + "]"
 
 
 class ExerciseAction(models.Model):
@@ -119,5 +120,7 @@ class ExerciseAction(models.Model):
         return response
 
     def __str__(self):
-        return "ExerciseAction - Exercise: [" + str(self.exercise) + "] LessonAction: [" + str(self.lesson_action) + "] Result: [" + str(self.result) + "]"
+        return "ExerciseAction - Exercise: [" + str(self.exercise) + \
+               "] LessonAction: [" + str(self.lesson_action) + \
+               "] Result: [" + str(self.result) + "]"
 
