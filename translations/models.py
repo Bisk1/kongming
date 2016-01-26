@@ -4,6 +4,7 @@ from translations.utils import Languages
 from words.models import to_word_model, WordEN, WordZH
 
 
+
 class BusinessText(models.Model):
     """
     Text with specified language and translations
@@ -11,8 +12,7 @@ class BusinessText(models.Model):
     text = models.CharField(max_length=255)
     language = models.CharField(max_length=2)
     translations = models.ManyToManyField("self", symmetrical=True)
-    words_en = models.ManyToManyField(WordEN)
-    words_zh = models.ManyToManyField(WordZH)
+    words_zh = models.ManyToManyField(WordZH, through='BusinessTextWordZH')
 
     class Meta:
         unique_together = ["text", "language"]
@@ -70,3 +70,10 @@ class BusinessText(models.Model):
         if created:
             object.auto_tokenize()
         return object, created
+
+
+class BusinessTextWordZH(models.Model):
+    text = models.ForeignKey(BusinessText, on_delete=models.CASCADE)
+    word = models.ForeignKey(WordZH, on_delete=models.CASCADE)
+    ordinal = models.PositiveSmallIntegerField()
+
