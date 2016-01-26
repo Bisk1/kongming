@@ -58,7 +58,7 @@ class Typing(AbstractExercise):
                                     ', '.join([translation.text for translation in
                                                self.text_to_translate.translations.all()]),
                                     ', '.join([word.word for word in
-                                                self.text_to_translate.get_words().all()]))
+                                                self.text_to_translate.words_zh.all()]))
 
     def __repr__(self):
         return str(self)
@@ -87,7 +87,7 @@ class Choice(AbstractExercise):
                                         self.text_to_translate.text,
                                         self.correct_choice.text,
                                         ', '.join([word.word for word in
-                                                   self.text_to_translate.get_words().all()]))
+                                                   self.text_to_translate.words_zh.all()]))
 
     def __repr__(self):
         return str(self)
