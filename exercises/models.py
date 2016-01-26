@@ -51,8 +51,8 @@ class Typing(AbstractExercise):
         return render_to_string('learn/typing.html', self.prepare())
 
     def __str__(self):
-        return '[{0}] Text: {1}\n' \
-               'Translations: {2} \n' \
+        return 'Typing - [{0}] Text: {1} |' \
+               'Translations: {2} |' \
                'Words: {3}'.format(self.text_to_translate.language,
                                     self.text_to_translate.text,
                                     ', '.join([translation.text for translation in
@@ -81,8 +81,8 @@ class Choice(AbstractExercise):
         return render_to_string('learn/choice.html', self.prepare())
 
     def __str__(self):
-        return '[{0}] Text: {1}\n' \
-               'Correct answer: {2} \n' \
+        return 'Choice - [{0}] Text: {1} |' \
+               'Correct answer: {2} |' \
                'Words: {3}'.format(self.text_to_translate.language,
                                         self.text_to_translate.text,
                                         self.correct_choice.text,
@@ -120,7 +120,7 @@ class Explanation(AbstractExercise):
         return render_to_string('learn/explanation.html', self.prepare())
 
     def __str__(self):
-        return self.text
+        return "Explanation - " + str(self.text)
 
     def __repr__(self):
         return str(self)
@@ -141,7 +141,7 @@ class Listening(AbstractExercise):
         return render_to_string('learn/listening.html', self.prepare())
 
     def __str__(self):
-        return self.text.text
+        return "Listening - " + str(self.text.text)
 
     def __repr__(self):
         return str(self)

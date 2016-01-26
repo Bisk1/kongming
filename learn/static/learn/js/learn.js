@@ -106,6 +106,11 @@ var LessonController = (function () {
         $('#negative_status').hide();
         if (json.final) { // if true there is no more exercises - show final screen
             $('#exercise-container').remove();
+            if (json.success) {
+                $('#lesson_positive_status').show();
+            } else {
+                $('#lesson_negative_status').show();
+            }
             $('#final').show();
         } else {
             lc.prepareExercise(json);

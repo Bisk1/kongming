@@ -32,13 +32,13 @@ class CedictClient(Translator):
         response = requests.get(self.BASE_URL + "zh/" + text + "/" + pinyin)
         data = response.json()
         if response.status_code == 404:
-            raise KeyError
+            raise KeyError("Could not find Chinese word with text [" + text + "] and pinyin [" + pinyin + "]")
         return data['translations']
 
     def get_word_en_translations(self, text):
         response = requests.get(self.BASE_URL + "en/" + text)
         if response.status_code == 404:
-            raise KeyError
+            raise KeyError("Could not find Chinese word with text [" + text + "]")
         data = response.json()
         return data['translations'][0]
 
@@ -50,5 +50,5 @@ class CedictClient(Translator):
         response = requests.get(self.BASE_URL + "zh/" + text)
         data = response.json()
         if response.status_code == 404:
-            raise KeyError
+            raise KeyError("Could not find English word with text [" + text + "]")
         return data[0]
