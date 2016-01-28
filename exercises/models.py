@@ -1,14 +1,19 @@
+# -*- coding: utf-8 -*-
+
 import random
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+import re
 from redactor.fields import RedactorField
 from django.template.loader import render_to_string
 
 from lessons.models import Lesson
 from translations.comparators import texts_difference
 from translations.models import BusinessText
+from translations.utils import Languages
+from words.models import WordZH
 
 
 class Exercise(models.Model):
@@ -44,7 +49,7 @@ class Typing(AbstractExercise):
                 'correct_translation': self.text_to_translate.translations.first().text}
 
     def prepare(self):
-        return {'text': self.text_to_translate.text,
+        return {'text': ChineseHelper.render_chinese_to_html(self.text_to_translate.text),
                 'language': self.text_to_translate.language}
 
     def render(self):
@@ -74,7 +79,7 @@ class Choice(AbstractExercise):
                 'correct_translation': self.correct_choice.text}
 
     def prepare(self):
-        return {'text': self.text_to_translate.text,
+        return {'text': ChineseHelper.render_chinese_to_html(self.text_to_translate.text),
                 'choices': self._get_all_choices_in_random_order()}
 
     def render(self):
@@ -114,7 +119,7 @@ class Explanation(AbstractExercise):
         raise Exception("Explanation has no check method")
 
     def prepare(self):
-        return {'text': self.text}
+        return {'text': ChineseHelper.render_chinese_to_html(self.text)}
 
     def render(self):
         return render_to_string('learn/explanation.html', self.prepare())
@@ -145,3 +150,29 @@ class Listening(AbstractExercise):
 
     def __repr__(self):
         return str(self)
+
+
+class ChineseHelper():
+    CHINESE_SUBSTRING_REGEX = re.compile(r'[\u4e00-\u9fff]+')
+
+    @classmethod
+    def render_chinese_to_html(cls, text_to_render):
+        """
+        Render text to HTML where each Chinese word has its own span element
+        of class chinese_word with pinyin in data-pinyin attribute
+        1) Find all substrings consisting of Chinese characters with regex
+        2) Tokenize the substring into Chinese words
+        3) Wrap each word
+        :param text_to_render:
+        :return: rendered text
+        """
+        return cls.CHINESE_SUBSTRING_REGEX.sub(cls._break_and_wrap, text_to_render)
+
+    @staticmethod
+    def _break_and_wrap(text_to_tokenize_match):
+        text_to_tokenize = text_to_tokenize_match.group(0)
+        wrapped = ""
+        for token in Languages.tokenize(Languages.chinese.value, text_to_tokenize):
+            word_zh = WordZH.get_or_create_with_translator(word=token)[0]
+            wrapped += '<span class="chinese-word">' + token + '<span><img class="callout" src="/static/learn/img/callout.gif" />' + word_zh.pinyin + '</span></span>'
+        return wrapped
