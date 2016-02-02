@@ -57,13 +57,10 @@ class Typing(AbstractExercise):
 
     def __str__(self):
         return 'Typing - [{0}] Text: {1} |' \
-               'Translations: {2} |' \
-               'Words: {3}'.format(self.text_to_translate.language,
-                                    self.text_to_translate.text,
-                                    ', '.join([translation.text for translation in
-                                               self.text_to_translate.translations.all()]),
-                                    ', '.join([word.word for word in
-                                                self.text_to_translate.words_zh.all()]))
+               'Translations: {2}'.format(self.text_to_translate.language,
+                                          self.text_to_translate.text,
+                                          ', '.join([translation.text for translation in
+                                                     self.text_to_translate.translations.all()]))
 
     def __repr__(self):
         return str(self)
@@ -87,12 +84,9 @@ class Choice(AbstractExercise):
 
     def __str__(self):
         return 'Choice - [{0}] Text: {1} |' \
-               'Correct answer: {2} |' \
-               'Words: {3}'.format(self.text_to_translate.language,
-                                        self.text_to_translate.text,
-                                        self.correct_choice.text,
-                                        ', '.join([word.word for word in
-                                                   self.text_to_translate.words_zh.all()]))
+               'Correct answer: {2}'.format(self.text_to_translate.language,
+                                            self.text_to_translate.text,
+                                            self.correct_choice.text)
 
     def __repr__(self):
         return str(self)
