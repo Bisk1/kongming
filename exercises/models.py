@@ -168,5 +168,5 @@ class ChineseHelper():
         wrapped = ""
         for token in Languages.tokenize(Languages.chinese.value, text_to_tokenize):
             word_zh = WordZH.get_or_create_with_translator(word=token)[0]
-            wrapped += '<span class="chinese-word">' + token + '<span><img class="callout" src="/static/learn/img/callout.gif" />' + word_zh.pinyin + '</span></span>'
+            wrapped += '<span class="chinese-word"><span>' + word_zh.pinyin + '</span><span>' + token + '</span></span>'
         return wrapped
