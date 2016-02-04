@@ -60,6 +60,9 @@
         <script src="{% static "js/bootstrap/custom.js" %}"></script> <!-- Custom codes -->
         <script src="{% static "js/bootstrap/charts.js" %}"></script> <!-- Custom chart codes -->
 
+        {% load static %}
+        <script language="javascript">var STATIC_URL = "{{ STATIC_URL }}";</script><!-- For js references -->
+
         <!-- HTML5 Support for IE -->
         <!--[if lt IE 9]>
         <script src="{% static "js/html5shim.js" %}"></script>

@@ -85,13 +85,13 @@ var LessonsMapGenerator = (function () {
      */
     var statusImage = function(status) {
         if (status == STATUS.SUCCESS.value) {
-            return "/static/learn/img/book_green.png";
+            return STATIC_URL + "learn/img/book_green.png";
         } else if (status == STATUS.FAILURE.value) {
-            return "/static/learn/img/book_red.png";
+            return STATIC_URL + "learn/img/book_red.png";
         } else if (status == STATUS.NOT_DONE.value) {
-            return "/static/learn/img/book_blue.png";
+            return STATIC_URL + "learn/img/book_blue.png";
         } else {
-            return "/static/learn/img/book_gray.png";
+            return STATIC_URL + "learn/img/book_gray.png";
         }
     };
 
