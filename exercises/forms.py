@@ -18,8 +18,7 @@ class TypingForm(forms.Form):
 
     source_language = forms.ChoiceField(label='Source language', choices=((Languages.chinese.value, 'Chinese'),
                                                                           (Languages.english.value, 'English')))
-    text_to_translate = forms.CharField(label='Text to translate', max_length=255,
-                                        widget=BusinessTextInputWithTranslations)
+    source_text = forms.CharField(label='Text to translate', widget=BusinessTextInputWithTranslations)
     translation_0 = forms.CharField(label='Translation', max_length=255)
 
     def __init__(self, *args, **kwargs):
@@ -35,7 +34,7 @@ class TypingForm(forms.Form):
 
     def _instance_to_fields(self):
         self.fields['source_language'].initial = self.instance.text_to_translate.language
-        self.fields['text_to_translate'].initial = self.instance.text_to_translate.text
+        self.fields['source_text'].initial = self.instance.text_to_translate.text
         for i, translation in enumerate(self.instance.text_to_translate.translations.all()):
             self.fields['translation_%s' % i] = forms.CharField(label='Translation', max_length=255,
                                                                 initial=translation.text)
@@ -43,7 +42,7 @@ class TypingForm(forms.Form):
     def save(self):
         source_language = Languages(self.cleaned_data['source_language'])
         self.instance.text_to_translate = BusinessText.get_or_create_and_auto_tokenize(
-            text=self.cleaned_data['text_to_translate'],
+            text=self.cleaned_data['source_text'],
             language=source_language.value)[0]
         self.instance.text_to_translate.translations.clear()
         for translation in self._received_translations():
