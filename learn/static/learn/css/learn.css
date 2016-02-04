@@ -11,7 +11,7 @@
 }
 
 #exercise-container {
-    height: 300px;
+    margin-bottom: 50px;
 }
 
 .options {
@@ -30,4 +30,12 @@ span.chinese-word {
 span.chinese-word span {
     display: block;
     text-align: center;
+}
+
+#exercise-container {
+    font-family: Lato, sans-serif;
+    font-size: 1.5em;
+    text-anchor: middle;
+    fill: black;
+    word-wrap: break-word;
 }
