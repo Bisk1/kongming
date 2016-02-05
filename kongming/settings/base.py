@@ -8,9 +8,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = (
@@ -24,7 +21,6 @@ INSTALLED_APPS = (
     # 3rd party apps
     'crispy_forms',
     'redactor',
-    'storages',
     # project apps
     'menu',
     'learn',
