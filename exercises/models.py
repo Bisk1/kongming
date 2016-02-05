@@ -77,7 +77,8 @@ class Choice(AbstractExercise):
 
     def prepare(self):
         return {'text': ChineseHelper.render_chinese_to_html(self.text_to_translate.text),
-                'choices': self._get_all_choices_in_random_order()}
+                'choices': self._get_all_choices_in_random_order(),
+                'language': self.text_to_translate.language}
 
     def render(self):
         return render_to_string('learn/choice.html', self.prepare())

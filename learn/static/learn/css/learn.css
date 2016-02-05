@@ -39,3 +39,7 @@ span.chinese-word span {
     fill: black;
     word-wrap: break-word;
 }
+
+#instruction {
+    margin-bottom: 2.0em;
+}

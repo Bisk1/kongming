@@ -1,4 +1,5 @@
-<h2 class="text-center" id="choice_text_to_translate">{{ text }}</h2>
+<div id="instruction"><p>Choose correct translation to {%  if language == 'zh' %}English{% else %}Chinese{% endif %}</p></div>
+<h2 class="text-center" id="choice_text_to_translate">{{ text|safe }}</h2>
 <div class="rows">
     <div class="col-md-6">
         <input type="button" class="choice btn btn-default btn-block" id="choice1" value="{{ choices.0 }}"/>
