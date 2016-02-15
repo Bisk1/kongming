@@ -32,7 +32,7 @@
                 var $aud;
                 {
                     $aud = $('<audio>');
-                    $aud.attr('controls', 'true').attr('data-redactor-inserted-audio', 'true');
+                    $aud.prop('controls').attr('data-redactor-inserted-audio', 'true');
                     $source = $('<source>').attr('src', json.filelink).attr('type', 'audio/wav');
                     $source.text('Your browser does not support the audio element.');
                     $aud.append($source);
