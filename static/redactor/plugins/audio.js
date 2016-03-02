@@ -71,23 +71,43 @@
 			},
 			insert: function(json, direct, e)
             {
-                var $aud;
-                {
-                    $aud = $('<audio>');
-                    $aud.prop('controls', true);
-                    $aud.attr('data-redactor-inserted-audio', 'true');
-                    $source = $('<source>').attr('src', json.filelink).attr('type', 'audio/wav');
-                    $source.text('Your browser does not support the audio element.');
-                    $aud.append($source);
-                }
+                var $aud = $(String()
+                + '<div class="cp-container" audio-src="' + json.filelink + '">'
+                    + '<div class="cp-jplayer"></div>'
+                    + '<div class="cp-buffer-holder cp-gt50" style="display: block;">'
+                        + '<div class="cp-buffer-1" style="transform: rotate(180deg);"></div>'
+                        + '<div class="cp-buffer-2" style="display: block; transform: rotate(271.362deg);"></div>'
+                    + '</div>'
+                    + '<div class="cp-progress-holder" style="display: block;">'
+                        + '<div class="cp-progress-1" style="transform: rotate(94.2428deg);"></div>'
+                        + '<div class="cp-progress-2" style="transform: rotate(0deg); display: none;"></div>'
+                    + '</div>'
+                    + '<div class="cp-circle-control"></div>'
+                    + '<ul class="cp-controls">'
+                        + '<li><a class="cp-play" tabindex="1" style="display: block;">play</a></li>'
+                        + '<li><a class="cp-pause" style="display: none;" tabindex="1">pause</a></li>'
+                    + '</ul>'
+                + '</div>');
+
+
+//                    $aud = $('<audio>');
+//                    $aud.prop('controls', true);
+//                    $aud.attr('data-redactor-inserted-audio', 'true');
+//                    $source = $('<source>').attr('src', json.filelink).attr('type', 'audio/wav');
+//                    $source.text('Your browser does not support the audio element.');
+//                    $aud.append($source);
 
                 var node = $aud;
-                var isP = this.utils.isCurrentOrParent('P');
-                if (isP)
-                {
+
+                node.uniqueId();
+                var id = node.attr("id");
+
+              //  var isP = this.utils.isCurrentOrParent('P');
+              //  if (isP)
+              //  {
                     // will replace
-                    node = $('<blockquote />').append($aud);
-                }
+                    // node = $('<blockquote />').append($aud);
+               // }
 
                 this.modal.close();
 
@@ -96,26 +116,28 @@
 
                 this.insert.html(this.utils.getOuterHtml(node), false);
 
-                var $audio = this.$editor.find('audio[data-redactor-inserted-audio=true]').removeAttr('data-redactor-inserted-audio');
+        //        var $audio = this.$editor.find('audio[data-redactor-inserted-audio=true]').removeAttr('data-redactor-inserted-audio');
 
-                if (isP)
-                {
-                    $audio.parent().contents().unwrap().wrap('<p />');
-                    $audio.parent().prepend('&nbsp;').append('&nbsp;');
-                }
-                else if (this.opts.linebreaks)
-                {
-                    if (!this.utils.isEmpty(this.code.get()))
-                    {
-                        $audio.before('<br>');
-                    }
+                //if (isP)
+                //{
+                //    $audio.parent().contents().unwrap().wrap('<p />');
+                //    $audio.parent().prepend('&nbsp;').append('&nbsp;');
+                //}
+         //       else if (this.opts.linebreaks)
+       //         {
+     //               if (!this.utils.isEmpty(this.code.get()))
+     //               {
+   //                     $audio.before('<br>');
+ //                   }
 
-                    $audio.after('<br>');
-                }
+                //    $audio.after('<br>');
+                //}
+
+                added_node = $("#" + id);
+                new CirclePlayer(added_node);
 
                 if (typeof json == 'string') return;
-
-                this.core.setCallback('fileUpload', $audio, json);
+                this.core.setCallback('fileUpload', node, json);
 
             }
 		}
