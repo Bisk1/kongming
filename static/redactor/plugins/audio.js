@@ -71,7 +71,7 @@
 			},
 			insert: function(json, direct, e)
             {
-                var $aud = $(String()
+                var audio = $(String()
                 + '<div class="cp-container" audio-src="' + json.filelink + '">'
                     + '<div class="cp-jplayer"></div>'
                     + '<div class="cp-buffer-holder cp-gt50" style="display: block;">'
@@ -89,55 +89,18 @@
                     + '</ul>'
                 + '</div>');
 
-
-//                    $aud = $('<audio>');
-//                    $aud.prop('controls', true);
-//                    $aud.attr('data-redactor-inserted-audio', 'true');
-//                    $source = $('<source>').attr('src', json.filelink).attr('type', 'audio/wav');
-//                    $source.text('Your browser does not support the audio element.');
-//                    $aud.append($source);
-
-                var node = $aud;
-
-                node.uniqueId();
-                var id = node.attr("id");
-
-              //  var isP = this.utils.isCurrentOrParent('P');
-              //  if (isP)
-              //  {
-                    // will replace
-                    // node = $('<blockquote />').append($aud);
-               // }
+                audio.uniqueId();
 
                 this.modal.close();
-
                 this.selection.restore();
                 this.buffer.set();
 
-                this.insert.html(this.utils.getOuterHtml(node), false);
+                this.insert.html(this.utils.getOuterHtml(audio), false);
 
-        //        var $audio = this.$editor.find('audio[data-redactor-inserted-audio=true]').removeAttr('data-redactor-inserted-audio');
-
-                //if (isP)
-                //{
-                //    $audio.parent().contents().unwrap().wrap('<p />');
-                //    $audio.parent().prepend('&nbsp;').append('&nbsp;');
-                //}
-         //       else if (this.opts.linebreaks)
-       //         {
-     //               if (!this.utils.isEmpty(this.code.get()))
-     //               {
-   //                     $audio.before('<br>');
- //                   }
-
-                //    $audio.after('<br>');
-                //}
-
-                added_node = $("#" + id);
-                new CirclePlayer(added_node);
+                new CirclePlayer("#" + audio.attr("id"));
 
                 if (typeof json == 'string') return;
-                this.core.setCallback('fileUpload', node, json);
+                this.core.setCallback('fileUpload', audio, json);
 
             }
 		}

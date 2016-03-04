@@ -2,5 +2,6 @@
 .idea
 /staticfiles/
 /media/
+/uploads/
 chromedriver.exe
 .env

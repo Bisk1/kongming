@@ -16,6 +16,7 @@
 	height:104px;
 	background:url("bgr.jpg") 0 0 no-repeat;
 	padding:48px;
+	box-sizing: content-box; /* to cancel out Bootstrap's content-box */
 	-webkit-tap-highlight-color:rgba(0,0,0,0);
 }
 

@@ -29,14 +29,23 @@
  */
 
 
-var CirclePlayer = function(ancestor, options) {
-    console.log("CirclePlayer id: " + ancestor.attr("id"));
+/**
+ * Initialize all circle players on the page
+ */
+var initCircles = function() {
+	$(".cp-container").each( function() {
+         new CirclePlayer("#" + $(this).attr("id"));
+    });
+}
+
+var CirclePlayer = function(cssSelectorAncestor) {
 	var	self = this,
 
 		defaults = {
 			supplied: "wav",
 			// Android 2.3 corrupts media element if preload:"none" is used.
 			// preload: "none", // No point preloading metadata since no times are displayed. It helps keep the buffer state correct too.
+			cssSelectorAncestor: cssSelectorAncestor,
 			cssSelector: {
 				play: ".cp-play",
 				pause: ".cp-pause"
@@ -61,8 +70,10 @@ var CirclePlayer = function(ancestor, options) {
 	this.spritePitch = 104;
 	this.spriteRatio = 0.24; // Number of steps / 100
 
+	ancestor = $(cssSelectorAncestor);
 	this.player = ancestor.find(".cp-jplayer");
-	this.media = $.extend({}, {wav: ancestor.attr("audio-src")});
+	this.media = $.extend({}, { wav: ancestor.attr("audio-src")});
+	options = {};
 	this.options = $.extend(true, {}, defaults, options); // Deep copy
 
 	this.cssTransforms = Modernizr.csstransforms;
@@ -73,7 +84,7 @@ var CirclePlayer = function(ancestor, options) {
 
 	this.jq = {};
 	$.each(cssSelector, function(entity, cssSel) {
-		self.jq[entity] = ancestor.find(cssSel);
+		self.jq[entity] = $(self.options.cssSelectorAncestor + " " + cssSel);
 	});
 
 	this._initSolution();
