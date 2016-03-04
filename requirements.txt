@@ -7,6 +7,7 @@ django-wysiwyg-redactor==0.4.9
 future==0.15.0
 gunicorn==19.1.1
 jieba==0.37
+lxml==3.5.0
 mysqlclient==1.3.6
 Pillow==2.9.0
 psycopg2==2.6.1
