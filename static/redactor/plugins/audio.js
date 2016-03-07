@@ -30,16 +30,21 @@
                 __log('Recording stop triggered');
                 recorder.stop();
                 $('#direct-recording').html('<button id="record-confirm">Confirm</button><button id="record-cancel">Cancel</button>');
-                $('#record-confirm').click(this.audio.upload);
+                $('#record-confirm').click(this.audio.export);
                 $('#record-cancel').click(this.audio.beforeStart);
                 __log('Recording stopped');
             },
-            upload: function()
+            export: function()
+            {
+                __log('Export triggered');
+                recorder.exportWAV(this.audio.upload);
+            },
+            upload: function(blob)
             {
                 __log('Upload triggered');
-                recorder.exportWAV(this.upload.traverseFile);
+                file = new File([blob], "recording.wav");
+                this.upload.traverseFile(file);
             },
-
 			getTemplate: function()
 			{
 				return String()
