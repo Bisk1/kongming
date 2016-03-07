@@ -27,12 +27,26 @@
             stopped: function()
             {
                 $('#record-stop').off();
-                __log('Recording stop triggered');
                 recorder.stop();
-                $('#direct-recording').html('<button id="record-confirm">Confirm</button><button id="record-cancel">Cancel</button>');
+                $('#direct-recording').html('<button id="record-confirm">Confirm</button><button id="record-play">Play</button><button id="record-cancel">Cancel</button>');
                 $('#record-confirm').click(this.audio.export);
+                $('#record-play').click(this.audio.playRequested);
                 $('#record-cancel').click(this.audio.beforeStart);
                 __log('Recording stopped');
+            },
+            playRequested: function()
+            {
+                recorder.getBuffer(this.audio.play);
+            },
+            play: function(buffers)
+            {
+                var newSource = audioContext.createBufferSource();
+                var newBuffer = audioContext.createBuffer( 2, buffers[0].length, audioContext.sampleRate );
+                newBuffer.getChannelData(0).set(buffers[0]);
+                newBuffer.getChannelData(1).set(buffers[1]);
+                newSource.buffer = newBuffer;
+                newSource.connect( audioContext.destination );
+                newSource.start(0);
             },
             export: function()
             {
@@ -84,18 +98,18 @@ function __log(e, data) {
 
 function startUserMedia(stream) {
     __log('startUserMedia.');
-    var input = audio_context.createMediaStreamSource(stream);
+    var input = audioContext.createMediaStreamSource(stream);
     __log('Media stream created.');
 
     // Uncomment if you want the audio to feedback directly
-    //input.connect(audio_context.destination);
+    //input.connect(audioContext.destination);
     //__log('Input connected to audio context destination.');
 
     recorder = new Recorder(input);
     __log('Recorder initialised.');
 }
 
-var audio_context;
+var audioContext;
 var recorder;
 
 window.onload = function init() {
@@ -105,7 +119,7 @@ window.onload = function init() {
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
         window.URL = window.URL || window.webkitURL;
 
-        audio_context = new AudioContext;
+        audioContext = new AudioContext;
         __log('Audio context set up.');
         __log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
     } catch (e) {
