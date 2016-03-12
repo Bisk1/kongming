@@ -6,17 +6,35 @@
 
             beforeStart: function()
             {
-                if (recorder === undefined) {
-                    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
-                      __log('No live audio input: ' + e);
-                    });
-                }
                 $('#direct-recording').html('<button id="record-start">Start</button>');
-                $('#record-start').click(this.audio.started);
+                $('#record-start').click(this.audio.startRequested);
+            },
+            startRequested: function()
+            {
+                $('#record-start').off();
+                var afterSetup = this.audio.started;
+                if (recorder === undefined) {
+                    navigator.getUserMedia({audio: true},
+                        function(stream) {
+                            var input = audioContext.createMediaStreamSource(stream);
+                            __log('Media stream created.');
+                            // Uncomment if you want the audio to feedback directly
+                            //input.connect(audioContext.destination);
+                            //__log('Input connected to audio context destination.');
+
+                            recorder = new Recorder(input);
+                            __log('Recorder initialised.');
+                            afterSetup();
+                        },
+                        function(e) {
+                          __log('No live audio input: ' + e);
+                        });
+                } else {
+                    afterSetup();
+                }
             },
             started: function()
             {
-                $('#record-start').off();
                 recorder.clear();
                 recorder.record();
                 $('#direct-recording').html('<button id="record-stop">Stop</button>');
