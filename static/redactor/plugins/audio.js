@@ -1,3 +1,6 @@
+var audioContext;
+var recorder;
+
 (function($)
 {
 	$.Redactor.prototype.audio = function()
@@ -17,17 +20,17 @@
                     navigator.getUserMedia({audio: true},
                         function(stream) {
                             var input = audioContext.createMediaStreamSource(stream);
-                            __log('Media stream created.');
+                            console.log('Media stream created.');
                             // Uncomment if you want the audio to feedback directly
                             //input.connect(audioContext.destination);
-                            //__log('Input connected to audio context destination.');
+                            //console.log('Input connected to audio context destination.');
 
                             recorder = new Recorder(input);
-                            __log('Recorder initialised.');
+                            console.log('Recorder initialised.');
                             afterSetup();
                         },
                         function(e) {
-                          __log('No live audio input: ' + e);
+                          console.log('No live audio input: ' + e);
                         });
                 } else {
                     afterSetup();
@@ -39,7 +42,7 @@
                 recorder.record();
                 $('#direct-recording').html('<button id="record-stop">Stop</button>');
                 $('#record-stop').click(this.audio.stopped);
-                __log('Recording started');
+                console.log('Recording started');
 
             },
             stopped: function()
@@ -50,7 +53,7 @@
                 $('#record-confirm').click(this.audio.export);
                 $('#record-play').click(this.audio.playRequested);
                 $('#record-cancel').click(this.audio.beforeStart);
-                __log('Recording stopped');
+                console.log('Recording stopped');
             },
             playRequested: function()
             {
@@ -68,12 +71,12 @@
             },
             export: function()
             {
-                __log('Export triggered');
+                console.log('Export triggered');
                 recorder.exportWAV(this.audio.upload);
             },
             upload: function(blob)
             {
-                __log('Upload triggered');
+                console.log('Upload triggered');
                 file = new File([blob], "recording.wav");
                 this.upload.traverseFile(file);
             },
@@ -110,25 +113,6 @@
 	}
 })(jQuery);
 
-function __log(e, data) {
-    console.log("\n" + e + " " + (data || ''));
-}
-
-function startUserMedia(stream) {
-    __log('startUserMedia.');
-    var input = audioContext.createMediaStreamSource(stream);
-    __log('Media stream created.');
-
-    // Uncomment if you want the audio to feedback directly
-    //input.connect(audioContext.destination);
-    //__log('Input connected to audio context destination.');
-
-    recorder = new Recorder(input);
-    __log('Recorder initialised.');
-}
-
-var audioContext;
-var recorder;
 
 window.onload = function init() {
     try {
@@ -138,8 +122,8 @@ window.onload = function init() {
         window.URL = window.URL || window.webkitURL;
 
         audioContext = new AudioContext;
-        __log('Audio context set up.');
-        __log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+        console.log('Audio context set up.');
+        console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
     } catch (e) {
         alert('No web audio support in this browser!');
     }
