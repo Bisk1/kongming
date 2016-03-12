@@ -9,7 +9,7 @@ var recorder;
 
             beforeStart: function()
             {
-                $('#direct-recording').html('<button id="record-start">Start</button>');
+                $('#direct-recording').html('<button type="button" class="btn btn-default" id="record-start">Start</button>');
                 $('#record-start').click(this.audio.startRequested);
             },
             startRequested: function()
@@ -40,7 +40,7 @@ var recorder;
             {
                 recorder.clear();
                 recorder.record();
-                $('#direct-recording').html('<button id="record-stop">Stop</button>');
+                $('#direct-recording').html('<button type="button" class="btn btn-default" id="record-stop">Stop</button>');
                 $('#record-stop').click(this.audio.stopped);
                 console.log('Recording started');
 
@@ -49,7 +49,9 @@ var recorder;
             {
                 $('#record-stop').off();
                 recorder.stop();
-                $('#direct-recording').html('<button id="record-confirm">Confirm</button><button id="record-play">Play</button><button id="record-cancel">Cancel</button>');
+                $('#direct-recording').html('<button type="button" class="btn btn-default" id="record-confirm">Confirm</button>' +
+                '<button type="button" class="btn btn-default" id="record-play">Play</button>' +
+                '<button type="button" class="btn btn-default" id="record-cancel">Cancel</button>');
                 $('#record-confirm').click(this.audio.export);
                 $('#record-play').click(this.audio.playRequested);
                 $('#record-cancel').click(this.audio.beforeStart);
@@ -83,11 +85,13 @@ var recorder;
 			getTemplate: function()
 			{
 				return String()
+                    + '<h5>1) File upload</h5>'
 				    + '<div id="upload-recording">'
                         + '<section id="redactor-modal-audio-insert">'
                             + '<div id="redactor-modal-audio-droparea"></div>'
                         + '</section>'
                     + '</div>'
+                    + '<h5>2) Direct recording</h5>'
                     + '<div id="direct-recording"></div>'
 			},
 			init: function()
