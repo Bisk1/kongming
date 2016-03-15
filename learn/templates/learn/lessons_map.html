@@ -13,7 +13,8 @@ function generateLearnURL(lesson_id){
 
 $(document).ready(function(){
     var lessons_levels = {{ lessons_levels|safe }};
-    LessonsMapGenerator.setWidth($(window).width());
+    var sidebarWidth = $(".sidebar").width();
+    LessonsMapGenerator.setWidth($(window).width() - sidebarWidth);
     LessonsMapGenerator.drawMap(lessons_levels, '#map');
 });
 </script>
