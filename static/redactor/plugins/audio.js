@@ -8,9 +8,13 @@ var recorder;
 		return {
 
             beforeStart: function()
-            {
-                $('#direct-recording').html('<button type="button" class="btn btn-default" id="record-start">Start</button>');
-                $('#record-start').click(this.audio.startRequested);
+            {   // microphone will work only over secure connection (HTTPS) or on localhost (for testing purposes)
+                if (window.location.protocol == "https:" || document.location.hostname == "localhost") {
+                    $('#direct-recording').html('<button type="button" class="btn btn-default" id="record-start">Start</button>');
+                    $('#record-start').click(this.audio.startRequested);
+                } else {
+                    $('#direct-recording').html('<h3>Only available over HTTPS!</h3>');
+                }
             },
             startRequested: function()
             {
