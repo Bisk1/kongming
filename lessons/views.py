@@ -32,7 +32,7 @@ class ModifyLessonView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['exercises'] = Exercise.objects.filter(lesson=self.get_object()).order_by('number')
+        context['exercises'] = Exercise.objects.filter(lesson=self.get_object()).order_by('number', 'content_type')
         return context
 
     def get_success_url(self):
