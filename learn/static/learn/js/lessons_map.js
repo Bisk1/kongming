@@ -200,13 +200,15 @@ var LessonsMapGenerator = (function () {
      */
     var drawArrow = function(lesson, lessons_levels, map_selector) {
         var requirement = findLessonWithKey(lessons_levels, lesson.requirement);
+        var x1 = requirement.x + lessonWidth/2;
+        var y1 = requirement.y + lessonHeight;
+        var x2 = lesson.x + lessonWidth/2;
+        var y2 = lesson.y - 10;
+
         d3.select(map_selector)
-                .append("line")
-                .attr("x1", requirement.x + lessonWidth/2)
-                .attr("y1", requirement.y + lessonHeight)
-                .attr("x2", lesson.x + lessonWidth/2)
-                .attr("y2", lesson.y)
-                .attr("style", "stroke:rgb(255,0,0);stroke-width:2")
+            .append("path")
+            .attr("d", "M" + x1 + "," + y1 + " L" + x2 + "," + y2)
+            .attr("style", "stroke: #6666ff; stroke-width: 1px; fill: none; marker-start: url(#markerCircle); marker-end: url(#markerArrow);");
     };
 
     /**
