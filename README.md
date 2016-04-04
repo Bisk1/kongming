@@ -25,3 +25,6 @@ The project core is structured into several Django apps:
  * learn - controls the process of learning by presenting lessons and taking user through the lesson flow
  
  
+## Demo
+
+http://kongming.herokuapp.com/
