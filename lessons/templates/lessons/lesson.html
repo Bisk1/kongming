@@ -1,18 +1,12 @@
 {% extends "base.html"%}
 {% block content %}
 {% load staticfiles %}
+{% load crispy_forms_tags %}
 
 
-{% if lesson %}
-    {% include "form_start.html" with header="Lesson: "|add:lesson.topic %}
-    <form class="form-horizontal" role="form" action="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}" method="post">
-{% else %}
-    {% include "form_start.html" with header="New lesson" %}
-    <form class="form-horizontal" role="form" action="{% url 'lessons:add_lesson' %}" method="post">
-{% endif %}
-        {% csrf_token %}
-        {% include "form_snippet.html" %}
-            <div class="form-group">
+    <form class="form-horizontal" role="form" action="{{ form_action }}" method="post">
+        {% crispy form %}
+            <div class="col-md-12">
             {% if lesson %}
                 <div>
                     Exercises:
@@ -24,7 +18,7 @@
                 Save the lesson to add exercises
             {% endif %}
             </div>
-            <button type="submit" id="save" class="btn btn-default">Save</button>
+            <button type="submit" id="save" class="btn btn-default btn-primary">Save</button>
             <a href="{% url 'lessons:lessons' %}" class="btn btn-default">Return</a>
         </form>
 {% include "form_end.html" %}

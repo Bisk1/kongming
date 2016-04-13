@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from crispy_forms.helper import FormHelper
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -8,6 +9,16 @@ from exercises.models import Exercise
 
 
 class LessonForm(forms.ModelForm):
+
+    helper = FormHelper()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper.form_tag = False
+        if self.instance.id:
+            self.helper.header = "Lesson: " + str(self.instance.topic)
+        else:
+            self.helper.header = "New lesson"
 
     class Meta:
         model = Lesson

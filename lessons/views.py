@@ -19,6 +19,11 @@ class CreateLessonView(CreateView):
     template_name = 'lessons/lesson.html'
     form_class = LessonForm
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_action'] = reverse('lessons:add_lesson')
+        return context
+
     def get_success_url(self):
         return reverse('lessons:modify_lesson', kwargs={'lesson_id': self.object.pk})
 
@@ -33,6 +38,7 @@ class ModifyLessonView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['exercises'] = Exercise.objects.filter(lesson=self.get_object()).order_by('number', 'content_type')
+        context['form_action'] = reverse('lessons:modify_lesson', kwargs={'lesson_id': context['form'].instance.id})
         return context
 
     def get_success_url(self):

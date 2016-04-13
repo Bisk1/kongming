@@ -5,13 +5,11 @@
 {% else %}
     {% if field|is_checkbox %}
         <div class="form-group">
-        {% if label_class %}
-            <div class="controls col-{{ bootstrap_device_type }}-offset-{{ label_size }} {{ field_class }}">
-        {% endif %}
+            <div class="controls col-{{ bootstrap_device_type }}-offset-{{ label_size }} col-lg-8 {{ field_class }}">
     {% endif %}
     <{% if tag %}{{ tag }}{% else %}div{% endif %} id="div_{{ field.auto_id }}" {% if not field|is_checkbox %}class="form-group{% else %}class="checkbox{% endif %}{% if wrapper_class %} {{ wrapper_class }}{% endif %}{% if form_show_errors%}{% if field.errors %} has-error{% endif %}{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
         {% if field.label and not field|is_checkbox and form_show_labels %}
-            <label for="{{ field.id_for_label }}" class="control-label {{ label_class }}">
+            <label for="{{ field.id_for_label }}" class="control-label col-lg-4 {{ label_class }}">
                 {{ field.label|safe }}
             </label>
         {% endif %}
@@ -32,7 +30,7 @@
                     {% include 'bootstrap3/layout/help_text_and_errors.html' %}
                 </label>
             {% else %}
-                <div class="{{ field_class }}">
+                <div class="col-lg-8 {{ field_class }}">
                     {% crispy_field field 'placeholder' field.label %}
                     {% include 'bootstrap3/layout/help_text_and_errors.html' %}
                 </div>
@@ -40,9 +38,7 @@
         {% endif %}
     </{% if tag %}{{ tag }}{% else %}div{% endif %}>
     {% if field|is_checkbox %}
-        {% if label_class %}
             </div>
-        {% endif %}
         </div>
     {% endif %}
 {% endif %}

@@ -16,7 +16,7 @@
     <h6>{{ header2 }}</h6>
     <hr>
     {% endif %}
-    {% if form_tag %}<form {{ flat_attrs|safe }} method="{{ form_method }}" {% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
+    {% if form_tag %}<form class="form-horizontal" {{ flat_attrs|safe }} method="{% if form_method %}{{ form_method }}{% else %}post{% endif %}" {% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
         {% if form_method|lower == 'post' and not disable_csrf %}
             {% csrf_token %}
         {% endif %}
