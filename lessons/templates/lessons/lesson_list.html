@@ -16,9 +16,10 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th class="col-md-4">Topic</th>
-                        <th class="col-md-4">Requirement</th>
+                        <th class="col-md-3">Topic</th>
+                        <th class="col-md-3">Requirement</th>
                         <th class="col-md-2">Exercises: To do/All</th>
+                        <th class="col-md-2">Publish</th>
                         <th class="col-md-2">Edit</th>
                     </tr>
                 </thead>
@@ -41,6 +42,9 @@
                         </td>
                         <td>
                             {{  lesson.exercises_number }}/{{  lesson.exercise_set.count }}
+                        </td>
+                        <td>
+                            {{  lesson.publish }}
                         </td>
                         <td>
                             <a class="btn btn-sm btn-info" href="{% url 'lessons:modify_lesson' lesson_id=lesson.id %}"><i class="icon-pencil"></i></a>

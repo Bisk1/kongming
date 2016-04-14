@@ -22,11 +22,12 @@ class LessonForm(forms.ModelForm):
 
     class Meta:
         model = Lesson
-        fields = ['topic', 'exercises_number', 'requirement']
+        fields = ['topic', 'exercises_number', 'requirement', 'publish']
         labels = {
             'topic': _('Topic'),
             'exercises_number': _('Exercises number'),
-            'requirement': _('Requirement')
+            'requirement': _('Requirement'),
+            'publish': _('Publish')
         }
 
     def clean(self):

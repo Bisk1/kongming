@@ -5,6 +5,7 @@ class Lesson(models.Model):
     topic = models.CharField(max_length=100)
     exercises_number = models.PositiveIntegerField()
     requirement = models.ForeignKey("self", null=True, blank=True)
+    publish = models.BooleanField(default=False)
 
     def get_fixed_order_exercises(self):
         """
