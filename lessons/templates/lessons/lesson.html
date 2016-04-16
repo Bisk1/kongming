@@ -3,26 +3,23 @@
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 
-
-    <form class="form-horizontal" role="form" action="{{ form_action }}" method="post">
-        {% crispy form %}
-            <div class="col-md-12">
-            {% if lesson %}
-                <div>
-                    Exercises:
-                    <div id="exercises">
-                    {% include "lessons/exercises.html" %}
-                    </div>
-                </div>
-             {% else %}
-                Save the lesson to add exercises
-            {% endif %}
+<form class="form-horizontal" role="form" action="{{ form_action }}" method="post">
+    {% crispy form %}
+    <div class="col-md-12">
+    {% if lesson %}
+        <div>
+            Exercises:
+            <div id="exercises">
+            {% include "lessons/exercises.html" %}
             </div>
-            <button type="submit" id="save" class="btn btn-default btn-primary">Save</button>
-            <a href="{% url 'lessons:lessons' %}" class="btn btn-default">Return</a>
-        </form>
-{% include "form_end.html" %}
-
+        </div>
+     {% else %}
+        Save the lesson to add exercises
+    {% endif %}
+    </div>
+    <button type="submit" id="save" class="btn btn-default btn-primary">Save</button>
+    <a href="{% url 'lessons:lessons' %}" class="btn btn-default">Return</a>
+</form>
 
 <div>
 {% if lesson %}
