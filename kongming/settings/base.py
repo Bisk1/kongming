@@ -28,8 +28,7 @@ INSTALLED_APPS = (
     'exercises',
     'users',
     'words',
-    'translations',
-    'tags',
+    'translations'
 )
 
 MIDDLEWARE_CLASSES = (

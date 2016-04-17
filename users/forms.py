@@ -1,12 +1,18 @@
 # _*_ coding: utf-8 _*_
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
+from crispy_forms.layout import Reset
+
 from django import forms
-from templates.forms import MetroAdminFormHelper
 from django.contrib.auth import authenticate
+
 
 class RegistrationForm(forms.Form):
 
-    helper = MetroAdminFormHelper()
-    helper.header = 'Registeration'
+    helper = FormHelper()
+    helper.header = 'Registration'
+    helper.add_input(Submit('submit', 'Register'))
+    helper.add_input(Reset('reset', 'Reset'))
 
     username = forms.CharField(label="Login",max_length=30)
     email = forms.EmailField(label="Email")
@@ -20,16 +26,13 @@ class RegistrationForm(forms.Form):
             raise forms.ValidationError('The password are different')
         return repeat_password
 
-class LoginFormHelper(MetroAdminFormHelper):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.primary_submit_button.value = 'Log in'
-
 
 class LoginForm(forms.Form):
 
-    helper = LoginFormHelper()
+    helper = FormHelper()
     helper.header = 'Log in'
+    helper.add_input(Submit('submit', 'Log in'))
+    helper.add_input(Reset('reset', 'Reset'))
 
     username = forms.CharField(label="Username", max_length=30)
     password = forms.CharField(label="Password", widget=forms.PasswordInput())

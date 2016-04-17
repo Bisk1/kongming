@@ -1,18 +1,25 @@
 # -*- coding: utf-8 -*-
-from crispy_forms.layout import Button
+from crispy_forms.helper import FormHelper
 
+from crispy_forms.layout import Button, Submit, Reset
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+
 from exercises.models import Explanation, Choice, Typing, Listening
 from translations.forms import BusinessTextInputWithTranslations
 from translations.models import BusinessText
 from translations.utils import Languages
-from templates.forms import MetroAdminFormHelper
 
+
+class ExercisesBaseFormHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.add_input(Submit('submit', 'Save'))
+        self.add_input(Reset('reset', 'Reset'))
 
 class TypingForm(forms.Form):
 
-    helper = MetroAdminFormHelper()
+    helper = ExercisesBaseFormHelper()
     helper.header2 = 'Exercise - writing'
     helper.add_input(Button('add', 'Add translation'))
 
@@ -62,7 +69,7 @@ class TypingForm(forms.Form):
 
 class ExplanationForm(forms.ModelForm):
 
-    helper = MetroAdminFormHelper()
+    helper = ExercisesBaseFormHelper()
     helper.header2 = 'Exercise - explanation'
 
     def __init__(self, *args, **kwargs):
@@ -81,7 +88,7 @@ class ExplanationForm(forms.ModelForm):
 
 class ChoiceForm(forms.Form):
 
-    helper = MetroAdminFormHelper()
+    helper = ExercisesBaseFormHelper()
     helper.header2 = 'Exercise - choice'
 
     source_language = forms.ChoiceField(label='Source language', choices=((Languages.chinese.value, 'Chinese'),
@@ -137,7 +144,7 @@ class ChoiceForm(forms.Form):
 
 class ListeningForm(forms.Form):
 
-    helper = MetroAdminFormHelper()
+    helper = ExercisesBaseFormHelper()
     helper.header2 = 'Exercise - listening'
 
     text = forms.CharField(label='Text to listen', max_length=255)
