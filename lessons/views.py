@@ -3,7 +3,7 @@ import logging
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.core.urlresolvers import reverse, reverse_lazy
 
-from lessons.forms import LessonForm
+from lessons.forms import LessonForm, DeleteLessonForm
 from lessons.models import Lesson
 from exercises.models import Exercise
 
@@ -16,7 +16,6 @@ class LessonListView(ListView):
 
 class CreateLessonView(CreateView):
     model = Lesson
-    template_name = 'lessons/lesson.html'
     form_class = LessonForm
 
     def get_context_data(self, **kwargs):
@@ -30,7 +29,6 @@ class CreateLessonView(CreateView):
 
 class ModifyLessonView(UpdateView):
     model = Lesson
-    template_name = 'lessons/lesson.html'
     form_class = LessonForm
     slug_field = 'pk'
     slug_url_kwarg = 'lesson_id'
@@ -47,10 +45,15 @@ class ModifyLessonView(UpdateView):
 
 class DeleteLessonView(DeleteView):
     model = Lesson
-    template_name = 'lessons/confirm_delete.html'
+    form_class = DeleteLessonForm
     success_url = reverse_lazy('lessons:lessons')
     slug_field = 'pk'
     slug_url_kwarg = 'lesson_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = DeleteLessonForm(instance = self.object)
+        return context
 
     def delete(self, *args, **kwargs):
         """

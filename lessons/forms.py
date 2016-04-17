@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-from crispy_forms.helper import FormHelper
+from crispy_forms.bootstrap import FormActions
 
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import HTML, Layout
+from crispy_forms.layout import Submit
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
@@ -60,3 +63,20 @@ class LessonForm(forms.ModelForm):
         for name, value in self.cleaned_data.items():
             if name.startswith('exercise_'):
                 yield name[len('exercise_'):], value
+
+class DeleteLessonForm(forms.Form):
+
+    helper = FormHelper()
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.pop('instance')
+        super().__init__(*args, **kwargs)
+        self.helper.header = "Are you sure that you want delete the lesson: " + str(instance) + "?"
+        self.helper.add_layout(
+            Layout(
+                FormActions(
+                    Submit('submit', 'Yes', css_class='btn btn-primary'),
+                    HTML('<a class="btn btn-default" href={% url "lessons:lessons" %}>Return</a>')
+                )
+            )
+        )

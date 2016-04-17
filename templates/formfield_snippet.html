@@ -1,8 +1,0 @@
-{% load formfilters %}
-<div class="form-group">
-    <label class="col-lg-4 control-label" for="{{ field.id_for_label }}">{{ field.label }}:</label>
-    <div class="col-lg-8">
-        {{ field.errors }}
-        {{ field|as_form_control:field.label}}
-    </div>
-</div>
