@@ -19,12 +19,12 @@ def determine_lessons_levels(user):
     :return: list of lessons levels
     """
     levels = list()
-    current_level = Lesson.objects.filter(requirement=None).order_by('pk')  # first level - no requirements
+    current_level = Lesson.objects.filter(publish=True,requirement=None).order_by('pk')  # first level - no requirements
     while current_level:
         levels.append(simple_lesson_level_dicts(current_level, user))
         # Each level requires lessons from previous level.
         # Ordering prevents crossing lines in template (lessons are close to their requirements).
-        current_level = Lesson.objects.filter(requirement__in=current_level).order_by('requirement')
+        current_level = Lesson.objects.filter(publish=True,requirement__in=current_level).order_by('requirement')
     return levels
 
 
