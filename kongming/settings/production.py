@@ -17,7 +17,6 @@ DATABASES['default']['CONN_MAX_AGE'] = 500
 
 # see http://developer.yahoo.com/performance/rules.html#expires
 AWS_HEADERS = {
-    'Expires': 'Thu, 15 Apr 2010 20:00:00 GMT',
     'Cache-Control': 'max-age=86400',
 }
 
@@ -32,5 +31,5 @@ STATICFILES_STORAGE = 'kongming.custom_storages.StaticStorage'
 STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
 
 MEDIAFILES_LOCATION = 'media'
-DEFAULT_FILE_STORAGE = 'kongming.custom_storages.MediaStorage'
+BASE_DEFAULT_FILE_STORAGE = 'kongming.custom_storages.MediaStorage'
 MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)

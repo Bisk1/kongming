@@ -22,3 +22,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
 
 MEDIA_URL = '/media/'
+
+
+BASE_DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

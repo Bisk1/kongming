@@ -77,26 +77,53 @@ var recorder;
             },
             export: function()
             {
+                var name = $('#recording_text').val();
+                if (name == undefined) {
+                    alert("You must provide recording text");
+                    recorder.exportWAV(this.audio.stopped);
+                }
                 console.log('Export triggered');
                 recorder.exportWAV(this.audio.upload);
             },
             upload: function(blob)
             {
-                console.log('Upload triggered');
-                file = new File([blob], "recording.wav");
+                var name = $('#recording_text').val();
+                console.log('Upload triggered for ' + name);
+                file = new File([blob], name + '.wav');
                 this.upload.traverseFile(file);
             },
 			getTemplate: function()
 			{
+                // TODO: add template engine and refactor
 				return String()
-                    + '<h5>1) File upload</h5>'
+                    + '<form class="form-horizontal">'
+                    + '<div class="col-md-12">'
+                    + '<div class="widget wgreen"> <div class="widget-head">'
+                    + '<div class="pull-left">A) Direct recording</div>'
+                    + '<div class="clearfix"></div>'
+                    + '</div></div>'
+                    + '<div class="widget-content"><div class="pad">'
+                    + '<div id="div_recording_text" class="form-group">'
+                    + '<label for="recording_text"  class="control-label col-lg-4">Text</label>'
+                    + '<div class="col-lg-8">'
+                    + '<input class="textinput textInput form-control" id="recording_text" name="text" placeholder="The text in the recording" type="text">'
+                    + '</div>'
+                    + '</div>'
+                    + '<div id="direct-recording"></div>'
+                    + '</div></div>'
+                    + '</div>'
+                    + '<div class="col-md-12">'
+                    + '<div class="widget worange"> <div class="widget-head">'
+                    + '<div class="pull-left">B) File upload</div>'
+                    + '<div class="clearfix"></div>'
+                    + '</div></div>'
 				    + '<div id="upload-recording">'
                         + '<section id="redactor-modal-audio-insert">'
                             + '<div id="redactor-modal-audio-droparea"></div>'
                         + '</section>'
                     + '</div>'
-                    + '<h5>2) Direct recording</h5>'
-                    + '<div id="direct-recording"></div>'
+                    + '</div>'
+                    + '</form>'
 			},
 			init: function()
 			{

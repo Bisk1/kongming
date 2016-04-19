@@ -28,7 +28,8 @@ INSTALLED_APPS = (
     'exercises',
     'users',
     'words',
-    'translations'
+    'translations',
+    'recordings'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -82,3 +83,5 @@ REDACTOR_OPTIONS = {'lang': 'en'}
 REDACTOR_UPLOAD = 'uploads/'
 
 LOGIN_URL = '/users/login'
+
+DEFAULT_FILE_STORAGE = 'recordings.storage.TrackingStorage'
