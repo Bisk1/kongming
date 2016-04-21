@@ -107,11 +107,7 @@ class Choice(AbstractExercise):
 
 
 class Explanation(AbstractExercise):
-    text = RedactorField(
-        verbose_name=u'Text',
-        redactor_options={'focus': 'true', 'plugins': ['audio']},
-        allow_image_upload=True
-    )
+    text = RedactorField()
 
     def check_answer(self, proposition):
         raise Exception("Explanation has no check method")

@@ -79,7 +79,7 @@ STATICFILES_DIRS = (
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 
-REDACTOR_OPTIONS = {'lang': 'en'}
+REDACTOR_OPTIONS = {'lang': 'en', 'plugins': ['audio'], 'focus': 'true'}
 REDACTOR_UPLOAD = 'uploads/'
 
 LOGIN_URL = '/users/login'
