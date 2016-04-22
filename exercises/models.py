@@ -7,6 +7,7 @@ from string import Template
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.template import loader
 from redactor.fields import RedactorField
 from django.template.loader import render_to_string
 
@@ -175,24 +176,6 @@ class ChineseHelper():
 
 
 class AudioHelper():
-    audio_player_template = Template(
-        """<div id="$unique_id" class="cp-container" audio-src="$audio_src">
-             <div class="cp-jplayer"></div>
-             <div class="cp-buffer-holder cp-gt50" style="display: block;">
-                <div class="cp-buffer-1" style="transform: rotate(180deg);"></div>
-                <div class="cp-buffer-2" style="display: block; transform: rotate(271.362deg);"></div>
-            </div>
-            <div class="cp-progress-holder" style="display: block;">
-                <div class="cp-progress-1" style="transform: rotate(94.2428deg);"></div>
-                <div class="cp-progress-2" style="transform: rotate(0deg); display: none;"></div>
-            </div>
-            <div class="cp-circle-control"></div>
-            <ul class="cp-controls">
-                <li><a class="cp-play" tabindex="1" style="display: block;">play</a></li>
-                <li><a class="cp-pause" style="display: none;" tabindex="1">pause</a></li>
-            </ul>
-        </div>""".replace('\n', '')
-    )
 
     @classmethod
     def render_audio_players(cls, text_to_render):
@@ -203,8 +186,7 @@ class AudioHelper():
 
         for index, audio_link_element in enumerate(audio_link_elements):
             audio_src = audio_link_element.attrib['href']
-            rendered_player = cls.audio_player_template.substitute(audio_src=audio_src,
-                                                                   unique_id='player-id-' + str(index))
+            rendered_player = loader.render_to_string('audio_player.html', {'audio_src': audio_src, 'unique_id': 'player-id-' + str(index)})
             player_element = etree.fromstring(rendered_player)
             audio_link_element.getparent().replace(audio_link_element, player_element)
         res = etree.tostring(root, encoding='unicode')
