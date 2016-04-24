@@ -28,16 +28,6 @@
  * Louis-Rémi Babé @Louis_Remi
  */
 
-
-/**
- * Initialize all circle players on the page
- */
-var initCircles = function() {
-	$(".cp-container").each( function() {
-         new CirclePlayer("#" + $(this).attr("id"));
-    });
-}
-
 var CirclePlayer = function(cssSelectorAncestor) {
 	var	self = this,
 

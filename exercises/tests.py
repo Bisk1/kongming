@@ -1,5 +1,5 @@
 from django.test import TestCase
-from exercises.models import ChineseHelper
+from exercises.models import ChineseHelper, AudioHelper
 
 
 class RenderChineseTest(TestCase):
@@ -21,9 +21,21 @@ class RenderChineseTest(TestCase):
                           '<span class="chinese-word" data-pinyin="ming2zi5">名字</span>？ kot ma ale')
 
         text4 = "hello 什么名字？ how are you 我爱你"
-        self.assertEquals(ChineseHelper.render_chinese_to_html(text2),
+        self.assertEquals(ChineseHelper.render_chinese_to_html(text4),
                           'hello <span class="chinese-word" data-pinyin="shen2ma5">什么</span>'
                           '<span class="chinese-word" data-pinyin="ming2zi5">名字</span>？ how are you '
                           '<span class="chinese-word" data-pinyin="wo3">我</span>'
                           '<span class="chinese-word" data-pinyin="ai4">爱</span>'
                           '<span class="chinese-word" data-pinyin="ni3">你</span>')
+
+
+class ParseAudioInput(TestCase):
+    def parsing(self):
+        input = """<p><a href="/media/uploads/Jeden.wav">Jeden.wav</a></p><p><a href="/media/uploads/Jeden.wav"></a><a href="/media/uploads
+        /dwa.wav">dwa.wav</a></p><p><a href="/media/uploads/trzy.wav">trzy.wav</a></p>"""
+
+        output = AudioHelper.render_audio_players(input)
+
+        self.assertContains(output, "player-id-0")
+        self.assertContains(output, "player-id-1")
+        self.assertContains(output, "player-id-2")

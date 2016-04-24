@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
+from io import StringIO
 
 import random
 import re
-from string import Template
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.template import loader
+from lxml import html
 from redactor.fields import RedactorField
 from django.template.loader import render_to_string
 
-from lxml import etree
+
 
 from lessons.models import Lesson
 from translations.comparators import texts_difference
@@ -179,23 +180,22 @@ class AudioHelper():
 
     @classmethod
     def render_audio_players(cls, text_to_render):
-        parser = etree.HTMLParser()
-        root = etree.fromstring(text_to_render, parser)
+        content = html.parse(StringIO(text_to_render))
         regexpNS = 'http://exslt.org/regular-expressions'  # to enable regex
-        audio_link_elements = root.xpath("//a[re:test(@href, 'wav$')]", namespaces={'re': regexpNS})  # all wav files
-
+        audio_link_elements = content.xpath("//a[re:test(@href, 'wav$')]", namespaces={'re': regexpNS})  # all wav files
         for index, audio_link_element in enumerate(audio_link_elements):
             audio_src = audio_link_element.attrib['href']
             rendered_player = loader.render_to_string('audio_player.html', {'audio_src': audio_src, 'unique_id': 'player-id-' + str(index)})
-            player_element = etree.fromstring(rendered_player)
+            player_element = html.parse(StringIO(rendered_player)).getroot()[0][0]
             audio_link_element.getparent().replace(audio_link_element, player_element)
-        res = etree.tostring(root, encoding='unicode')
-        res = cls.unwrap(res)  # tree ends up wrapped in <html> and <body> elements that must be stripped
+        res = html.tostring(content.getroot()[0], encoding='unicode')
+        res = cls.unwrap(res)  # tree ends up wrapped in <body> element that must be stripped
         return res
 
     @classmethod
     def unwrap(cls, text):
-        if text.startswith("<html><body>") and text.endswith("</body></html>"):
-            return text[12:len(text) - 14]
+        text = text.strip()
+        if text.startswith("<body>") and text.endswith("</body>"):
+            return text[6:len(text) - 7]
         else:
             raise Exception("Unexpected form of rendered HTML")
