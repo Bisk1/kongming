@@ -1,0 +1,50 @@
+{% extends "base.html"%}
+{% block content %}
+{% with recordings=object_list %}
+<div class="col-md-12">
+    {% if recordings %}
+    <div class="widget wred">
+        <div class="widget-head">
+            <div class="pull-left">Recordings</div>
+            <div class="widget-icons pull-right">
+                <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a>
+                <a href="#" class="wclose"><i class="icon-remove"></i></a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="widget-content medias">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="col-md-5">Text</th>
+                        <th class="col-md-5">URL</th>
+                        <th class="col-md-2">Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for recording in recordings %}
+                    <tr>
+                        <td>
+                            {{ recording.text }}
+                        </td>
+                        <td>
+                            {{ recording.url }}
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-info" href="{% url 'recordings:modify_recording' pk=recording.pk %}"><i class="icon-pencil"></i></a>
+                            <a class="btn btn-sm btn-danger" href="{% url 'recordings:delete_recording' pk=recording.pk %}"><i class="icon-remove"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+        No recordings available
+    {% endif %}
+
+</div>
+
+{% endwith %}
+{% endblock %}
