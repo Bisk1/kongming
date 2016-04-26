@@ -1,13 +1,13 @@
 {% load staticfiles %}
 
-<div id="{{ unique_id }}" class="cp-container" audio-src="{{ audio_src }}">
-    <link rel="stylesheet" href="{% static "circle/circle.skin/circle.player.css" %}">
-    <script type="text/javascript" src="{% static "circle/js/jquery.transform2d.js" %}"></script>
-    <script type="text/javascript" src="{% static "circle/js/jquery.grab.js" %}"></script>
-    <script type="text/javascript" src="{% static "circle/js/jquery.jplayer.js" %}"></script>
-    <script type="text/javascript" src="{% static "circle/js/mod.csstransforms.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "circle/js/circle.player.js" %}"></script>
+<link rel="stylesheet" href="{% static "circle/circle.skin/circle.player.css" %}">
+<script type="text/javascript" src="{% static "circle/js/jquery.transform2d.js" %}"></script>
+<script type="text/javascript" src="{% static "circle/js/jquery.grab.js" %}"></script>
+<script type="text/javascript" src="{% static "circle/js/jquery.jplayer.js" %}"></script>
+<script type="text/javascript" src="{% static "circle/js/mod.csstransforms.min.js" %}"></script>
+<script type="text/javascript" src="{% static "circle/js/circle.player.js" %}"></script>
 
+<div id="{{ unique_id }}" class="cp-container" audio-src="{{ audio_src }}">
     <script>
         $(document).ready(function(){
             new CirclePlayer("#{{ unique_id }}");

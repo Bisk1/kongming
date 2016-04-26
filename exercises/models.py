@@ -183,19 +183,29 @@ class AudioHelper():
         content = html.parse(StringIO(text_to_render))
         regexpNS = 'http://exslt.org/regular-expressions'  # to enable regex
         audio_link_elements = content.xpath("//a[re:test(@href, 'wav$')]", namespaces={'re': regexpNS})  # all wav files
+        head = None
         for index, audio_link_element in enumerate(audio_link_elements):
             audio_src = audio_link_element.attrib['href']
             rendered_player = loader.render_to_string('audio_player.html', {'audio_src': audio_src, 'unique_id': 'player-id-' + str(index)})
-            player_element = html.parse(StringIO(rendered_player)).getroot()[0][0]
-            audio_link_element.getparent().replace(audio_link_element, player_element)
+            rendered_player_tree_root = html.parse(StringIO(rendered_player)).getroot()
+            player_div = rendered_player_tree_root[1][0]
+            audio_link_element.getparent().replace(audio_link_element, player_div)
+            if head is None:
+                head = rendered_player_tree_root[0]
         res = html.tostring(content.getroot()[0], encoding='unicode')
-        res = cls.unwrap(res)  # tree ends up wrapped in <body> element that must be stripped
+        res = cls.unwrap(res, 'body')  # tree ends up wrapped in <body> element that must be stripped
+        if head is not None:
+            head_html = html.tostring(head, encoding='unicode')
+            head_html = cls.unwrap(head_html, 'head')
+            res = head_html + res
         return res
 
     @classmethod
-    def unwrap(cls, text):
+    def unwrap(cls, text, tag):
         text = text.strip()
-        if text.startswith("<body>") and text.endswith("</body>"):
-            return text[6:len(text) - 7]
+        if text.startswith('<' + tag + '>') and text.endswith('</' + tag + '>'):
+            open_tag_len = len(tag) + 2
+            close_tag_len = len(tag) + 3
+            return text[open_tag_len:len(text) - close_tag_len]
         else:
             raise Exception("Unexpected form of rendered HTML")
