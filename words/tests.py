@@ -3,8 +3,8 @@ from unittest import skip
 
 from django.test import TestCase
 from words.models import WordZH, WordEN
-from words import translator
 from translations.utils import Languages
+from words.translator import CedictClient
 
 
 class WordTranslationTest(TestCase):
@@ -88,29 +88,29 @@ class WordTranslationTest(TestCase):
         self.assertEqual(len(shui_matches), 0)
 
 
-@skip("Translator violates Google terms, need to find other solution")
 class TranslatorTest(TestCase):
-
-    def test_can_translate_chinese_word_with_google(self):
+    translator = CedictClient()
+    def test_can_translate_chinese_word_with_cedict(self):
         text_zh = '狗'
-        text_en = translator.translate(text_zh, Languages.chinese)
-        self.assertEqual(text_en, 'dog')
+        text_en_translations = self.translator.get_word_zh_translations(text_zh)[0]
+        self.assertIn('dog', text_en_translations)
 
-    def test_can_translate_english_word_with_google(self):
-        text_en = 'ass'
-        text_zh = translator.translate(text_en, Languages.english)
-        self.assertEqual(text_zh, '屁股')
+    def test_can_translate_english_word_with_cedict(self):
+        text_en = 'flower'
+        text_zh = self.translator.get_word_en_translations(text_en)
+        print(len(text_zh))
+        self.assertIn(["华","huā"], text_zh)
 
     def test_can_translate_chinese_word_with_db(self):
         word_zh = WordZH(word='some_word_zh', pinyin='some_word_zh_pinyin')
         word_zh.save()
         word_zh.worden_set.create(word='some_word_en')
-        word_en = translator.translate('some_word_zh', Languages.chinese)
+        word_en = WordZH.objects.get(word='some_word_zh').get_translations().all()[0].word
         self.assertEqual(word_en, 'some_word_en')
 
     def test_can_translate_english_word_with_db(self):
         word_en = WordEN(word='test_word_en')
         word_en.save()
         word_en.wordzh_set.create(word='test_word_zh', pinyin='test_word_zh_pinyin')
-        word_zh = translator.translate('test_word_en', Languages.english)
+        word_zh = WordEN.objects.get(word='test_word_en').get_translations().all()[0].word
         self.assertEqual(word_zh, 'test_word_zh')

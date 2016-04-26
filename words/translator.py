@@ -40,7 +40,7 @@ class CedictClient(Translator):
         if response.status_code == 404:
             raise KeyError("Could not find Chinese word with text [" + text + "]")
         data = response.json()
-        return data['translations'][0]
+        return data['translations']
 
     def get_pinyin(self, text):
         word = self._get_word_zh_by_text(text)
