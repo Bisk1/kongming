@@ -1,6 +1,6 @@
 var checkAndUpdateTranslationsForm = function(source_text) {
     $.ajax({
-        url: textsTranslationsApi,
+        url: Django.url("translations:texts_translations_api"),
         type: 'POST',
         dataType: "json",
         data: {

@@ -2,8 +2,6 @@ var getSourceLanguage = function() {
     return $("#id_source_language").val();
 };
 
-var textsTranslationsApi = "/translations/texts_translations_api/";
-
 var BusinessTextInput = (function() {
     var bti = {};
 
@@ -13,7 +11,7 @@ var BusinessTextInput = (function() {
         $("#id_source_text" ).autocomplete({
             source: function(request, response) {
                 $.ajax({
-                    url: textsTranslationsApi,
+                    url: Django.url("translations:texts_translations_api"),
                     type: 'POST',
                     dataType: "json",
                     data: {

@@ -2,8 +2,6 @@ var getSourceLanguage = function() {
     return $("#id_source_language").val();
 };
 
-var wordsTranslationsApi = "/translations/words_translations_api/";
-
 var WordInput = (function() {
     var wi = {};
 
@@ -13,7 +11,7 @@ var WordInput = (function() {
         $("#id_source_word" ).autocomplete({
             source: function(request, response) {
                 $.ajax({
-                    url: wordsTranslationsApi,
+                    url: Django.url("translations：words_translations_api"),
                     type: 'POST',
                     dataType: "json",
                     data: {
