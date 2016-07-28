@@ -14,4 +14,5 @@ urlpatterns = patterns('',
     url(r'^recordings/', include('recordings.urls', namespace='recordings')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^redactor/', include('redactor.urls')),
+    url(r'^djangojs/', include('djangojs.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

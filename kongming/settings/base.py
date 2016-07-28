@@ -21,6 +21,7 @@ INSTALLED_APPS = (
     # 3rd party apps
     'crispy_forms',
     'redactor',
+    'djangojs',
     # project apps
     'menu',
     'learn',

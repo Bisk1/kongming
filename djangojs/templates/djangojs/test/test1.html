@@ -1,0 +1,18 @@
+{% load js %}
+<html>
+
+<head>
+{% django_js %}
+</head>
+
+<body>
+<script type="text/javascript">
+    $(function(){
+        console.log(Django.url('django_js_json'));
+        console.log(Django.url('first_test', 'a'));
+        console.log(Django.url('second_test', {'test': 'a'}));
+    });
+</script>
+</body>
+
+</html>

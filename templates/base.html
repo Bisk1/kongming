@@ -63,8 +63,9 @@
 
         <script src="{% static "js/form-engine.js" %}"></script>
 
-        {% load static %}
-        <script language="javascript">var STATIC_URL = "{{ STATIC_URL }}";</script><!-- For js references -->
+        <!-- Django JS -->
+        {% load js %}
+        {% django_js jquery=false %}
 
         <!-- HTML5 Support for IE -->
         <!--[if lt IE 9]>

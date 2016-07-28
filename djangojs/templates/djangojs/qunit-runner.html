@@ -1,0 +1,25 @@
+{% load js %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}QUnit Test Runner{% endblock %}</title>
+
+  {% block js_init %}
+    {% include "djangojs/qunit-runner-head.html" %}
+  {% endblock %}
+</head>
+<body>
+
+    {% block body_content %}{% endblock %}
+
+    <div id="qunit-fixture">{% block qunit-fixture %}{% endblock %}</div>
+    {% include "djangojs/qunit-runner-body.html" %}
+
+    {% for file in js_test_files %}
+    {% js file %}
+    {% endfor %}
+
+    {% block js_content %}{% endblock %}
+</body>
+</html>

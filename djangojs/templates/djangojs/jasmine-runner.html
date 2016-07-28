@@ -1,0 +1,23 @@
+{% load js %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>{% block title %}Jasmine Test Runner{% endblock %}</title>
+
+  {% block js_init %}
+    {% include "djangojs/jasmine-runner-head.html" %}
+  {% endblock js_init %}
+
+  {% block js_content %}{% endblock %}
+
+  {% for file in js_test_files %}
+  {% js file %}
+  {% endfor %}
+</head>
+
+<body>
+  {% block body_content %}{% endblock %}
+  {% include "djangojs/jasmine-runner-body.html" %}
+</body>
+</html>
