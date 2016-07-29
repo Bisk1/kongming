@@ -12,6 +12,8 @@ var FormEngine = {
                 return '<div id="' + fieldSchema.id + '"></div>';
             case "customHtml":
                 return fieldSchema.html;
+            case "button":
+                return this.button(fieldSchema);
             default:
                 throw "Unsupported field type: " + fieldSchema.type;
         }
