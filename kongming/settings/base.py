@@ -84,5 +84,3 @@ REDACTOR_OPTIONS = {'lang': 'en', 'plugins': ['audio'], 'focus': 'true'}
 REDACTOR_UPLOAD = 'uploads/'
 
 LOGIN_URL = '/users/login'
-
-DEFAULT_FILE_STORAGE = 'recordings.storage.TrackingStorage'

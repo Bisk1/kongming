@@ -31,5 +31,5 @@ STATICFILES_STORAGE = 'kongming.custom_storages.StaticStorage'
 STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
 
 MEDIAFILES_LOCATION = 'media'
-BASE_DEFAULT_FILE_STORAGE = 'kongming.custom_storages.MediaStorage'
+DEFAULT_FILE_STORAGE = 'kongming.custom_storages.MediaStorage'
 MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
