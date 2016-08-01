@@ -30,7 +30,7 @@ INSTALLED_APPS = (
     'users',
     'words',
     'translations',
-    'recordings'
+    'audio_placeholders'
 )
 
 MIDDLEWARE_CLASSES = (

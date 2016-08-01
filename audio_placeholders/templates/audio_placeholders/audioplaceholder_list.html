@@ -1,0 +1,67 @@
+{% extends "base.html"%}
+{% block content %}
+{% load staticfiles %}
+<script type="text/javascript" src="{% static "js/recorder/recorder.js" %}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.record-btn').click(function() {
+        $this = $(this);
+        $this.hide();
+        $('div[placeholder-id=' + this.id + ']').recorder(function(){console.log("upload"); $this.show();});
+    });
+});
+</script>
+{% with placeholders=object_list %}
+<div class="col-md-12">
+    {% if placeholders %}
+    <div class="widget wred">
+        <div class="widget-head">
+            <div class="pull-left">Placeholders</div>
+            <div class="widget-icons pull-right">
+                <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a>
+                <a href="#" class="wclose"><i class="icon-remove"></i></a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="widget-content medias">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="col-md-3">Text</th>
+                        <th class="col-md-3">Link id</th>
+                        <th class="col-md-3">Record</th>
+                        <th class="col-md-3">Explanation id</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for placeholder in placeholders %}
+                    <tr>
+                        <td>
+                            {{ placeholder.text }}
+                        </td>
+                        <td>
+                            {{ placeholder.link_id }}
+                        </td>
+                        <td>
+                            <button id="{{ placeholder.id }}" class="record-btn btn btn-default">Record</button>
+                            <div placeholder-id="{{ placeholder.id }}"></div>
+                        </td>
+                        <td>
+                            {% with placeholder.explanation.exercises.all.0 as exercise %}
+                                <a href="{% url 'lessons:exercises:modify_exercise' lesson_id=exercise.lesson.id exercise_id=exercise.id %}">To exercise</a>
+                            {% endwith %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+        No placeholders
+    {% endif %}
+
+</div>
+
+{% endwith %}
+{% endblock %}
