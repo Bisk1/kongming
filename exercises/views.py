@@ -42,7 +42,7 @@ def add_exercise(request, lesson_id, exercise_type):
         form.helper.form_action = reverse('lessons:exercises:add_exercise',
                                           kwargs={'lesson_id': lesson.id,
                                                   'exercise_type': exercise_type})
-        return render(request, 'exercises/' + exercise_type_handler.name + '.html',
+        return render(request, 'exercises/' + str(exercise_type_handler.name) + '.html',
                       {'lesson': lesson, 'form': form})
 
 
@@ -55,7 +55,7 @@ def modify_exercise(request, lesson_id, exercise_id):
     exercise = Exercise.objects.get(id=exercise_id)
     spec = exercise.spec
     if request.method == 'POST':
-        return handle_spec(request, exercise_type_handler, lesson, exercise)
+        return handle_spec(request, exercise_type_handler, lesson, exercise, spec)
     else:
         form = exercise_type_handler.get_form_class()(instance=spec, lesson=lesson)
         form.helper.form_action = reverse('lessons:exercises:modify_exercise',
@@ -76,7 +76,7 @@ def handle_spec(request, exercise_type_handler, lesson, exercise, spec=None):
         exercise.save()
         return redirect('lessons:modify_lesson', lesson_id=lesson.id)
     else:
-        return render(request, 'exercises/' + exercise_type_handler + '.html',
+        return render(request, 'exercises/' + str(exercise_type_handler) + '.html',
                       {'lesson': lesson, 'exercise': exercise, 'form': form})
 
 

@@ -4,7 +4,7 @@ from io import StringIO
 import random
 import re
 
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.template import loader
@@ -110,6 +110,7 @@ class Choice(AbstractExercise):
 
 class Explanation(AbstractExercise):
     text = RedactorField()
+    exercises = GenericRelation(Exercise)
 
     def check_answer(self, proposition):
         raise Exception("Explanation has no check method")
