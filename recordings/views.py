@@ -1,9 +1,8 @@
 import logging
+from django.http import JsonResponse, HttpResponse
 
-from django.views.generic import UpdateView, DeleteView, ListView
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.views.generic import ListView, View
 
-from recordings.forms import RecordingForm, DeleteRecordingForm
 from recordings.models import Recording
 
 logger = logging.getLogger(__name__)
@@ -12,20 +11,16 @@ logger = logging.getLogger(__name__)
 class RecordingsView(ListView):
     model = Recording
 
+class CreatePlaceholderView(View):
 
-class ModifyRecordingView(UpdateView):
-    model = Recording
-    form_class = RecordingForm
+    def post(self, request):
+        """
+        API for accessing text translations
+        """
+        link_id = request.POST['link_id']
+        text = request.POST['text']
+        explanation_id = request.POST['explanation_id']
+        new_recording = Recording(link_id=link_id, text=text, explanation_id=explanation_id)
+        new_recording.save()
+        return HttpResponse(status=204)
 
-    def get_success_url(self):
-        return reverse('recordings:recordings')
-
-
-class DeleteRecordingView(DeleteView):
-    model = Recording
-    success_url = reverse_lazy('recordings:recordings')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = DeleteRecordingForm(instance=self.object)
-        return context

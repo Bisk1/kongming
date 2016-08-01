@@ -5,6 +5,5 @@ from . import views
 
 urlpatterns = patterns('',
     url(r'^$', login_required(views.RecordingsView.as_view()), name='recordings'),
-    url(r'^(?P<pk>\d+)/modify/$', login_required(views.ModifyRecordingView.as_view()), name='modify_recording'),
-    url(r'^(?P<pk>\d+)/delete/$', login_required(views.DeleteRecordingView.as_view()), name='delete_recording'),
+    url(r'^create$', login_required(views.CreatePlaceholderView.as_view()), name='create_placeholder'),
 )

@@ -3,6 +3,11 @@
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 <script type="text/javascript" src="{% static "js/recorder/recorder.js" %}"></script>
+<script type="text/javascript">
+{% if form.instance.id %} {% comment %} used for placeholder - needs to have reference to explanation {% endcomment %}
+    var explanationId = {{ form.instance.id }};
+{% endif %}
+</script>
 
     {% crispy form %}
 

@@ -1,9 +1,11 @@
 from django.db import models
+from exercises.models import Explanation
 
 
 class Recording(models.Model):
+    link_id = models.CharField(max_length=20)
     text = models.CharField(max_length=20)
-    url = models.CharField(max_length=40, null=True)
+    explanation = models.ForeignKey(Explanation)
 
     def __str__(self):
         return self.text

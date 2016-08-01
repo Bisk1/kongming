@@ -17,8 +17,8 @@
                 <thead>
                     <tr>
                         <th class="col-md-5">Text</th>
-                        <th class="col-md-5">URL</th>
-                        <th class="col-md-2">Edit</th>
+                        <th class="col-md-5">Link id</th>
+                        <th class="col-md-5">Explanation id</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,11 +28,10 @@
                             {{ recording.text }}
                         </td>
                         <td>
-                            {{ recording.url }}
+                            {{ recording.link_id }}
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-info" href="{% url 'recordings:modify_recording' pk=recording.pk %}"><i class="icon-pencil"></i></a>
-                            <a class="btn btn-sm btn-danger" href="{% url 'recordings:delete_recording' pk=recording.pk %}"><i class="icon-remove"></i></a>
+                            {% url 'lessons:exercises:modify_exercise' lesson_id=exercise.exercise_set exercise_id=exercise.exercise_set.0.id %}
                         </td>
                     </tr>
                 {% endfor %}

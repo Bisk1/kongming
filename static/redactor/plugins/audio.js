@@ -1,11 +1,58 @@
 var audioContext;
 var recorder;
 
+var placeholderActive = false;
+
+if (typeof explanationId !== 'undefined') {
+    placeholderActive = true;
+}
+
+function guid8() { // 8-characters unique id
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4();
+}
+
 (function ($) {
     $.Redactor.prototype.audio = function () {
         return {
 
-            beforeStart: function () {   // microphone will work only over secure connection (HTTPS) or on localhost (for testing purposes)
+            init: function () {
+                var button = this.button.addAfter('image', 'audio', "Insert Audio...");
+                button.attr("class", "icon-music redactor-btn-image");
+                this.button.addCallback(button, this.audio.show);
+            },
+            beforeStart: function () {
+                var audio = this.audio;
+                // 1. Setup placeholder creating
+                if (placeholderActive) {
+                    $('#create-placeholder').click(function() {
+                        var link_id = guid8();
+                        var text_to_record = $('#placeholder-recording-text').val();
+                        $.ajax({
+                            url: Django.url('recordings:create_placeholder'),
+                            type: 'POST',
+                            dataType: "json",
+                            data: {
+                                link_id: link_id,
+                                text: text_to_record,
+                                explanation_id: explanationId,
+                                csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+                            },
+                            success: function (data) {
+                                audio.placeholderInsert(link_id, text_to_record);
+                            },
+                            error: function (xhr, errmsg, err) {
+                                $('#error_box').html(xhr.status + ": " + xhr.responseText).show();
+                            }
+                        });
+                    });
+                }
+                // 2. Setup direct recording
+                // microphone will work only over secure connection (HTTPS) or on localhost (for testing purposes)
                 if (window.location.protocol == "https:" || document.location.hostname == "localhost") {
                     $('#direct-recording').html(FormEngine.button({id: "record-start", text: "Start"}));
                     $('#record-start').click(this.audio.startRequested);
@@ -70,37 +117,63 @@ var recorder;
                 newSource.start(0);
             },
             export: function () {
-                var name = $('#recording-text').val();
+                var name = $('#recording-filename').val();
                 if (name == undefined) {
-                    alert("You must provide recording text");
+                    alert("You must provide recording filename");
                     recorder.exportWAV(this.audio.stopped);
                 }
                 console.log('Export triggered');
                 recorder.exportWAV(this.audio.upload);
             },
             upload: function (blob) {
-                var name = $('#recording-text').val();
+                var name = $('#recording-filename').val();
                 console.log('Upload triggered for ' + name);
                 var file = new File([blob], name + '.wav');
                 this.upload.traverseFile(file);
             },
             getTemplate: function () {
-                return String()
-                    + FormEngine.renderForm({
-                        title: "A) Direct recording",
+                if (placeholderActive) {
+                    placeholderFormSchema = {
+                        title: "Placeholder",
+                        color: "blue",
+                        fields: [{
+                            type: "text",
+                            id: "placeholder-recording-text",
+                            label: "Text",
+                            placeholder: "Text to record"
+                        }, {
+                            type: "button",
+                            id: "create-placeholder",
+                            text: "Create"
+                        }]
+                    }
+                } else {
+                    placeholderFormSchema = {
+                        title: "Placeholder",
+                        color: "blue",
+                        fields: [{
+                            type: "customHtml",
+                            html: '<h4> You must save exercise first to use placeholders </h4>'
+                        }]
+                    }
+                }
+                return String() +
+                    FormEngine.renderForm(placeholderFormSchema) +
+                    FormEngine.renderForm({
+                        title: "Direct recording",
                         color: "green",
                         fields: [{
                             type: "text",
-                            id: "recording-text",
+                            id: "recording-filename",
                             label: "Text",
-                            placeholder: "The text in the recording"
+                            placeholder: "Recording filename"
                         }, {
                             type: "emptyDiv",
                             id: "direct-recording"
                         }]
-                    })
-                    + FormEngine.renderForm({
-                        title: "B) File upload",
+                    }) +
+                    FormEngine.renderForm({
+                        title: "File upload",
                         color: "orange",
                         fields: [{
                             type: "customHtml",
@@ -113,11 +186,6 @@ var recorder;
                     });
 
             },
-            init: function () {
-                var button = this.button.addAfter('image', 'audio', "Insert Audio...");
-                button.attr("class", "icon-music redactor-btn-image");
-                this.button.addCallback(button, this.audio.show);
-            },
             show: function () {
                 this.modal.addTemplate('audio', this.audio.getTemplate());
 
@@ -129,6 +197,13 @@ var recorder;
 
                 this.audio.beforeStart();
 
+            },
+            placeholderInsert: function(id, text_to_record) {
+                // copy&paste from file insert
+                this.modal.close();
+                this.selection.restore();
+                this.buffer.set();
+                this.insert.htmlWithoutClean('<p><a id="' + id + '">{' + text_to_record + '}</a></p>');
             }
         }
     }
