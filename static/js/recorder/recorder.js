@@ -1,3 +1,9 @@
+/*
+jQuery Plugin usage: element.recorder(uploadCallback)
+    uploadCallback will be called after recording is created and confirmed
+*/
+
+
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Recorder = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 
@@ -355,3 +361,100 @@ module.exports = InlineWorker;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}]},{},[1])(1)
 });
+
+$.fn.recorder = function(uploadCallback, $filenameInput) {
+
+    var element = this;
+    element.show();
+    var recorder;
+    beforeStart();
+
+    function beforeStart() {
+        // microphone will work only over secure connection (HTTPS) or on localhost (for testing purposes)
+        if (window.location.protocol == "https:" || document.location.hostname == "localhost") {
+            element.html(FormEngine.button({id: "record-start", text: "Start"}));
+            $('#record-start').click(startRequested);
+        } else {
+            element.html('<h3>Only available over HTTPS!</h3>');
+        }
+    }
+
+    function startRequested() {
+        $('#record-start').off();
+        var afterSetup = started;
+        if (recorder === undefined) {
+            navigator.getUserMedia({audio: true},
+                function (stream) {
+                    var input = audioContext.createMediaStreamSource(stream);
+                    console.log('Media stream created.');
+                    // Uncomment if you want the audio to feedback directly
+                    //input.connect(audioContext.destination);
+                    //console.log('Input connected to audio context destination.');
+
+                    recorder = new Recorder(input);
+                    console.log('Recorder initialised.');
+                    afterSetup();
+                },
+                function (e) {
+                    console.log('No live audio input: ' + e);
+                });
+        } else {
+            afterSetup();
+        }
+    }
+
+    function started() {
+        recorder.clear();
+        recorder.record();
+        element.html(FormEngine.button({id: "record-stop", text: "Stop"}));
+        $('#record-stop').click(stopped);
+        console.log('Recording started');
+
+    }
+    function stopped() {
+        $('#record-stop').off();
+        recorder.stop();
+        element.html(
+            FormEngine.button({id: "record-confirm", text: "Confirm"}) +
+            FormEngine.button({id: "record-play", text: "Play"}) +
+            FormEngine.button({id: "record-cancel", text: "Cancel"})
+        );
+        $('#record-confirm').click(cleanAndUpload);
+        $('#record-play').click(playRequested);
+        $('#record-cancel').click(beforeStart);
+        console.log('Recording stopped');
+    }
+    function playRequested() {
+        recorder.getBuffer(play);
+    }
+    function play(buffers) {
+        var newSource = audioContext.createBufferSource();
+        var newBuffer = audioContext.createBuffer(2, buffers[0].length, audioContext.sampleRate);
+        newBuffer.getChannelData(0).set(buffers[0]);
+        newBuffer.getChannelData(1).set(buffers[1]);
+        newSource.buffer = newBuffer;
+        newSource.connect(audioContext.destination);
+        newSource.start(0);
+    }
+
+    function cleanAndUpload() {
+        element.hide();
+        uploadCallback();
+    }
+}
+
+
+window.onload = function init() {
+    try {
+        // webkit shim
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+        window.URL = window.URL || window.webkitURL;
+
+        audioContext = new AudioContext;
+        console.log('Audio context set up.');
+        console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+    } catch (e) {
+        alert('No web audio support in this browser!');
+    }
+};
