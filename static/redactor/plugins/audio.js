@@ -129,7 +129,7 @@ function guid8() { // 8-characters unique id
                 this.modal.close();
                 this.selection.restore();
                 this.buffer.set();
-                this.insert.htmlWithoutClean('<p><a id="' + id + ' audio-ready=false ">{' + text_to_record + '}</a></p>');
+                this.insert.htmlWithoutClean('<p><a id="' + id + ' placeholder=true ">{' + text_to_record + '}</a></p>');
             }
         }
     }

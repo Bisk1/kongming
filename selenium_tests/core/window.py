@@ -1,3 +1,5 @@
+import os
+from platform import _platform
 from selenium import webdriver
 import time
 from selenium.common.exceptions import WebDriverException, TimeoutException
@@ -9,7 +11,11 @@ from selenium.webdriver.support import expected_conditions
 class Window(object):
     def __init__(self, driver=None):
         if not driver:
-            self.driver = webdriver.Chrome(executable_path="./chromedriver.exe", port=5673)
+            if os.name == "posix":
+                driver_name = "chromedriver"
+            else:
+                driver_name = "chromedriver.exe"
+            self.driver = webdriver.Chrome(executable_path="./" + driver_name, port=5673)
         else:
             self.driver = driver
         self.driver.implicitly_wait(5)
