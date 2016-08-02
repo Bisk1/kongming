@@ -439,7 +439,7 @@ $.fn.recorder = function(uploadCallback, $filenameInput) {
 
     function cleanAndUpload() {
         element.hide();
-        uploadCallback();
+        recorder.exportWAV(uploadCallback);
     }
 }
 

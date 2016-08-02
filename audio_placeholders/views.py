@@ -1,11 +1,9 @@
 import logging
-from io import StringIO
 from bs4 import BeautifulSoup
 from django.core.files.storage import default_storage
 from django.http import HttpResponse
 
 from django.views.generic import ListView, View
-from lxml import html
 
 from audio_placeholders.models import AudioPlaceholder
 

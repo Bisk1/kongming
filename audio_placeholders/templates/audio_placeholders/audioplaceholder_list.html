@@ -2,15 +2,7 @@
 {% block content %}
 {% load staticfiles %}
 <script type="text/javascript" src="{% static "js/recorder/recorder.js" %}"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-    $('.record-btn').click(function() {
-        $this = $(this);
-        $this.hide();
-        $('div[placeholder-id=' + this.id + ']').recorder(function(){console.log("upload"); $this.show();});
-    });
-});
-</script>
+<script type="text/javascript" src="{% static "audio_placeholders/js/audioplaceholders_list.js" %}"></script>
 {% with placeholders=object_list %}
 <div class="col-md-12">
     {% if placeholders %}
