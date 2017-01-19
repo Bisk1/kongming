@@ -6,27 +6,31 @@ function setupRecorderButtons() {
     $('.record-btn').click(function() {
         $this = $(this);
         $this.hide();
-        $('div[placeholder-id=' + this.id + ']').recorder(function(file){
-            fillPlaceholder(file, this.id, this);
+        $('div[placeholder-id=' + this.id + ']').recorder(function(blob) {
+            var file = new File([blob], guid() + '.wav');
+            fillPlaceholder(file, $this[0].id, $this);
             $this.show();
         });
     });
 }
 
 function fillPlaceholder(file, placeholder_id, button) {
+    var formData = new FormData();
+    formData.append("file", file);
+    formData.append("placeholder_id", placeholder_id);
     $.ajax({
-            url: Django.url("audio_placeholders:fill_placeholder"),
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                file: file,
-                placeholder_id: placeholder_id
-            },
-            success: function (json) {
-                button.closest('tr').remove(); // remove row with completed placeholder
-            },
-            error: function(error) {
-                alert(error);
-            }
-        });
+        url: Django.url("audio_placeholders:fill_placeholder"),
+        type: 'POST',
+        dataType: 'json',
+        data: formData,
+        success: function (json) {
+            button.closest('tr').remove(); // remove row with completed placeholder
+        },
+        error: function(error) {
+            console.log(error);
+        },
+        cache: false,
+        processData: false,
+        contentType: false,
+    });
 }

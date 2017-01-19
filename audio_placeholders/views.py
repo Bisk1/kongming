@@ -1,7 +1,7 @@
 import logging
 from bs4 import BeautifulSoup
 from django.core.files.storage import default_storage
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from django.views.generic import ListView, View
 
@@ -34,13 +34,14 @@ class FillPlaceholderView(View):
         placeholder_id = request.POST['placeholder_id']
         file = request.FILES['file']
         placeholder = AudioPlaceholder.objects.get(id=placeholder_id)
-        saved_file = default_storage.save('uploads/' + file.name, file)
+        saved_filename = default_storage.save('uploads/' + file.name, file)
+        saved_file_url = default_storage.url(saved_filename)
         explanation = placeholder.explanation
-        text_filled = PlaceholderHelper.replace_placeholder(placeholder.link_id, saved_file.url, saved_file.url, explanation.text)
-        explanation.content = text_filled
+        text_filled = PlaceholderHelper.replace_placeholder(placeholder.link_id, saved_file_url, saved_filename, explanation.text)
+        explanation.text = text_filled
         explanation.save()
         placeholder.delete()
-        return HttpResponse()
+        return JsonResponse({})
 
 
 class PlaceholderHelper:

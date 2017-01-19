@@ -4,16 +4,6 @@ if (typeof explanationId !== 'undefined') {
     placeholderActive = true;
 }
 
-function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-}
-
-function guid() {
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-    s4() + '-' + s4() + s4() + s4();
-}
 
 function guid8() { // 8-characters unique id
   return s4() + s4();
@@ -57,9 +47,7 @@ function guid8() { // 8-characters unique id
                 $('#direct-recording').recorder(this.audio.upload);
             },
             upload: function (blob) {
-                var name = guid();
-                console.log('Upload triggered for ' + name);
-                var file = new File([blob], name + '.wav');
+                var file = new File([blob], guid() + '.wav');
                 this.upload.traverseFile(file);
             },
             getTemplate: function () {
@@ -129,7 +117,7 @@ function guid8() { // 8-characters unique id
                 this.modal.close();
                 this.selection.restore();
                 this.buffer.set();
-                this.insert.htmlWithoutClean('<p><a id="' + id + ' placeholder=true ">{' + text_to_record + '}</a></p>');
+                this.insert.htmlWithoutClean('<p><a id="' + id + '" placeholder=true>{' + text_to_record + '}</a></p>');
             }
         }
     }
