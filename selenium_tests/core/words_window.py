@@ -3,9 +3,10 @@ from selenium.webdriver.support.expected_conditions import text_to_be_present_in
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium_tests.core.window import Window
 
+
 class WordsWindow(Window):
-    text_to_search_input_css = "#word_to_search"
-    first_translation_text_css = "table#translations_table tr:first-child > td:nth-child(2) > input"
+    source_word_css = "#id_source_word"
+    first_translation_text_css = "#id_translation_0"
     first_translation_pinyin_css = "table#translations_table tr:first-child > td:nth-child(4) > input"
     edit_button_css = "#edit"
     add_translation_button_css = "#add_translation_button"
@@ -18,7 +19,7 @@ class WordsWindow(Window):
         super(WordsWindow, self).__init__(driver=driver)
 
     def type_text_to_search(self, text):
-        self.driver.find_element_by_css_selector(self.text_to_search_input_css).send_keys(text)
+        self.driver.find_element_by_css_selector(self.source_word_css).send_keys(text)
 
     def type_first_translation_text(self, text):
         self.driver.find_element_by_css_selector(self.first_translation_text_css).send_keys(text)

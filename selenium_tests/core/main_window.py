@@ -10,12 +10,8 @@ class MainWindow(Window):
     lesson_management_css = 'a[href="/lessons/"]'
 
     words_translations_css = 'li#words_menu > a'
-    words_translations_en_css = 'li#words_menu_en > a'
-    words_translations_zh_css = 'li#words_menu_zh > a'
 
     texts_translations_css = 'li#texts_menu > a'
-    texts_translations_en_css = 'li#texts_menu_en > a'
-    texts_translations_zh_css = 'li#texts_menu_zh > a'
 
     def __init__(self, driver):
         super(MainWindow, self).__init__(driver=driver)
@@ -33,12 +29,10 @@ class MainWindow(Window):
 
     def words(self):
         self.wait_and_click(self.words_translations_css)
-        self.wait_and_click(self.words_translations_en_css)
         words = WordsWindow(driver=self.driver)
         return words
 
     def texts(self):
         self.wait_and_click(self.texts_translations_css)
-        self.wait_and_click(self.texts_translations_en_css)
         texts = TextsWindow(driver=self.driver)
         return texts

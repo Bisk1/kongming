@@ -11,7 +11,7 @@ class LessonManagementWindow(Window):
 
     def load(self):
         self.wait_for_loading()
-        self.wait_for_element(css_selector=self.new_lesson_css)
+        self.wait_for_element(self.new_lesson_css)
 
     def modify_lesson(self, number_of_lesson):
         self.driver.find_element_by_css_selector(self.modify_lesson_css % number_of_lesson).click()
