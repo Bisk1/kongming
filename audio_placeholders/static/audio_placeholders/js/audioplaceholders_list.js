@@ -1,5 +1,17 @@
 $(document).ready(function() {
     setupRecorderButtons();
+    $('#cleanup_audios').click(function() {
+        $.ajax({
+            url: Django.url("audio_placeholders:cleanup_audios"),
+            type: 'GET',
+            success: function (json) {
+                console.log("Removed " + json.removed_audios + " audios");
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    })
 });
 
 function setupRecorderButtons() {

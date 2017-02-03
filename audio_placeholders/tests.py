@@ -1,6 +1,6 @@
 from unittest import TestCase
 from bs4 import BeautifulSoup
-from audio_placeholders.views import PlaceholderHelper
+from audio_placeholders.views import AudioHelper
 
 
 class FillPlaceholder(TestCase):
@@ -10,7 +10,7 @@ class FillPlaceholder(TestCase):
             '<p><a href="/media/uploads/Jeden.wav"></a><a href="/media/uploads/dwa.wav">dwa.wav</a></p>' + \
             '<p><a href="/media/uploads/trzy.wav">trzy.wav</a></p>'
 
-        output = PlaceholderHelper.replace_placeholder('some-id', 'static/new_audio.wav', 'New Audio', input)
+        output = AudioHelper.replace_placeholder('some-id', 'static/new_audio.wav', 'New Audio', input)
 
         soup = BeautifulSoup(output, 'html.parser')
         placeholder = soup.find("a", attrs={"id": "some-id"})
