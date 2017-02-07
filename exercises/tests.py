@@ -1,10 +1,19 @@
 from django.test import TestCase
 from exercises.models import ChineseHelper, AudioHelper
+from words.models import WordZH
 
 
 class RenderChineseTest(TestCase):
-    maxDiff = None
     def testRendering(self):
+        # mock word zh
+        WordZH.get_or_create_with_translator = lambda word: {
+            '什么': (WordZH(pinyin='shén me'), True),
+            '名字': (WordZH(pinyin='míng zi'), True),
+            '谁': (WordZH(pinyin='shéi'), True),
+            '爱': (WordZH(pinyin='ài'), True),
+            '你': (WordZH(pinyin='nǐ'), True)
+        }[word]
+
         text1 = "什么名字？"
         self.assertEquals(ChineseHelper.render_chinese_to_html(text1),
                           '<span class="chinese-word"><span>shén me</span><span>什么</span></span>'

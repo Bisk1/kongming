@@ -80,8 +80,8 @@ class WordZH(models.Model):
                 return True
         return False
 
-    @classmethod
-    def get_or_create_with_translator(cls, word):
+    @staticmethod
+    def get_or_create_with_translator(word):
         """
         If word does not exist, use translator to fetch pinyin
         :param word: Chinese word to get
