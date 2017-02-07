@@ -1,5 +1,5 @@
 from selenium.webdriver.common.by import By
-from selenium_tests.core.management_window import LessonManagementWindow
+from selenium_tests.core.lessons_window import LessonsWindow
 from selenium_tests.core.texts_window import TextsWindow
 from selenium_tests.core.window import Window
 from selenium_tests.core.words_window import WordsWindow
@@ -23,7 +23,7 @@ class MainWindow(Window):
     def lesson_management(self):
         self.wait_for_element(self.lesson_management_css)
         self.driver.find_element_by_css_selector(self.lesson_management_css).click()
-        lesson_management = LessonManagementWindow(driver=self.driver)
+        lesson_management = LessonsWindow(driver=self.driver)
         lesson_management.load()
         return lesson_management
 

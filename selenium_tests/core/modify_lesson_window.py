@@ -1,7 +1,9 @@
-from selenium_tests.core.window import Window
+import re
+
+from selenium_tests.core.form_window import FormWindow
 
 
-class ModifyLessonWindow(Window):
+class ModifyLessonWindow(FormWindow):
     add_button_css = "button#add"
     save_button_css = "button#save"
     category_css = '#menu > option[addr="/lessons/modify_lesson/%s/add_exercise_%s/"]'
@@ -12,9 +14,11 @@ class ModifyLessonWindow(Window):
     number_css = "#id_number"
     delete_button_css = "#exercises button"
 
-    def __init__(self, driver, number_of_lesson):
+    def __init__(self, driver):
         super(ModifyLessonWindow, self).__init__(driver=driver)
-        self.number_of_lesson = number_of_lesson
+        url = driver.current_url
+        m = re.search('lessons/(\\d+)/modify', url)
+        self.id = m.group(1)
 
     def load(self):
         self.wait_for_loading()
@@ -25,7 +29,7 @@ class ModifyLessonWindow(Window):
                                in self.driver.find_elements_by_css_selector(self.delete_button_css)]
         self.driver.find_element_by_css_selector(self.add_button_css).click()
         self.wait_for_loading()
-        self.driver.find_element_by_css_selector(self.category_css % (self.number_of_lesson, category)).click()
+        self.driver.find_element_by_css_selector(self.category_css % (self.id, category)).click()
         self.wait_for_loading()
 
         word_zh_input = self.driver.find_element_by_css_selector(self.word_zh_css)
