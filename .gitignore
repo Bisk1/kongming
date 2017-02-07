@@ -6,3 +6,4 @@
 chromedriver.exe
 chromedriver
 .env
+__pycache__/
