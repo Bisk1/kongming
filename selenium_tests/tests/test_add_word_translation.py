@@ -17,6 +17,3 @@ class TestAddWordTranslation(TestBase):
     #     words.type_text_to_search("hello")
     #     words_hints = words.get_autocomplete_hints()
     #     self.assertTrue("hello" in words_hints, "New word is not shown in autocomplete box!")
-
-    def tearDown(self):
-        self.main_window.exit()

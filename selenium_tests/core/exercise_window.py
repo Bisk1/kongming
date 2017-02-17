@@ -1,3 +1,4 @@
+import time
 from selenium_tests.core.form_window import FormWindow
 import selenium_tests.core.lesson_window
 
@@ -14,8 +15,9 @@ class ExplanationWindow(ExerciseWindow):
     placeholder_text_css = "#placeholder-recording-text"
     create_placeholder_button_css = "#create-placeholder"
 
-    def fill(self, content):
+    def fill_placeholder(self, content):
         content_field = self.driver.find_element_by_css_selector(self.redactor_field_css)
+        time.sleep(0.5)
         content_field.send_keys(content)
 
     def create_audio_placeholder(self, name):
@@ -24,5 +26,5 @@ class ExplanationWindow(ExerciseWindow):
         self.wait_and_click(self.create_placeholder_button_css)
 
     def read_content(self):
-        content_field = self.wait_for_element(self.redactor_field_css)
+        content_field = self.driver.find_element_by_css_selector(self.redactor_field_css)
         return content_field.text

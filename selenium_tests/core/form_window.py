@@ -8,7 +8,7 @@ class FormWindow(Window):
     def get_field(self, field_name):
         id_selector = "id_" + field_name
         input = self.driver.find_element_by_id(id_selector)
-        input.get_attribute('value')
+        return input.get_attribute('value')
 
     def set_field(self, field_name, field_value):
         id_selector = "id_" + field_name

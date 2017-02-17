@@ -43,6 +43,6 @@ function fillPlaceholder(file, placeholder_id, button) {
         },
         cache: false,
         processData: false,
-        contentType: false,
+        contentType: false
     });
 }
