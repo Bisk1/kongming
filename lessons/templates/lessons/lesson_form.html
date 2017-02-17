@@ -25,10 +25,10 @@
 {% if lesson %}
     Add exercise:
     <div>
-        <a href="{% url 'lessons:exercises:add_exercise' lesson_id=lesson.id exercise_type='typing' %}" class="btn btn-default">Typing</a>
-        <a href="{% url 'lessons:exercises:add_exercise' lesson_id=lesson.id exercise_type='explanation' %}" class="btn btn-default">Explanation</a>
-        <a href="{% url 'lessons:exercises:add_exercise' lesson_id=lesson.id exercise_type='choice' %}" class="btn btn-default">Choice</a>
-        <a href="{% url 'lessons:exercises:add_exercise' lesson_id=lesson.id exercise_type='listening' %}" class="btn btn-default">Listening</a>
+        <a href="{% url 'lessons:exercises:add_exercise' lesson_id=lesson.id exercise_type='typing' %}" class="btn btn-default" id="typing" >Typing</a>
+        <a href="{% url 'lessons:exercises:add_exercise' lesson_id=lesson.id exercise_type='explanation' %}" class="btn btn-default" id="explanation">Explanation</a>
+        <a href="{% url 'lessons:exercises:add_exercise' lesson_id=lesson.id exercise_type='choice' %}" class="btn btn-default" id="choice">Choice</a>
+        <a href="{% url 'lessons:exercises:add_exercise' lesson_id=lesson.id exercise_type='listening' %}" class="btn btn-default" id="listening">Listening</a>
     </div>
 {% endif %}
 </div>

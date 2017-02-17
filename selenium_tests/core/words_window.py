@@ -46,4 +46,4 @@ class WordsWindow(Window):
         self.driver.find_element_by_css_selector(self.add_translation_button_css).click()
 
     def save(self):
-        self.driver.find_element_by_css_selector(self.save_button_css).click()
+        self.wait_and_click(self.save_button_css)

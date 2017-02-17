@@ -7,7 +7,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
-
 class Window(object):
     def __init__(self, driver=None):
         if not driver:
@@ -45,7 +44,12 @@ class Window(object):
 
     def wait_and_click(self, selector, by=By.CSS_SELECTOR, timeout=10):
         self.wait_for_element(selector, by, timeout)
-        self.driver.find_element(by, selector).click()
+        try:
+            self.driver.find_element(by, selector).click()
+        except WebDriverException:
+            time.sleep(2)
+            self.driver.find_element(by, selector).click()
+
 
     def refresh(self):
         self.driver.refresh()

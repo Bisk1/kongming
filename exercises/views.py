@@ -76,7 +76,7 @@ def handle_spec(request, exercise_type_handler, lesson, exercise, spec=None):
         exercise.save()
         return redirect('lessons:modify_lesson', lesson_id=lesson.id)
     else:
-        return render(request, 'exercises/' + str(exercise_type_handler) + '.html',
+        return render(request, 'exercises/' + exercise_type_handler.get_name() + '.html',
                       {'lesson': lesson, 'exercise': exercise, 'form': form})
 
 

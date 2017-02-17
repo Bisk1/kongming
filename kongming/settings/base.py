@@ -22,6 +22,7 @@ INSTALLED_APPS = (
     'crispy_forms',
     'redactor',
     'djangojs',
+    'django_extensions',
     # project apps
     'menu',
     'learn',

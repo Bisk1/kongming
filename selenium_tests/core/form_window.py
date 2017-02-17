@@ -3,19 +3,18 @@ from selenium_tests.core.window import Window
 
 class FormWindow(Window):
 
-    save_button_css = "button#save"
+    save_button_css = "#submit-id-submit"
 
-    def set_field(self, name, value):
-        css_selector = "#id_" + name
-        self.wait_for_element(css_selector)
-        field = self.driver.find_element_by_css_selector(css_selector)
-        field.send_keys(value)
+    def get_field(self, field_name):
+        id_selector = "id_" + field_name
+        input = self.driver.find_element_by_id(id_selector)
+        input.get_attribute('value')
 
-    def get_field(self, name):
-        css_selector = "#id_" + name
-        self.wait_for_element(css_selector)
-        field = self.driver.find_element_by_css_selector(css_selector)
-        return field.get_attribute('value')
+    def set_field(self, field_name, field_value):
+        id_selector = "id_" + field_name
+        input = self.driver.find_element_by_id(id_selector)
+        input.clear()
+        input.send_keys(field_value)
 
     def save(self):
         self.wait_and_click(self.save_button_css)

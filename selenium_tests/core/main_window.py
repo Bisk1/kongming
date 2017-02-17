@@ -1,5 +1,5 @@
-from selenium.webdriver.common.by import By
 from selenium_tests.core.lessons_window import LessonsWindow
+from selenium_tests.core.placeholders_window import PlaceholdersWindow
 from selenium_tests.core.texts_window import TextsWindow
 from selenium_tests.core.window import Window
 from selenium_tests.core.words_window import WordsWindow
@@ -8,10 +8,9 @@ from selenium_tests.core.words_window import WordsWindow
 class MainWindow(Window):
     navbar_header_css = "div.navbar-header"
     lesson_management_css = 'a[href="/lessons/"]'
-
     words_translations_css = 'li#words_menu > a'
-
     texts_translations_css = 'li#texts_menu > a'
+    placeholders_translations_css = 'li#placeholders_menu > a'
 
     def __init__(self, driver):
         super(MainWindow, self).__init__(driver=driver)
@@ -36,3 +35,7 @@ class MainWindow(Window):
         self.wait_and_click(self.texts_translations_css)
         texts = TextsWindow(driver=self.driver)
         return texts
+
+    def placeholders(self):
+        self.wait_and_click(self.placeholders_translations_css)
+        return PlaceholdersWindow(driver=self.driver)

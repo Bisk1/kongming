@@ -1,5 +1,5 @@
 from selenium_tests.core.form_window import FormWindow
-from selenium_tests.core.modify_lesson_window import ModifyLessonWindow
+from selenium_tests.core.lesson_window import LessonWindow
 from selenium_tests.core.window import Window
 
 
@@ -22,10 +22,10 @@ class LessonsWindow(Window):
         if requirement:
             new_lesson_form.set_field('requirement', requirement)
         new_lesson_form.save()
-        return ModifyLessonWindow(driver=self.driver)
+        return LessonWindow(driver=self.driver)
 
     def modify_lesson(self, id):
         self.driver.find_element_by_css_selector(self.modify_lesson_css % id).click()
-        modify_lesson = ModifyLessonWindow(driver=self.driver)
+        modify_lesson = LessonWindow(driver=self.driver)
         modify_lesson.load()
         return modify_lesson
